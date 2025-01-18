@@ -6,9 +6,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class lancherSub extends SubsystemBase {
+public class LancherSub extends SubsystemBase {
   /** Creates a new lancherSub. */
-  public lancherSub() {}
+  public LancherSub() {}
 
   @Override
   public void periodic() {

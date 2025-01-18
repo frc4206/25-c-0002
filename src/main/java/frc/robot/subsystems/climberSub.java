@@ -6,9 +6,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class climberSub extends SubsystemBase {
+public class ClimberSub extends SubsystemBase {
   /** Creates a new climberSub. */
-  public climberSub() {}
+  public ClimberSub() {}
 
   @Override
   public void periodic() {

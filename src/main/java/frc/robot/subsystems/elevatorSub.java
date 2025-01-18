@@ -6,9 +6,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class elevatorSub extends SubsystemBase {
+public class ElevatorSub extends SubsystemBase {
   /** Creates a new elevatorSub. */
-  public elevatorSub() {}
+  public ElevatorSub() {}
 
   @Override
   public void periodic() {

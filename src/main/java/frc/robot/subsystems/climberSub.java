@@ -4,14 +4,53 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.common.DefaultTalonFX;
 
 public class ClimberSub extends SubsystemBase {
   /** Creates a new climberSub. */
+  DefaultTalonFX.Config climberMotorConfig1 = new DefaultTalonFX.Config("climber1Cfg");
+  DefaultTalonFX.Config climberMotorConfig2 = new DefaultTalonFX.Config("climber2Cfg");
+  CANcoder climberCCoder = new CANcoder(3);
+  DigitalInput climerHalSensor = new DigitalInput(3);
+
+  public class  Config  extends LoadableConfig {
+    public double kHomePosition;
+    public double kCruiseVelocity;
+    public double kAcceleration;
+    public double kMaxUnitsLimit;
+    public double kMinUnitsLimit;
+    public double kEnableSupplyCurrentLimit;
+    public double kSupplyCurrentLimit;
+    public double kSupplyCurrentThreshold;
+    public double kSupplyCurrentTimeout;
+    public double kMaxForwardOutput;
+    public double kMaxReverseOutput;
+
+    public Config(String filename){
+      
+
+      super.load(this, filename);
+      LoadableConfig.print(this);
+    }
+  }
+
+  public DefaultTalonFX climberMotor1 = new DefaultTalonFX(climberMotorConfig1);
+  public DefaultTalonFX climberMotor2 = new DefaultTalonFX(climberMotorConfig2);
+
   public ClimberSub() {}
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void setPercentage_func(double percentage) {
+    climberMotor1.Duty_Cycle_Output(percentage);
+    climberMotor2.Duty_Cycle_Output(percentage);
   }
 }

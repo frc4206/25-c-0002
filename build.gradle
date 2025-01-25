@@ -1,8 +1,6 @@
-// if 'plugins' shows a squiqqly red error, just ignore
-// the java language server doesn't understand gradle
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2025.2.1"
+    id "edu.wpi.first.GradleRIO" version "2025.1.1"
     id "com.peterabeles.gversion" version "1.10.3"
 }
 

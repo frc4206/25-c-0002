@@ -4,21 +4,18 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.DefaultTalonFX;
 
-public class ArmSub extends SubsystemBase {
-  /** Creates a new armSub. */
-  DefaultTalonFX.Config armMotorConfig1 = new DefaultTalonFX.Config("arm1Cfg");
-  DefaultTalonFX.Config armMotorConfig2 = new DefaultTalonFX.Config("arm2Cfg");
-  CANcoder armCCoder = new CANcoder(3);
-  DigitalInput armHallSensor = new DigitalInput(1);
+public class ClawSub extends SubsystemBase {
+  /** Creates a new ClawSub. */
+  DefaultTalonFX.Config clawMotorConfig1 = new DefaultTalonFX.Config("claw1Cfg");
+  DefaultTalonFX.Config clawMotorConfig2 = new DefaultTalonFX.Config("claw2Cfg");
+  DigitalInput beamBreak1 = new DigitalInput(2);
 
-  //TODO:put in proper values in the tomls and check if they make sense for the subsystem, the filler values will break something if unchanged
   public class  Config  extends LoadableConfig {
     public double kHomePosition;
     public double kCruiseVelocity;
@@ -40,10 +37,10 @@ public class ArmSub extends SubsystemBase {
     }
   }
 
-  public DefaultTalonFX armMotor1 = new DefaultTalonFX(armMotorConfig1);
-  public DefaultTalonFX armMotor2 = new DefaultTalonFX(armMotorConfig2);
+  public DefaultTalonFX clawMotor1 = new DefaultTalonFX(clawMotorConfig1);
+  public DefaultTalonFX clawMotor2 = new DefaultTalonFX(clawMotorConfig2);
 
-  public ArmSub() {}
+  public ClawSub() {}
 
   @Override
   public void periodic() {
@@ -51,8 +48,7 @@ public class ArmSub extends SubsystemBase {
   }
 
   public void setPercentage_func(double percentage) {
-        //TODO: make sure one of these doesn't need to be inverted, double check all motors
-        armMotor1.Duty_Cycle_Output(percentage);
-        armMotor2.Duty_Cycle_Output(percentage);
+    clawMotor1.Duty_Cycle_Output(percentage);
+    clawMotor2.Duty_Cycle_Output(percentage);
   }
 }

@@ -1,0 +1,16 @@
+name = "intake2Cfg"
+canID = 42
+inverted = false
+
+[slot0]
+kp = 0
+ki = 0
+kd = 0
+[slot]
+kp = 0
+ki = 0
+kd = 0
+[slot2]
+kp = 0
+ki = 0
+kd = 0

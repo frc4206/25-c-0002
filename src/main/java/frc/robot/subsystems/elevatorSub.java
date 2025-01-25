@@ -4,14 +4,52 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.common.DefaultTalonFX;
 
 public class ElevatorSub extends SubsystemBase {
   /** Creates a new elevatorSub. */
+  DefaultTalonFX.Config elevatorMotorConfig1 = new DefaultTalonFX.Config("elevator1Cfg");
+  DefaultTalonFX.Config elevatorMotorConfig2 = new DefaultTalonFX.Config("elevator2Cfg");
+  DigitalInput elevatorHallSensor1 = new DigitalInput(4);
+  DigitalInput elevatorHallSensor2 = new DigitalInput(5);
+
+  public class  Config  extends LoadableConfig {
+    public double kHomePosition;
+    public double kCruiseVelocity;
+    public double kAcceleration;
+    public double kMaxUnitsLimit;
+    public double kMinUnitsLimit;
+    public double kEnableSupplyCurrentLimit;
+    public double kSupplyCurrentLimit;
+    public double kSupplyCurrentThreshold;
+    public double kSupplyCurrentTimeout;
+    public double kMaxForwardOutput;
+    public double kMaxReverseOutput;
+
+    public Config(String filename){
+      
+
+      super.load(this, filename);
+      LoadableConfig.print(this);
+    }
+  }
+
+  public DefaultTalonFX elevatorMotor1 = new DefaultTalonFX(elevatorMotorConfig1);
+  public DefaultTalonFX elevatorMotor2 = new DefaultTalonFX(elevatorMotorConfig2);
+
   public ElevatorSub() {}
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void setPercentage_func(double percentage) {
+    elevatorMotor1.Duty_Cycle_Output(percentage);
+    elevatorMotor2.Duty_Cycle_Output(percentage);
   }
 }

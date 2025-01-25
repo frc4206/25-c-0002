@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.team4206.battleaid.common.LoadableConfig;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -19,16 +21,6 @@ public class ElevatorSub extends SubsystemBase {
 
   public class  Config  extends LoadableConfig {
     public double kHomePosition;
-    public double kCruiseVelocity;
-    public double kAcceleration;
-    public double kMaxUnitsLimit;
-    public double kMinUnitsLimit;
-    public double kEnableSupplyCurrentLimit;
-    public double kSupplyCurrentLimit;
-    public double kSupplyCurrentThreshold;
-    public double kSupplyCurrentTimeout;
-    public double kMaxForwardOutput;
-    public double kMaxReverseOutput;
 
     public Config(String filename){
       

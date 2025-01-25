@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.team4206.battleaid.common.LoadableConfig;
+
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -18,19 +20,12 @@ public class ArmSub extends SubsystemBase {
   CANcoder armCCoder = new CANcoder(3);
   DigitalInput armHallSensor = new DigitalInput(1);
 
+  public DefaultTalonFX armMotor1 = new DefaultTalonFX(armMotorConfig1);
+  public DefaultTalonFX armMotor2 = new DefaultTalonFX(armMotorConfig2);
+
   //TODO:put in proper values in the tomls and check if they make sense for the subsystem, the filler values will break something if unchanged
   public class  Config  extends LoadableConfig {
     public double kHomePosition;
-    public double kCruiseVelocity;
-    public double kAcceleration;
-    public double kMaxUnitsLimit;
-    public double kMinUnitsLimit;
-    public double kEnableSupplyCurrentLimit;
-    public double kSupplyCurrentLimit;
-    public double kSupplyCurrentThreshold;
-    public double kSupplyCurrentTimeout;
-    public double kMaxForwardOutput;
-    public double kMaxReverseOutput;
 
     public Config(String filename){
       
@@ -40,19 +35,30 @@ public class ArmSub extends SubsystemBase {
     }
   }
 
-  public DefaultTalonFX armMotor1 = new DefaultTalonFX(armMotorConfig1);
-  public DefaultTalonFX armMotor2 = new DefaultTalonFX(armMotorConfig2);
+  
 
-  public ArmSub() {}
+  public ArmSub(Config cfg) {
+      armMotor1.Enable_Sim();
+      armMotor2.Enable_Sim();
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+   
   }
 
   public void setPercentage_func(double percentage) {
         //TODO: make sure one of these doesn't need to be inverted, double check all motors
         armMotor1.Duty_Cycle_Output(percentage);
         armMotor2.Duty_Cycle_Output(percentage);
+  }
+
+  @Override
+  public void simulationPeriodic() {
+      // TODO Auto-generated method stub
+      super.simulationPeriodic();
+      armMotor1.Update_Sim();
+      armMotor2.Update_Sim();
   }
 }

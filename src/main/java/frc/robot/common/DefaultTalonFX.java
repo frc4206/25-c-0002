@@ -20,7 +20,11 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
@@ -46,8 +50,12 @@ public class DefaultTalonFX {
     //Simulation
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
+    private static boolean startedSimThread = false;
     private double m_lastSimTime;
-    private final DCMotorSim m_motorSimModel = new DCMotorSim(DCMotor.getKrakenX60Foc(1), 1.0, 0.001);
+    //private final DCMotorSim m_motorSimModel = new DCMotorSim(DCMotor.getKrakenX60Foc(1), 1.0, 0.001);
+    private LinearSystem ln = LinearSystemId.createDCMotorSystem(.01, 0.1);
+    private final DCMotorSim m_motorSimModel = new DCMotorSim(ln, DCMotor.getKrakenX60Foc(1), 0.001);
+    
     
     //SmartDashboard Logging
     private boolean LivePIDInit = false;
@@ -73,6 +81,7 @@ public class DefaultTalonFX {
         public BasicSlot(){};
     }
 
+
     public static class Slot extends LoadableConfig {
         public double kp; // proportional
         public double ki; // integral
@@ -80,6 +89,17 @@ public class DefaultTalonFX {
         public double ks; // static feedforward
         public double kv; // velocity feedforward
         public double ka; // acceleration feedforward
+
+        public double kCruiseVelocity;
+        public double kAcceleration;
+        public double kMaxUnitsLimit;
+        public double kMinUnitsLimit;
+        public double kEnableSupplyCurrentLimit;
+        public double kSupplyCurrentLimit;
+        public double kSupplyCurrentThreshold;
+        public double kSupplyCurrentTimeout;
+        public double kMaxForwardOutput;
+        public double kMaxReverseOutput;
     
         public Slot(){};
     }
@@ -386,6 +406,10 @@ public class DefaultTalonFX {
 
     //-----------------------Simulation Support-----------------------
     private void startSimThread() {
+
+        if(startedSimThread)
+            return;
+
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
         /* Run simulation at a faster rate so PID gains behave more reasonably */
@@ -398,6 +422,7 @@ public class DefaultTalonFX {
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
+        startedSimThread = true;
     }
 
     private void updateSimState(double deltaTime, double batteryVoltage) {
@@ -408,9 +433,8 @@ public class DefaultTalonFX {
     public void Enable_Sim() {
         if (Utils.isSimulation()) {
             startSimThread();
-            motor.getSimState().setSupplyVoltage(12);
         }
-        
+        motor.getSimState().setSupplyVoltage(12);
     }
 
     public void Update_Sim() {

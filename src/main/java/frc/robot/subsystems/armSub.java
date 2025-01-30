@@ -27,6 +27,12 @@ public class ArmSub extends SubsystemBase {
   public class  Config  extends LoadableConfig {
     public double kHomePosition;
 
+    public double armL1Pos;
+    public double armL2Pos;
+    public double armL3Pos;
+    public double armL4Pos;
+
+
     public Config(String filename){
       
 

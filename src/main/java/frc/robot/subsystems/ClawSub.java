@@ -21,6 +21,11 @@ public class ClawSub extends SubsystemBase {
   public class  Config  extends LoadableConfig {
     public double kHomePosition;
 
+    public double ClawL1Pos;
+    public double ClawL2Pos;
+    public double ClawL3Pos;
+    public double ClawL4Pos;
+
     public Config(String filename){
       
 

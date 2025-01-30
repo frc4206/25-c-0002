@@ -22,6 +22,11 @@ public class ElevatorSub extends SubsystemBase {
   public class  Config  extends LoadableConfig {
     public double kHomePosition;
 
+    public double elevatorL1Pos;
+    public double elevatorL2Pos;
+    public double elevatorL3Pos;
+    public double elevatorL4Pos;
+
     public Config(String filename){
       
 

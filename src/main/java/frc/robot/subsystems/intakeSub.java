@@ -23,6 +23,9 @@ public class IntakeSub extends SubsystemBase {
   public class  Config  extends LoadableConfig {
     public double kHomePosition;
 
+    public double intakeUpPos;
+    public double intakeOutPos;
+
     public Config(String filename){
       
       super.load(this, filename);

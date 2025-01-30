@@ -22,8 +22,13 @@ public class ClimberSub extends SubsystemBase {
 
   public class  Config  extends LoadableConfig {
     public double kHomePosition;
-    
+
     public double kMaxReverseOutput;
+
+    public double climberOutPos;
+    public double climberInPos;
+  //The next one probably won't be needed
+    //public double climberDefaultPos;
 
     public Config(String filename){
       
@@ -46,5 +51,9 @@ public class ClimberSub extends SubsystemBase {
   public void setPercentage_func(double percentage) {
     climberMotor1.Duty_Cycle_Output(percentage);
     climberMotor2.Duty_Cycle_Output(percentage);
+  }
+
+  public void reefTroughPos_func(double pos) {
+    climberMotor1.PID_Position(pos);
   }
 }

@@ -67,4 +67,19 @@ public class ArmSub extends SubsystemBase {
       armMotor1.Update_Sim();
       armMotor2.Update_Sim();
   }
+
+  //TODO:also default pos??
+  public void intakeAcceptAngle_func(double pos) {
+    armMotor1.PID_Position(pos);
+    armMotor2.PID_Position(pos);
+  }
+
+  public void reefTroughAngle_func(double pos) {
+    armMotor1.PID_Position(pos);
+    armMotor2.PID_Position(pos);
+  }
+  public void reefHighestAngle_func(double pos) {
+    armMotor1.PID_Position(pos);
+    armMotor2.PID_Position(pos);
+  }
 }

@@ -48,4 +48,24 @@ public class ClawSub extends SubsystemBase {
     clawMotor1.Duty_Cycle_Output(percentage);
     clawMotor2.Duty_Cycle_Output(percentage);
   }
+
+  public void reefTroughAngle_func(double pos) {
+    clawMotor1.PID_Position(pos);
+    clawMotor2.PID_Position(pos);
+  }
+
+  public void reefBranchesAngle_func(double pos) {
+    clawMotor1.PID_Position(pos);
+    clawMotor2.PID_Position(pos);
+  }
+
+  public void reefHighestAngle_func(double pos) {
+    clawMotor1.PID_Position(pos);
+    clawMotor2.PID_Position(pos);
+  }
+
+  public void intakeAcceptAngle_func(double pos) {
+    clawMotor1.PID_Position(pos);
+    clawMotor2.PID_Position(pos);
+  }
 }

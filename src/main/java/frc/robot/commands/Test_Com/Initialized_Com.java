@@ -6,11 +6,32 @@
 package frc.robot.commands.Test_Com;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Arm_Sub;
+import frc.robot.subsystems.Claw_Sub;
+import frc.robot.subsystems.Climber_Sub;
+import frc.robot.subsystems.Elevator_Sub;
+import frc.robot.subsystems.Intake_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Initialized_Com extends Command {
+
+  Intake_Sub m_intakeSub;
+  Climber_Sub m_climberSub;
+  Elevator_Sub m_elevatorSub;
+  Claw_Sub m_clawSub;
+  Arm_Sub m_armSub;
   /** Creates a new Initialized. */
-  public Initialized_Com() {
+  public Initialized_Com(Arm_Sub armSub, Claw_Sub clawSub, Elevator_Sub elevatorSub, Climber_Sub climberSub, Intake_Sub intakeSub) {
+    m_intakeSub = intakeSub;
+    m_climberSub = climberSub;
+    m_armSub = armSub;
+    m_clawSub = clawSub;
+    m_elevatorSub = elevatorSub;
+    addRequirements(m_intakeSub);
+    addRequirements(m_climberSub);
+    addRequirements(m_armSub);
+    addRequirements(m_clawSub);
+    addRequirements(m_elevatorSub);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

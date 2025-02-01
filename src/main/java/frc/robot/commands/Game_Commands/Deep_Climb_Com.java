@@ -5,19 +5,18 @@
 package frc.robot.commands.Game_Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Arm_Sub;
 import frc.robot.subsystems.Climber_Sub;
-
+import frc.robot.subsystems.Intake_Sub;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Deep_Climb_Com extends Command {
 
   Climber_Sub m_climberSub;
-  Arm_Sub m_armSub;
+  Intake_Sub m_intakeSub;
   /** Creates a new Deep_Climb. */
-  public Deep_Climb_Com(Arm_Sub armSub, Climber_Sub climberSub) {
-    m_armSub = armSub;
+  public Deep_Climb_Com(Intake_Sub intakeSub, Climber_Sub climberSub) {
+    m_intakeSub = intakeSub;
     m_climberSub = climberSub;
-    addRequirements(m_armSub);
+    addRequirements(m_intakeSub);
     addRequirements(m_climberSub);
     // Use addRequirements() here to declare subsystem dependencies.
   }

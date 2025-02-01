@@ -2,15 +2,21 @@ name = "climber2Cfg"
 canID = 22
 inverted = false
 
+intakelimit = 1.0
+shootlimit = 2.0
+climblimit = 3.0
+defenselimit = 4.0
+cyclelimit = 5.0
+
 [slot0]
-kp = 0
-ki = 0
-kd = 0
-[slot]
-kp = 0
-ki = 0
-kd = 0
+kp = 0.0
+ki = 0.0
+kd = 0.0
+[slot1]
+kp = 0.0
+ki = 0.0
+kd = 0.0
 [slot2]
-kp = 0
-ki = 0
-kd = 0
+kp = 0.0
+ki = 0.0
+kd = 0.0

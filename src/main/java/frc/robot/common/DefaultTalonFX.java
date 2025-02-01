@@ -53,9 +53,9 @@ public class DefaultTalonFX {
     private static boolean startedSimThread = false;
     private double m_lastSimTime;
     //private final DCMotorSim m_motorSimModel = new DCMotorSim(DCMotor.getKrakenX60Foc(1), 1.0, 0.001);
-    private LinearSystem ln = LinearSystemId.createDCMotorSystem(.01, 0.1);
-    private final DCMotorSim m_motorSimModel = new DCMotorSim(ln, DCMotor.getKrakenX60Foc(1), 0.001);
-    
+    DCMotor motorsim = new DCMotor(0, 0, 0, 0, 0, 0);
+    // private LinearSystem ln = LinearSystemId.createDCMotorSystem(motorsim, .01, 1.0);
+    // private final DCMotorSim m_motorSimModel = new DCMotorSim(ln,DCMotor.getKrakenX60Foc(1), 1.0, 0.001);
     
     //SmartDashboard Logging
     private boolean LivePIDInit = false;
@@ -109,6 +109,12 @@ public class DefaultTalonFX {
         public String name;
         public int canID;
         public boolean inverted;
+
+        public double intakelimit;
+        public double shootlimit;
+        public double climblimit;
+        public double defenselimit;
+        public double cyclelimit;
 
         public BasicSlot slot0;
         public BasicSlot slot1;
@@ -445,15 +451,15 @@ public class DefaultTalonFX {
      
         // use the motor voltage to calculate new position and velocity
         // using WPILib's DCMotorSim class for physics simulation
-        m_motorSimModel.setInputVoltage(motorVoltage);
-        m_motorSimModel.update(0.020); // assume 20 ms loop time
+        // m_motorSimModel.setInputVoltage(motorVoltage);
+        // m_motorSimModel.update(0.020); // assume 20 ms loop time
      
-        // apply the new rotor position and velocity to the TalonFX;
-        // note that this is rotor position/velocity (before gear ratios)
-        talonFXSim.setRawRotorPosition(m_motorSimModel.getAngularPositionRotations());
-        talonFXSim.setRotorVelocity(
-           Units.radiansToRotations(m_motorSimModel.getAngularVelocityRadPerSec())
-        );
+        // // apply the new rotor position and velocity to the TalonFX;
+        // // note that this is rotor position/velocity (before gear ratios)
+        // talonFXSim.setRawRotorPosition(m_motorSimModel.getAngularPositionRotations());
+        // talonFXSim.setRotorVelocity(
+        //    Units.radiansToRotations(m_motorSimModel.getAngularVelocityRadPerSec())
+        // );
      }
     
 }

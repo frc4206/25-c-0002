@@ -5,18 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IntakeSub;
+import frc.robot.subsystems.Arm_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakeMoveCom extends Command {
-  /** Creates a new IntakeMoveCom. */
-  IntakeSub m_intakeSub;
-  double m_percent;
-  public IntakeMoveCom(IntakeSub intakeSub, double percent) {
-    m_intakeSub = intakeSub;
-    m_percent = percent;
+public class ArmPercent_Com extends Command {
+  /** Creates a new ArmMoveCom. */
+  Arm_Sub m_armSub;
+  double m_inputPercent;
+
+  public ArmPercent_Com(Arm_Sub armSub, double inputPercent) {
+    m_armSub = armSub;
+    m_inputPercent = inputPercent;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_intakeSub);
+    addRequirements(m_armSub);
   }
 
   // Called when the command is initially scheduled.
@@ -26,13 +27,13 @@ public class IntakeMoveCom extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeSub.setPercentage_func(m_percent);
+    m_armSub.setPercentage_func(m_inputPercent);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intakeSub.setPercentage_func(0);
+    m_armSub.setPercentage_func(0);
   }
 
   // Returns true when the command should end.

@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.DefaultTalonFX;
 
-public class ElevatorSub extends SubsystemBase {
+public class Elevator_Sub extends SubsystemBase {
   /** Creates a new elevatorSub. */
   DefaultTalonFX.Config elevatorMotorConfig1 = new DefaultTalonFX.Config("elevator1Cfg");
   DefaultTalonFX.Config elevatorMotorConfig2 = new DefaultTalonFX.Config("elevator2Cfg");
@@ -38,7 +38,7 @@ public class ElevatorSub extends SubsystemBase {
   public DefaultTalonFX elevatorMotor1 = new DefaultTalonFX(elevatorMotorConfig1);
   public DefaultTalonFX elevatorMotor2 = new DefaultTalonFX(elevatorMotorConfig2);
 
-  public ElevatorSub() {}
+  public Elevator_Sub() {}
 
   @Override
   public void periodic() {

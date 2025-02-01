@@ -5,14 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ClawSub;
+import frc.robot.subsystems.Claw_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ClawMoveCom extends Command {
+public class ClawPercent_Com extends Command {
   /** Creates a new ClawCom. */
-  ClawSub m_clawSub;
+  Claw_Sub m_clawSub;
   double m_percent;
-  public ClawMoveCom(ClawSub clawSub, double percent) {
+  public ClawPercent_Com(Claw_Sub clawSub, double percent) {
     m_clawSub = clawSub;
     m_percent = percent;
     // Use addRequirements() here to declare subsystem dependencies.

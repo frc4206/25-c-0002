@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.DefaultTalonFX;
 
-public class ClawSub extends SubsystemBase {
+public class Claw_Sub extends SubsystemBase {
   /** Creates a new ClawSub. */
   DefaultTalonFX.Config clawMotorConfig1 = new DefaultTalonFX.Config("claw1Cfg");
   DefaultTalonFX.Config clawMotorConfig2 = new DefaultTalonFX.Config("claw2Cfg");
@@ -37,7 +37,7 @@ public class ClawSub extends SubsystemBase {
   public DefaultTalonFX clawMotor1 = new DefaultTalonFX(clawMotorConfig1);
   public DefaultTalonFX clawMotor2 = new DefaultTalonFX(clawMotorConfig2);
 
-  public ClawSub() {}
+  public Claw_Sub() {}
 
   @Override
   public void periodic() {

@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.DefaultTalonFX;
 
-public class IntakeSub extends SubsystemBase {
+public class Intake_Sub extends SubsystemBase {
   /** Creates a new intakeSub. */
   DefaultTalonFX.Config intakeMotorConfig1 = new DefaultTalonFX.Config("intake1Cfg");
   DefaultTalonFX.Config intakeMotorConfig2 = new DefaultTalonFX.Config("intake2Cfg");
@@ -36,7 +36,7 @@ public class IntakeSub extends SubsystemBase {
   public DefaultTalonFX intakeMotor1 = new DefaultTalonFX(intakeMotorConfig1);
   public DefaultTalonFX intakeMotor2 = new DefaultTalonFX(intakeMotorConfig2);
 
-  public IntakeSub() {}
+  public Intake_Sub() {}
 
   @Override
   public void periodic() {
@@ -46,5 +46,15 @@ public class IntakeSub extends SubsystemBase {
   public void setPercentage_func(double percentage) {
     intakeMotor1.Duty_Cycle_Output(percentage);
     intakeMotor2.Duty_Cycle_Output(percentage);
+  }
+
+  public void intakeDefaultPos_func(double pos) {
+    intakeMotor1.PID_Position(pos);
+    intakeMotor2.PID_Position(pos);
+  }
+
+  public void intakeOutPos_func(double pos) {
+    intakeMotor1.PID_Position(pos);
+    intakeMotor2.PID_Position(pos);
   }
 }

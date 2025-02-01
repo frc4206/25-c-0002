@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.DefaultTalonFX;
 
-public class ArmSub extends SubsystemBase {
+public class Arm_Sub extends SubsystemBase {
   /** Creates a new armSub. */
   DefaultTalonFX.Config armMotorConfig1 = new DefaultTalonFX.Config("arm1Cfg");
   DefaultTalonFX.Config armMotorConfig2 = new DefaultTalonFX.Config("arm2Cfg");
@@ -43,7 +43,7 @@ public class ArmSub extends SubsystemBase {
 
   
 
-  public ArmSub(Config cfg) {
+  public Arm_Sub(Config cfg) {
       armMotor1.Enable_Sim();
       armMotor2.Enable_Sim();
   }

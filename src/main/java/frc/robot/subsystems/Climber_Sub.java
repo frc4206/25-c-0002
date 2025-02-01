@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.DefaultTalonFX;
 
-public class ClimberSub extends SubsystemBase {
+public class Climber_Sub extends SubsystemBase {
   /** Creates a new climberSub. */
   DefaultTalonFX.Config climberMotorConfig1 = new DefaultTalonFX.Config("climber1Cfg");
   DefaultTalonFX.Config climberMotorConfig2 = new DefaultTalonFX.Config("climber2Cfg");
@@ -41,7 +41,7 @@ public class ClimberSub extends SubsystemBase {
   public DefaultTalonFX climberMotor1 = new DefaultTalonFX(climberMotorConfig1);
   public DefaultTalonFX climberMotor2 = new DefaultTalonFX(climberMotorConfig2);
 
-  public ClimberSub() {}
+  public Climber_Sub() {}
 
   @Override
   public void periodic() {

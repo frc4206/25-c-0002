@@ -2,21 +2,27 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Game_Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Claw_Sub;
+import frc.robot.subsystems.Arm_Sub;
+import frc.robot.subsystems.Elevator_Sub;
+import frc.robot.subsystems.Intake_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ClawPercent_Com extends Command {
-  /** Creates a new ClawCom. */
-  Claw_Sub m_clawSub;
-  double m_percent;
-  public ClawPercent_Com(Claw_Sub clawSub, double percent) {
-    m_clawSub = clawSub;
-    m_percent = percent;
+public class Coral_Intake_Com extends Command {
+   Elevator_Sub m_elevatorSub;
+  Intake_Sub m_intakeSub;
+  Arm_Sub m_armSub;
+  /** Creates a new Coral_Intake. */
+  public Coral_Intake_Com(Arm_Sub armSub, Intake_Sub intakeSub, Elevator_Sub elevatorSub) {
+    m_armSub = armSub;
+    m_intakeSub = intakeSub;
+    m_elevatorSub = elevatorSub;
+    addRequirements(m_armSub);
+    addRequirements(m_intakeSub);
+    addRequirements(m_elevatorSub);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_clawSub);
   }
 
   // Called when the command is initially scheduled.
@@ -25,15 +31,11 @@ public class ClawPercent_Com extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    m_clawSub.setPercentage_func(m_percent);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_clawSub.setPercentage_func(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

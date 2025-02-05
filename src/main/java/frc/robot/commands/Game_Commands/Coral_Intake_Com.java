@@ -11,11 +11,18 @@ import frc.robot.subsystems.Intake_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Coral_Intake_Com extends Command {
-   Elevator_Sub m_elevatorSub;
+
+  Elevator_Sub m_elevatorSub;
   Intake_Sub m_intakeSub;
   Arm_Sub m_armSub;
+  double m_elevatorPosition;
+  double m_armPosition;
+  double m_intakePosition;
   /** Creates a new Coral_Intake. */
-  public Coral_Intake_Com(Arm_Sub armSub, Intake_Sub intakeSub, Elevator_Sub elevatorSub) {
+  public Coral_Intake_Com(Arm_Sub armSub, Intake_Sub intakeSub, Elevator_Sub elevatorSub, double elevatorPosition, double armPosition, double intakePosition) {
+    m_elevatorPosition = elevatorPosition;
+    m_armPosition = armPosition;
+    m_intakePosition = intakePosition;
     m_armSub = armSub;
     m_intakeSub = intakeSub;
     m_elevatorSub = elevatorSub;
@@ -32,9 +39,9 @@ public class Coral_Intake_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armSub.intakeAcceptAngle_func(0);
-    m_elevatorSub.elevatorMoveToPos_func(0);
-    m_intakeSub.intakeDefaultPos_func(0);
+    m_armSub.intakeAcceptAngle_func(m_armPosition);
+    m_elevatorSub.elevatorMoveToPos_func(m_elevatorPosition);
+    m_intakeSub.intakeDefaultPos_func(m_intakePosition);
   }
 
   // Called once the command ends or is interrupted.

@@ -11,11 +11,11 @@ import frc.robot.subsystems.Elevator_Sub;
 public class Elevator_PID_Com extends Command {
 
   Elevator_Sub m_elevatorSub;
-  double m_position;
+  double m_elevatorPosition;
   /** Creates a new Elevator_PID_Com. */
   public Elevator_PID_Com(Elevator_Sub elevatorSub, double position) {  ;
     m_elevatorSub = elevatorSub;
-    m_position = position;
+    m_elevatorPosition = position;
   
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_elevatorSub);
@@ -31,7 +31,7 @@ public class Elevator_PID_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_elevatorSub.elevatorMoveToPos_func(m_position);
+    m_elevatorSub.elevatorMoveToPos_func(m_elevatorPosition);
   }
 
   // Called once the command ends or is interrupted.

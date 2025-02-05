@@ -11,12 +11,17 @@ import frc.robot.subsystems.Elevator_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class L3_scoring_Com extends Command {
-
+  double m_elevatorPosition;
+  double m_clawPosition;
+  double m_armPosition;
   Elevator_Sub m_elevatorSub;
   Claw_Sub m_clawSub;
   Arm_Sub m_armSub;
   /** Creates a new L3_scoring. */
-  public L3_scoring_Com(Arm_Sub armSub, Claw_Sub clawSub, Elevator_Sub elevatorSub) {
+  public L3_scoring_Com(Arm_Sub armSub, Claw_Sub clawSub, Elevator_Sub elevatorSub,double armPosition, double elevatorPosition, double clawPosition) {
+    m_elevatorPosition = elevatorPosition;
+    m_armPosition = armPosition;
+    m_clawPosition = clawPosition;
     m_armSub = armSub;
     m_clawSub = clawSub;
     m_elevatorSub = elevatorSub;
@@ -33,8 +38,8 @@ public class L3_scoring_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_clawSub.reefBranchesAngle_func(0);
-    m_elevatorSub.elevatorMoveToPos_func(0);
+    m_clawSub.reefBranchesAngle_func(m_clawPosition);
+    m_elevatorSub.elevatorMoveToPos_func(m_elevatorPosition);
   }
 
   // Called once the command ends or is interrupted.

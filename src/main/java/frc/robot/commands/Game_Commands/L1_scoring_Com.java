@@ -11,11 +11,14 @@ import frc.robot.subsystems.Intake_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class L1_scoring_Com extends Command {
-
+  double m_clawPosition;
+  double m_intakePosition;
   Claw_Sub m_clawSub;
   Intake_Sub m_intakeSub;
   /** Creates a new L1_scoring_Com. */
-  public L1_scoring_Com(Intake_Sub intakeSub, Claw_Sub clawSub) {
+  public L1_scoring_Com(Intake_Sub intakeSub, Claw_Sub clawSub, double clawPosition, double intakePosition) {
+    m_clawPosition = clawPosition;
+    m_intakePosition = intakePosition;
     m_intakeSub = intakeSub;
     m_clawSub = clawSub;
     addRequirements(m_intakeSub);
@@ -30,8 +33,8 @@ public class L1_scoring_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeSub.intakeOutPos_func(0);
-    m_clawSub.reefTroughAngle_func(0);
+    m_intakeSub.intakeOutPos_func(m_intakePosition);
+    m_clawSub.reefTroughAngle_func(m_clawPosition);
   }
 
   // Called once the command ends or is interrupted.

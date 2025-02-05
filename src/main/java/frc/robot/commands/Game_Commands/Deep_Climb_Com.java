@@ -9,11 +9,14 @@ import frc.robot.subsystems.Climber_Sub;
 import frc.robot.subsystems.Intake_Sub;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Deep_Climb_Com extends Command {
-
+  double m_climberPosition;
+  double m_intakePosition;
   Climber_Sub m_climberSub;
   Intake_Sub m_intakeSub;
   /** Creates a new Deep_Climb. */
-  public Deep_Climb_Com(Intake_Sub intakeSub, Climber_Sub climberSub) {
+  public Deep_Climb_Com(Intake_Sub intakeSub, Climber_Sub climberSub, double climberPosition, double intakePosition) {
+    m_climberPosition = climberPosition;
+    m_intakePosition = intakePosition;
     m_intakeSub = intakeSub;
     m_climberSub = climberSub;
     addRequirements(m_intakeSub);
@@ -28,7 +31,7 @@ public class Deep_Climb_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climberSub.climberOutPos_func(0);
+    m_climberSub.climberOutPos_func(m_climberPosition);
   }
 
   // Called once the command ends or is interrupted.

@@ -9,11 +9,12 @@ import frc.robot.subsystems.Climber_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Climber_PID_Com extends Command {
-
+double m_climbPosition;
   Climber_Sub m_climberSub;
   /** Creates a new Climber_PID_Com. */
-  public Climber_PID_Com(Climber_Sub climberSub) {
+  public Climber_PID_Com(Climber_Sub climberSub, double position) {
     m_climberSub = climberSub;
+    m_climbPosition = position;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_climberSub);
   }
@@ -26,7 +27,9 @@ public class Climber_PID_Com extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_climberSub.climberOutPos_func(m_climbPosition);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

@@ -55,22 +55,7 @@ public class Elevator_Sub extends SubsystemBase {
     elevatorMotor2.PID_Position(pos);
   }
 
-  public void reefTroughPos_func(double pos) {
-    elevatorMotor1.PID_Position(pos);
-    elevatorMotor2.PID_Position(pos);
-  }
-
-  public void reefLowestBranchPos_func(double pos) {
-    elevatorMotor1.PID_Position(pos);
-    elevatorMotor2.PID_Position(pos);
-  }
-
-  public void reefMiddleBranchPos_func(double pos) {
-    elevatorMotor1.PID_Position(pos);
-    elevatorMotor2.PID_Position(pos);
-  }
-
-  public void reefHighestBranchPos_func(double pos) {
+  public void elevatorMoveToPos_func(double pos) {
     elevatorMotor1.PID_Position(pos);
     elevatorMotor2.PID_Position(pos);
   }

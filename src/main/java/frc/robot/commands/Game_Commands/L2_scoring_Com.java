@@ -4,6 +4,8 @@
 
 package frc.robot.commands.Game_Commands;
 
+import org.checkerframework.checker.units.qual.m;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Arm_Sub;
 import frc.robot.subsystems.Claw_Sub;
@@ -32,7 +34,10 @@ public class L2_scoring_Com extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_clawSub.reefBranchesAngle_func(0);
+    m_elevatorSub.elevatorMoveToPos_func(0);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

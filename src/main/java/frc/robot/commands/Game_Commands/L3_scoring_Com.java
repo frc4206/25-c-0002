@@ -32,7 +32,10 @@ public class L3_scoring_Com extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_clawSub.reefBranchesAngle_func(0);
+    m_elevatorSub.elevatorMoveToPos_func(0);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

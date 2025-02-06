@@ -7,65 +7,47 @@ package frc.robot.subsystems;
 import org.team4206.battleaid.common.LoadableConfig;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.DefaultTalonFX;
 
 public class Claw_Sub extends SubsystemBase {
-  /** Creates a new ClawSub. */
-  DefaultTalonFX.Config clawMotorConfig1 = new DefaultTalonFX.Config("claw1Cfg");
-  DefaultTalonFX.Config clawMotorConfig2 = new DefaultTalonFX.Config("claw2Cfg");
-  DigitalInput beamBreak1 = new DigitalInput(2);
+    /** Creates a new ClawSub. */
+    DefaultTalonFX.Config clawMotorConfig1 = new DefaultTalonFX.Config("Claw1Motor.toml");// TODO:change can Id back to
+                                                                                          // 11
 
-  public class  Config  extends LoadableConfig {
-    public double kHomePosition;
+    DigitalInput clawBeamBreak = new DigitalInput(9);
 
-    public double ClawL1Pos;
-    public double ClawL2Pos;
-    public double ClawL3Pos;
-    public double ClawL4Pos;
+    public class Config extends LoadableConfig {
 
-    public Config(String filename){
-      
+        public Config(String filename) {
 
-      super.load(this, filename);
-      LoadableConfig.print(this);
+            super.load(this, filename);
+            LoadableConfig.print(this);
+        }
     }
-  }
 
-  public DefaultTalonFX clawMotor1 = new DefaultTalonFX(clawMotorConfig1);
-  public DefaultTalonFX clawMotor2 = new DefaultTalonFX(clawMotorConfig2);
+    public DefaultTalonFX clawMotor1 = new DefaultTalonFX(clawMotorConfig1);
 
-  public Claw_Sub() {}
+    public Claw_Sub() {
+        clawMotor1.motor.setNeutralMode(NeutralModeValue.Brake);
+    }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 
-  public void setPercentage_func(double percentage) {
-    clawMotor1.Duty_Cycle_Output(percentage);
-    clawMotor2.Duty_Cycle_Output(percentage);
-  }
+    public void setPercentage_func(double percentage) {
+        if (clawBeamBreak.get() != true) {
+            clawMotor1.Duty_Cycle_Output(0);
+            System.out.print("stopping End Effector");
+        } else {
+            clawMotor1.Duty_Cycle_Output(percentage);
+        }
+    }
 
-  public void reefTroughAngle_func(double pos) {
-    clawMotor1.PID_Position(pos);
-    clawMotor2.PID_Position(pos);
-  }
-
-  public void reefBranchesAngle_func(double pos) {
-    clawMotor1.PID_Position(pos);
-    clawMotor2.PID_Position(pos);
-  }
-
-  public void reefHighestAngle_func(double pos) {
-    clawMotor1.PID_Position(pos);
-    clawMotor2.PID_Position(pos);
-  }
-
-  public void intakeAcceptAngle_func(double pos) {
-    clawMotor1.PID_Position(pos);
-    clawMotor2.PID_Position(pos);
-  }
+    // public void setPercentageOverride_func(double )
 }

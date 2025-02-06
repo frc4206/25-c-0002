@@ -48,12 +48,7 @@ public class Intake_Sub extends SubsystemBase {
     intakeMotor2.Duty_Cycle_Output(percentage);
   }
 
-  public void intakeDefaultPos_func(double pos) {
-    intakeMotor1.PID_Position(pos);
-    intakeMotor2.PID_Position(pos);
-  }
-
-  public void intakeOutPos_func(double pos) {
+  public void setIntakePos_func(double pos) {
     intakeMotor1.PID_Position(pos);
     intakeMotor2.PID_Position(pos);
   }

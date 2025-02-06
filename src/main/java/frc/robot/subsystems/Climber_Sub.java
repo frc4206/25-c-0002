@@ -53,12 +53,7 @@ public class Climber_Sub extends SubsystemBase {
     climberMotor2.Duty_Cycle_Output(percentage);
   }
 
-  public void climberOutPos_func(double pos) {
-    climberMotor1.PID_Position(pos);
-    climberMotor2.PID_Position(pos);
-  }
-
-  public void climberInPos_func(double pos) {
+  public void setClimberPos_func(double pos) {
     climberMotor1.PID_Position(pos);
     climberMotor2.PID_Position(pos);
   }

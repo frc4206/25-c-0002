@@ -26,7 +26,7 @@ public class Arm_PID_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armSub.intakeAcceptAngle_func(m_armPosition);
+    m_armSub.setArmAngle_func(m_armPosition);
   }
 
   // Called once the command ends or is interrupted.

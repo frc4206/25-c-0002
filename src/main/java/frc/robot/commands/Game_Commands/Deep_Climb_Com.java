@@ -31,7 +31,7 @@ public class Deep_Climb_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climberSub.climberOutPos_func(m_climberPosition);
+    m_climberSub.setClimberPos_func(m_climberPosition);
   }
 
   // Called once the command ends or is interrupted.

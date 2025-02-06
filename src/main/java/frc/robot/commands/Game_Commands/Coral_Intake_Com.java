@@ -39,9 +39,9 @@ public class Coral_Intake_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armSub.intakeAcceptAngle_func(m_armPosition);
-    m_elevatorSub.elevatorMoveToPos_func(m_elevatorPosition);
-    m_intakeSub.intakeDefaultPos_func(m_intakePosition);
+    m_armSub.setArmAngle_func(m_armPosition);
+    m_elevatorSub.setElevatorPos_func(m_elevatorPosition);
+    m_intakeSub.setIntakePos_func(m_intakePosition);
   }
 
   // Called once the command ends or is interrupted.

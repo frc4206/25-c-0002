@@ -31,7 +31,7 @@ public class Elevator_PID_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_elevatorSub.elevatorMoveToPos_func(m_elevatorPosition);
+    m_elevatorSub.setElevatorPos_func(m_elevatorPosition);
   }
 
   // Called once the command ends or is interrupted.

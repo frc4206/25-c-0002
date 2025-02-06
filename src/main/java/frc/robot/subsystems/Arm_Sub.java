@@ -43,7 +43,7 @@ public class Arm_Sub extends SubsystemBase {
 
   
 
-  public Arm_Sub(Config cfg) {
+  public Arm_Sub(/*Config cfg*/) {
       armMotor1.Enable_Sim();
       armMotor2.Enable_Sim();
   }
@@ -68,17 +68,7 @@ public class Arm_Sub extends SubsystemBase {
       armMotor2.Update_Sim();
   }
 
-  //TODO:also default pos??
-  public void intakeAcceptAngle_func(double pos) {
-    armMotor1.PID_Position(pos);
-    armMotor2.PID_Position(pos);
-  }
-
-  public void reefTroughAngle_func(double pos) {
-    armMotor1.PID_Position(pos);
-    armMotor2.PID_Position(pos);
-  }
-  public void reefHighestAngle_func(double pos) {
+  public void setArmAngle_func(double pos) {
     armMotor1.PID_Position(pos);
     armMotor2.PID_Position(pos);
   }

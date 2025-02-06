@@ -33,8 +33,7 @@ public class L1_scoring_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeSub.intakeOutPos_func(m_intakePosition);
-    m_clawSub.reefTroughAngle_func(m_clawPosition);
+    m_intakeSub.setIntakePos_func(m_intakePosition);
   }
 
   // Called once the command ends or is interrupted.

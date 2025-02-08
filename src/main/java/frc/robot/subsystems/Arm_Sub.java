@@ -43,11 +43,11 @@ public class Arm_Sub extends SubsystemBase {
 
   public Arm_Sub(Arm_Sub.Config arm_Motor_Config) {
     armMotorConfig = arm_Motor_Config; 
+    armMotor2.motor.setControl(new Follower(arm_Motor_Config.canID, false));
 
     armMotor1.Enable_Sim();
     armMotor2.Enable_Sim();
 
-    armMotor2.motor.setControl(new Follower(arm_Motor_Config.canID, false));
   }
 
   @Override
@@ -59,7 +59,6 @@ public class Arm_Sub extends SubsystemBase {
   public void setPercentage_func(double percentage) {
         //TODO: make sure one of these doesn't need to be inverted, double check all motors
         armMotor1.Duty_Cycle_Output(percentage);
-        armMotor2.Duty_Cycle_Output(percentage);
   }
 
   @Override
@@ -72,6 +71,5 @@ public class Arm_Sub extends SubsystemBase {
 
   public void setArmAngle_func(double pos) {
     armMotor1.PID_Position(pos);
-    armMotor2.PID_Position(pos);
   }
 }

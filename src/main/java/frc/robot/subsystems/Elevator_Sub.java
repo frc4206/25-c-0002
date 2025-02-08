@@ -51,11 +51,9 @@ public class Elevator_Sub extends SubsystemBase {
 
   public void setPercentage_func(double percentage) {
     elevatorMotor1.Duty_Cycle_Output(percentage);
-    elevatorMotor2.Duty_Cycle_Output(percentage);
   }
 
   public void setElevatorPos_func(double pos) {
     elevatorMotor1.PID_Position(pos);
-    elevatorMotor2.PID_Position(pos);
   }
 }

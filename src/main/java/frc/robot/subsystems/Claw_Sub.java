@@ -10,10 +10,15 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.DefaultTalonFX;
 
 public class Claw_Sub extends SubsystemBase {
+
+    private XboxController controller;
+    private Thread clawThread;
+
     /** Creates a new ClawSub. */
     DefaultTalonFX.Config clawMotorConfig1 = new DefaultTalonFX.Config("Claw1Motor.toml");// TODO:change can Id back to 11
 
@@ -30,8 +35,35 @@ public class Claw_Sub extends SubsystemBase {
 
     public DefaultTalonFX clawMotor1 = new DefaultTalonFX(clawMotorConfig1);
 
-    public Claw_Sub() {
+    public Claw_Sub(XboxController controller) {
         clawMotor1.motor.setNeutralMode(NeutralModeValue.Brake);
+        this.controller = controller;
+
+        setupClawThread();
+    }
+
+    public void clawLogic() throws InterruptedException
+    {
+        if (!controller.getBButton() && clawBeamBreak.get() != true) {
+            clawMotor1.Duty_Cycle_Output(0);
+            System.out.print("stopping End Effector");
+        } else {
+            clawMotor1.Duty_Cycle_Output(1.0);
+        }
+    }
+
+    public void setupClawThread(){
+        clawThread = new Thread() {
+            public void run() {
+                try {
+                    clawLogic();
+                } catch(InterruptedException v) {
+                    System.out.println(v);
+                }
+            }  
+        };
+        
+        clawThread.start();
     }
 
     @Override

@@ -39,7 +39,6 @@ public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Arm_Sub m_Arm_Sub = new Arm_Sub();
-  private final Claw_Sub m_Claw_Sub = new Claw_Sub();
   private final Climber_Sub m_Climber_Sub = new Climber_Sub();
   private final Elevator_Sub m_Elevator_Sub = new Elevator_Sub();
   private final Intake_Sub m_Intake_Sub = new Intake_Sub();
@@ -48,6 +47,8 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+
+  private final Claw_Sub m_Claw_Sub = new Claw_Sub(m_driverController.getHID());
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -78,32 +79,32 @@ public class RobotContainer {
     // m_driverController.a().onTrue(new InstantCommand(() -> m_GameStateCurrentLimiter.SetState(GameStateCurrentLimiter.State.SHOOT)));
     // m_driverController.x().onTrue(new InstantCommand(() -> m_GameStateCurrentLimiter.SetState(GameStateCurrentLimiter.State.CLIMB)));
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    m_driverController.a().whileTrue(new ClawPercent_Com(m_Claw_Sub, 0.2));
-    m_driverController.b().whileTrue(new ClawPercent_Com(m_Claw_Sub, -0.5));
+    // m_driverController.a().whileTrue(new ClawPercent_Com(m_Claw_Sub, 0.2));
+    // m_driverController.b().whileTrue(new ClawPercent_Com(m_Claw_Sub, -0.5));
     //m_driverController.axisMagnitudeGreaterThan(1, 0.1).whileTrue(new ClawPercent_Com(m_Claw_Sub, -m_driverController.getLeftY()));
 
-    m_driverController.x().whileTrue(new Arm_PID_Com(m_Arm_Sub, 0));
+    // m_driverController.x().whileTrue(new Arm_PID_Com(m_Arm_Sub, 0));
 
     // L4 scoring command button line,TODO:change it off of D-pad
     //TODO: test if this works, it should in theory
-    m_driverController.pov(0).onTrue(new L4_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)
-          .andThen(new ClawPercent_Com(m_Claw_Sub, 0))
-          .andThen(new L4_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)));
+    // m_driverController.pov(0).onTrue(new L4_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)
+    //       .andThen(new ClawPercent_Com(m_Claw_Sub, 0))
+    //       .andThen(new L4_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)));
     
-    // L3 scoring command button line
-    m_driverController.pov(180).onTrue(new L3_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)
-          .andThen(new ClawPercent_Com(m_Claw_Sub, 0))
-          .andThen(new L3_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)));
+    // // L3 scoring command button line
+    // m_driverController.pov(180).onTrue(new L3_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)
+    //       .andThen(new ClawPercent_Com(m_Claw_Sub, 0))
+    //       .andThen(new L3_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)));
 
-    // L2 scoring command button line
-    m_driverController.pov(90).onTrue(new L2_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)
-          .andThen(new ClawPercent_Com(m_Claw_Sub, 0))
-          .andThen(new L2_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)));
+    // // L2 scoring command button line
+    // m_driverController.pov(90).onTrue(new L2_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)
+    //       .andThen(new ClawPercent_Com(m_Claw_Sub, 0))
+    //       .andThen(new L2_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)));
 
-    // L1 scoring command button line
-    m_driverController.pov(270).onTrue(new L1_scoring_Com(m_Intake_Sub, 0)
-          .andThen(new ClawPercent_Com(m_Claw_Sub, 0))
-          .andThen(new L1_scoring_Com(m_Intake_Sub, 0)));
+    // // L1 scoring command button line
+    // m_driverController.pov(270).onTrue(new L1_scoring_Com(m_Intake_Sub, 0)
+    //       .andThen(new ClawPercent_Com(m_Claw_Sub, 0))
+    //       .andThen(new L1_scoring_Com(m_Intake_Sub, 0)));
   }
 
   /**

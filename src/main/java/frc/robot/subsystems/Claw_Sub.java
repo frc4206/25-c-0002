@@ -5,8 +5,6 @@
 package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
-
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;

@@ -5,9 +5,6 @@
 package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
-
-import com.ctre.phoenix6.hardware.CANcoder;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.DefaultTalonFX;

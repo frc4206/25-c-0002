@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
-import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -23,6 +23,7 @@ public class Climber_Sub extends SubsystemBase {
   public DefaultTalonFX climberMotor2 = new DefaultTalonFX(climberMotorConfig2);
   DigitalInput climberHallSensor = new DigitalInput(3);
   public Config climberConfig = new Config("Climber.toml");
+  public Config climberMotorConfig = new Config("Climber1Motor.toml");
 
   public TalonFX[] m_climberList = {climberMotor1.motor, climberMotor2.motor};
   public ArrayList<Double[]> currentLimitList = new ArrayList<>();
@@ -34,6 +35,7 @@ public class Climber_Sub extends SubsystemBase {
     public double climbReadyPosition; 
     public String name;
 
+    public int canID; 
 
     public Config(String filename){
 
@@ -42,7 +44,7 @@ public class Climber_Sub extends SubsystemBase {
     }
   }
 
-  public Climber_Sub(Config cfg) {
+  public Climber_Sub(Config cfg, Climber_Sub.Config climber_Motor_Config) {
     Double[] intakeLimits = {climberMotorConfig1.intakelimit, climberMotorConfig2.intakelimit};
     Double[] shootLimits = {climberMotorConfig1.shootlimit, climberMotorConfig2.shootlimit};
     Double[] climbLimits = {climberMotorConfig1.climblimit, climberMotorConfig2.climblimit};
@@ -53,6 +55,9 @@ public class Climber_Sub extends SubsystemBase {
     currentLimitList.add(climbLimits);
     currentLimitList.add(defenseLimits);
     currentLimitList.add(cycleLimits);
+
+    climberMotorConfig = climber_Motor_Config; 
+    climberMotor2.motor.setControl(new Follower(climber_Motor_Config.canID, false));
   }
 
   public Climber_Sub() {}

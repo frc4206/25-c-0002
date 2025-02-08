@@ -6,8 +6,7 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-
+import com.ctre.phoenix6.controls.Follower;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.DefaultTalonFX;
@@ -19,6 +18,7 @@ public class Elevator_Sub extends SubsystemBase {
   DigitalInput elevatorHallSensor1 = new DigitalInput(4);
   DigitalInput elevatorHallSensor2 = new DigitalInput(5);
   public Config elevatorConfig = new Config("Elevator");
+  public Config elevatorMotorConfig = new Config("Elevator1Motor.toml");
 
   public class  Config  extends LoadableConfig {
     public double stowPosition; 
@@ -28,9 +28,9 @@ public class Elevator_Sub extends SubsystemBase {
     public double l3ScoringPosition; 
     public double l4ScoringPosition; 
 
-    public Config(String filename){
-      
+    public int canID; 
 
+    public Config(String filename){
       super.load(this, filename);
       LoadableConfig.print(this);
     }
@@ -39,7 +39,10 @@ public class Elevator_Sub extends SubsystemBase {
   public DefaultTalonFX elevatorMotor1 = new DefaultTalonFX(elevatorMotorConfig1);
   public DefaultTalonFX elevatorMotor2 = new DefaultTalonFX(elevatorMotorConfig2);
 
-  public Elevator_Sub() {}
+  public Elevator_Sub(Elevator_Sub.Config elevator_Motor_Config) {
+    elevatorMotorConfig = elevator_Motor_Config; 
+    elevatorMotor2.motor.setControl(new Follower(elevator_Motor_Config.canID, false));
+  }
 
   @Override
   public void periodic() {

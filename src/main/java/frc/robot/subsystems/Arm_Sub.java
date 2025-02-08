@@ -6,9 +6,8 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.DefaultTalonFX;
@@ -22,6 +21,7 @@ public class Arm_Sub extends SubsystemBase {
   public DefaultTalonFX armMotor1 = new DefaultTalonFX(armMotorConfig1);
   public DefaultTalonFX armMotor2 = new DefaultTalonFX(armMotorConfig2);
   public Config armConfig = new Config("Arm.toml"); 
+  public Config armMotorConfig = new Config("Arm1Motor.toml");
 
   //TODO:put in proper values in the tomls and check if they make sense for the subsystem, the filler values will break something if unchanged
   public class  Config  extends LoadableConfig {
@@ -30,21 +30,24 @@ public class Arm_Sub extends SubsystemBase {
     public double l2ScoringPosition; 
     public double l3ScoringPosition; 
     public double l4ScoringPosition; 
+    public double percent; 
 
+    public int canID; 
 
     public Config(String filename){
-      
-
       super.load(this, filename);
       LoadableConfig.print(this);
     }
+
   }
 
-  
+  public Arm_Sub(Arm_Sub.Config arm_Motor_Config) {
+    armMotorConfig = arm_Motor_Config; 
 
-  public Arm_Sub(/*Config cfg*/) {
-      armMotor1.Enable_Sim();
-      armMotor2.Enable_Sim();
+    armMotor1.Enable_Sim();
+    armMotor2.Enable_Sim();
+
+    armMotor2.motor.setControl(new Follower(arm_Motor_Config.canID, false));
   }
 
   @Override

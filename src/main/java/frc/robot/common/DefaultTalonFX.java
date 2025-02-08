@@ -110,6 +110,12 @@ public class DefaultTalonFX {
         public int canID;
         public boolean inverted;
 
+        public double intakelimit;
+        public double shootlimit;
+        public double climblimit;
+        public double defenselimit;
+        public double cyclelimit;
+
         public BasicSlot slot0;
         public BasicSlot slot1;
         public BasicSlot slot2;

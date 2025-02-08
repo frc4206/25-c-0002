@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+
 import org.team4206.battleaid.common.LoadableConfig;
 
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -15,37 +17,64 @@ import frc.robot.common.DefaultTalonFX;
 
 public class Climber_Sub extends SubsystemBase {
   /** Creates a new climberSub. */
-  DefaultTalonFX.Config climberMotorConfig1 = new DefaultTalonFX.Config("climber1Cfg");
-  DefaultTalonFX.Config climberMotorConfig2 = new DefaultTalonFX.Config("climber2Cfg");
+  DefaultTalonFX.Config climberMotorConfig1 = new DefaultTalonFX.Config("Climber1Motor.toml");
+  DefaultTalonFX.Config climberMotorConfig2 = new DefaultTalonFX.Config("Climber2Motor.toml");
+  public DefaultTalonFX climberMotor1 = new DefaultTalonFX(climberMotorConfig1);
+  public DefaultTalonFX climberMotor2 = new DefaultTalonFX(climberMotorConfig2);
+
   CANcoder climberCCoder = new CANcoder(3);
   DigitalInput climerHalSensor = new DigitalInput(3);
 
-  public class  Config  extends LoadableConfig {
-    public double kHomePosition;
+  public TalonFX[] m_climberList = {climberMotor1.motor, climberMotor2.motor};
+  public ArrayList<Double[]> currentLimitList = new ArrayList<>();
+  
 
-    public double kMaxReverseOutput;
+  public static class Config  extends LoadableConfig {
 
-    public double climberOutPos;
-    public double climberInPos;
+    // public double kHomePosition;
+
+    // public double kMaxReverseOutput;
+
+    // public double climberOutPos;
+    // public double climberInPos;
+    public String name;
   //The next one probably won't be needed
     //public double climberDefaultPos;
 
     public Config(String filename){
-      
 
       super.load(this, filename);
-      LoadableConfig.print(this);
+        LoadableConfig.print(this);
     }
   }
 
-  public DefaultTalonFX climberMotor1 = new DefaultTalonFX(climberMotorConfig1);
-  public DefaultTalonFX climberMotor2 = new DefaultTalonFX(climberMotorConfig2);
+  public Climber_Sub(Config cfg) {
+    Double[] intakeLimits = {climberMotorConfig1.intakelimit, climberMotorConfig2.intakelimit};
+    Double[] shootLimits = {climberMotorConfig1.shootlimit, climberMotorConfig2.shootlimit};
+    Double[] climbLimits = {climberMotorConfig1.climblimit, climberMotorConfig2.climblimit};
+    Double[] defenseLimits = {climberMotorConfig1.defenselimit, climberMotorConfig2.defenselimit};
+    Double[] cycleLimits = {climberMotorConfig1.cyclelimit, climberMotorConfig2.cyclelimit};
+    currentLimitList.add(intakeLimits);
+    currentLimitList.add(shootLimits);
+    currentLimitList.add(climbLimits);
+    currentLimitList.add(defenseLimits);
+    currentLimitList.add(cycleLimits);
+  }
 
   public Climber_Sub() {}
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    // TODO Auto-generated method stub
+
+    climberMotor1.Update_Sim();
+    climberMotor2.Update_Sim();
+    super.simulationPeriodic();
   }
 
   public void setPercentage_func(double percentage) {

@@ -21,8 +21,8 @@ public class Climber_Sub extends SubsystemBase {
   DefaultTalonFX.Config climberMotorConfig2 = new DefaultTalonFX.Config("Climber2Motor.toml");
   public DefaultTalonFX climberMotor1 = new DefaultTalonFX(climberMotorConfig1);
   public DefaultTalonFX climberMotor2 = new DefaultTalonFX(climberMotorConfig2);
-
   DigitalInput climberHallSensor = new DigitalInput(3);
+  public Config climberConfig = new Config("Climber.toml");
 
   public TalonFX[] m_climberList = {climberMotor1.motor, climberMotor2.motor};
   public ArrayList<Double[]> currentLimitList = new ArrayList<>();

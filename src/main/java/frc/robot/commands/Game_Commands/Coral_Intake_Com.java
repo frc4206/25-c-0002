@@ -11,18 +11,11 @@ import frc.robot.subsystems.Elevator_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Coral_Intake_Com extends Command {
-
   Elevator_Sub m_elevatorSub;
   Claw_Sub m_claw_Sub; 
   Arm_Sub m_armSub;
-  double m_elevatorPosition;
-  double m_armPosition;
-  double m_percent;
   /** Creates a new Coral_Intake. */
-  public Coral_Intake_Com(Arm_Sub armSub, Claw_Sub clawSub, Elevator_Sub elevatorSub, double elevatorPosition, double armPosition, double percent) {
-    m_elevatorPosition = elevatorPosition;
-    m_armPosition = armPosition;
-    m_percent = percent; 
+  public Coral_Intake_Com(Arm_Sub armSub, Claw_Sub clawSub, Elevator_Sub elevatorSub) {
     m_armSub = armSub;
     m_claw_Sub = clawSub; 
     m_elevatorSub = elevatorSub;
@@ -38,9 +31,9 @@ public class Coral_Intake_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armSub.setArmAngle_func(m_armPosition);
-    m_elevatorSub.setElevatorPos_func(m_elevatorPosition);
-    m_claw_Sub.setPercentage_func(m_percent); 
+    m_armSub.setArmAngle_func(m_armSub.armConfig.sourceIntakePosition);
+    m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.sourceIntakePosition);
+    m_claw_Sub.setPercentage_func(m_claw_Sub.clawConfig.intakePercent); 
   }
 
   // Called once the command ends or is interrupted.

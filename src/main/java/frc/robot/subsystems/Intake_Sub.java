@@ -46,6 +46,16 @@ public class Intake_Sub extends SubsystemBase {
   }
 
   public void setPercentage_func(double percentage) {
+    if (intakeBeamBreak.get() != true) {
+      intakeMotorRollers.Duty_Cycle_Output(0);
+      System.out.println("stopping Intake"); 
+    }
+    else {
+      intakeMotorRollers.Duty_Cycle_Output(percentage);
+    }  
+  } 
+
+  public void setPercentageOuttake_func(double percentage) {
     intakeMotorRollers.Duty_Cycle_Output(percentage);
   }
 

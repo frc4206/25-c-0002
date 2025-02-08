@@ -5,22 +5,27 @@
 package frc.robot.commands.Game_Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Arm_Sub;
 import frc.robot.subsystems.Climber_Sub;
+import frc.robot.subsystems.Elevator_Sub;
 import frc.robot.subsystems.Intake_Sub;
+
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Deep_Climb_Com extends Command {
-  double m_climberPosition;
-  double m_intakePosition;
+  Elevator_Sub m_elevatorSub;
+  Arm_Sub m_armSub;
   Climber_Sub m_climberSub;
   Intake_Sub m_intakeSub;
   /** Creates a new Deep_Climb. */
-  public Deep_Climb_Com(Intake_Sub intakeSub, Climber_Sub climberSub, double climberPosition, double intakePosition) {
-    m_climberPosition = climberPosition;
-    m_intakePosition = intakePosition;
+  public Deep_Climb_Com(Intake_Sub intakeSub, Climber_Sub climberSub, Elevator_Sub elevatorSub, Arm_Sub armSub) {
     m_intakeSub = intakeSub;
     m_climberSub = climberSub;
+    m_elevatorSub = elevatorSub; 
+    m_armSub = armSub; 
     addRequirements(m_intakeSub);
     addRequirements(m_climberSub);
+    addRequirements(m_elevatorSub);
+    addRequirements(m_armSub);
   }
 
   // Called when the command is initially scheduled.
@@ -30,8 +35,10 @@ public class Deep_Climb_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climberSub.setClimberPos_func(m_climberPosition);
-    m_intakeSub.setIntakePos_func(m_intakePosition);
+    m_climberSub.setClimberPos_func(m_climberSub.climberConfig.climbReadyPosition);
+    m_intakeSub.setIntakePos_func(m_intakeSub.intakeConfig.intakePosition);
+    m_armSub.setArmAngle_func(m_armSub.armConfig.stowPosition);
+    m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.stowPosition);
   }
 
   // Called once the command ends or is interrupted.

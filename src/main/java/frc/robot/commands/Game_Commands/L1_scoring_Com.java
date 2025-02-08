@@ -3,9 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.Game_Commands;
-
-import java.lang.module.Configuration;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake_Sub;
 
@@ -26,7 +23,7 @@ public class L1_scoring_Com extends Command {
   @Override
   public void execute() {
     m_intakeSub.setIntakePos_func(m_intakeSub.intakeConfig.l1ScoringPosition);
-    m_intakeSub.setPercentage_func(m_intakeSub.intakeConfig.outtakePercent);
+    m_intakeSub.setPercentageOuttake_func(m_intakeSub.intakeConfig.outtakePercent);
   }
 
   // Called once the command ends or is interrupted.

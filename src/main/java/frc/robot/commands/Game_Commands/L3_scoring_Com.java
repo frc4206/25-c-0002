@@ -11,17 +11,11 @@ import frc.robot.subsystems.Elevator_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class L3_scoring_Com extends Command {
-  double m_elevatorPosition;
-  double m_armPosition;
-  double m_percent; 
   Elevator_Sub m_elevatorSub;
   Claw_Sub m_clawSub;
   Arm_Sub m_armSub;
   /** Creates a new L3_scoring. */
-  public L3_scoring_Com(Arm_Sub armSub, Claw_Sub clawSub, Elevator_Sub elevatorSub, double armPosition, double elevatorPosition, double percent) {
-    m_elevatorPosition = elevatorPosition;
-    m_armPosition = armPosition;
-    m_percent = percent; 
+  public L3_scoring_Com(Arm_Sub armSub, Claw_Sub clawSub, Elevator_Sub elevatorSub) { 
     m_armSub = armSub;
     m_clawSub = clawSub;
     m_elevatorSub = elevatorSub;
@@ -37,9 +31,9 @@ public class L3_scoring_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_elevatorSub.setElevatorPos_func(m_elevatorPosition);
-    m_armSub.setArmAngle_func(m_armPosition); 
-    m_clawSub.setPercentageOuttake_func(m_percent);
+    m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.l3ScoringPosition);
+    m_armSub.setArmAngle_func(m_armSub.armConfig.l3ScoringPosition); 
+    m_clawSub.setPercentageOuttake_func(m_clawSub.clawConfig.outtakePercent);
   }
 
   // Called once the command ends or is interrupted.

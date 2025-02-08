@@ -19,9 +19,9 @@ public class Arm_Sub extends SubsystemBase {
   DefaultTalonFX.Config armMotorConfig2 = new DefaultTalonFX.Config("arm2Cfg");
   CANcoder armCCoder = new CANcoder(22);
   DigitalInput armHallSensor = new DigitalInput(1);
-
   public DefaultTalonFX armMotor1 = new DefaultTalonFX(armMotorConfig1);
   public DefaultTalonFX armMotor2 = new DefaultTalonFX(armMotorConfig2);
+  public Config armConfig = new Config("Arm.toml"); 
 
   //TODO:put in proper values in the tomls and check if they make sense for the subsystem, the filler values will break something if unchanged
   public class  Config  extends LoadableConfig {

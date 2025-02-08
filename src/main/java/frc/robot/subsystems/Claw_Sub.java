@@ -16,8 +16,8 @@ import frc.robot.common.DefaultTalonFX;
 public class Claw_Sub extends SubsystemBase {
     /** Creates a new ClawSub. */
     DefaultTalonFX.Config clawMotorConfig1 = new DefaultTalonFX.Config("Claw1Motor.toml");
-
     DigitalInput clawBeamBreak = new DigitalInput(2);
+    public Config clawConfig = new Config("Claw.toml"); 
 
     public class Config extends LoadableConfig {
         public double intakePercent; 
@@ -44,14 +44,14 @@ public class Claw_Sub extends SubsystemBase {
     public void setPercentage_func(double percentage) {
         if (clawBeamBreak.get() != true) {
             clawMotor1.Duty_Cycle_Output(0);
-            System.out.print("stopping End Effector");
+            System.out.println("stopping End Effector");
         } else {
             clawMotor1.Duty_Cycle_Output(percentage);
         }
     }
 
     public void setPercentageOuttake_func(double percentage) {
-        clawMotor1.Duty_Cycle_Output(-percentage);
+        clawMotor1.Duty_Cycle_Output(percentage);
     }
 
     // public void setPercentageOverride_func(double )

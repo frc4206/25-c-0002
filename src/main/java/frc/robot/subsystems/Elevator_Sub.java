@@ -18,6 +18,7 @@ public class Elevator_Sub extends SubsystemBase {
   DefaultTalonFX.Config elevatorMotorConfig2 = new DefaultTalonFX.Config("elevator2Cfg");
   DigitalInput elevatorHallSensor1 = new DigitalInput(4);
   DigitalInput elevatorHallSensor2 = new DigitalInput(5);
+  public Config elevatorConfig = new Config("Elevator");
 
   public class  Config  extends LoadableConfig {
     public double stowPosition; 

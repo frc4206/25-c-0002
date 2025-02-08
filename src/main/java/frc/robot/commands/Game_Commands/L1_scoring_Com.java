@@ -5,25 +5,17 @@
 package frc.robot.commands.Game_Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-
-import frc.robot.subsystems.Claw_Sub;
 import frc.robot.subsystems.Intake_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class L1_scoring_Com extends Command {
-  double m_clawPosition;
   double m_intakePosition;
-  Claw_Sub m_clawSub;
   Intake_Sub m_intakeSub;
   /** Creates a new L1_scoring_Com. */
-  public L1_scoring_Com(Intake_Sub intakeSub, Claw_Sub clawSub, double clawPosition, double intakePosition) {
-    m_clawPosition = clawPosition;
+  public L1_scoring_Com(Intake_Sub intakeSub, double intakePosition) {
     m_intakePosition = intakePosition;
     m_intakeSub = intakeSub;
-    m_clawSub = clawSub;
     addRequirements(m_intakeSub);
-    addRequirements(m_clawSub);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.

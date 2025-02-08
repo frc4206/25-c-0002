@@ -1,5 +1,5 @@
 name = "intake2Cfg"
-canID = 42
+canID = 61
 inverted = false
 
 [slot0]

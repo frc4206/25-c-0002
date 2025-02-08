@@ -15,7 +15,6 @@ public class ClawPercent_Com extends Command {
   public ClawPercent_Com(Claw_Sub clawSub, double percent) {
     m_clawSub = clawSub;
     m_percent = percent;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_clawSub);
   }
 

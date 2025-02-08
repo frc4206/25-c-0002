@@ -1,5 +1,5 @@
 name = "arm1Cfg"
-canID = 1
+canID = 20
 inverted = false
 
 [slot0]

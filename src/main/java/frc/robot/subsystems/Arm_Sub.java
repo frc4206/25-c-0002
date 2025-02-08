@@ -17,7 +17,7 @@ public class Arm_Sub extends SubsystemBase {
   /** Creates a new armSub. */
   DefaultTalonFX.Config armMotorConfig1 = new DefaultTalonFX.Config("arm1Cfg");
   DefaultTalonFX.Config armMotorConfig2 = new DefaultTalonFX.Config("arm2Cfg");
-  CANcoder armCCoder = new CANcoder(3);
+  CANcoder armCCoder = new CANcoder(22);
   DigitalInput armHallSensor = new DigitalInput(1);
 
   public DefaultTalonFX armMotor1 = new DefaultTalonFX(armMotorConfig1);

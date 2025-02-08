@@ -16,7 +16,6 @@ public class ArmPercent_Com extends Command {
   public ArmPercent_Com(Arm_Sub armSub, double inputPercent) {
     m_armSub = armSub;
     m_inputPercent = inputPercent;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_armSub);
   }
 

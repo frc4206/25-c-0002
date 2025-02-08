@@ -1,5 +1,5 @@
 name = "climber1Cfg"
-canID = 21
+canID = 40
 inverted = false
 
 intakelimit = 1.0

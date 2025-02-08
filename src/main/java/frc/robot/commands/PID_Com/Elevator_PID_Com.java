@@ -16,8 +16,6 @@ public class Elevator_PID_Com extends Command {
   public Elevator_PID_Com(Elevator_Sub elevatorSub, double position) {  ;
     m_elevatorSub = elevatorSub;
     m_elevatorPosition = position;
-  
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_elevatorSub);
   }
 

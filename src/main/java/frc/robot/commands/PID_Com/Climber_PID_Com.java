@@ -15,7 +15,6 @@ double m_climbPosition;
   public Climber_PID_Com(Climber_Sub climberSub, double position) {
     m_climberSub = climberSub;
     m_climbPosition = position;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_climberSub);
   }
     

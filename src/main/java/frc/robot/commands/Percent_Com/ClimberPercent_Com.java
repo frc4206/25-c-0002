@@ -15,7 +15,6 @@ public class ClimberPercent_Com extends Command {
   public ClimberPercent_Com(Climber_Sub climberSub, double percent) {
     m_climberSub = climberSub;
     m_percent = percent;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_climberSub);
   }
 

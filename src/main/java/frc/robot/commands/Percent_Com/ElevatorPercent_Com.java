@@ -15,7 +15,6 @@ public class ElevatorPercent_Com extends Command {
   public ElevatorPercent_Com(Elevator_Sub elevatorSub, double percent) {
     m_elevatorSub = elevatorSub;
     m_percent = percent;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_elevatorSub);
   }
 

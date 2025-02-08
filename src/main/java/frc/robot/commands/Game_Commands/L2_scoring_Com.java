@@ -31,7 +31,6 @@ public class L2_scoring_Com extends Command {
     addRequirements(m_armSub);
     addRequirements(m_clawSub);
     addRequirements(m_elevatorSub);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -42,6 +41,8 @@ public class L2_scoring_Com extends Command {
   @Override
   public void execute() {
     m_elevatorSub.setElevatorPos_func(m_elevatorPosition);
+    m_armSub.setArmAngle_func(m_armPosition); 
+    
   }
 
   // Called once the command ends or is interrupted.

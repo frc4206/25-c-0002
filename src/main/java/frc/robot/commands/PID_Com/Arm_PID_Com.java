@@ -15,8 +15,7 @@ public class Arm_PID_Com extends Command {
   public Arm_PID_Com(Arm_Sub armSub, double position) {
     m_armPosition = position;
     m_armSub = armSub;
-  addRequirements(m_armSub);
-    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_armSub);
   }
 
   // Called when the command is initially scheduled.

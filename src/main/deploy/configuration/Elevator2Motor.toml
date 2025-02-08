@@ -1,5 +1,5 @@
 name = "elevator2Cfg"
-canID = 32
+canID = 51
 inverted = false
 
 [slot0]

@@ -1,5 +1,5 @@
 name = "claw1Cfg"
-canID = 50
+canID = 30
 inverted = false
 
 [slot0]

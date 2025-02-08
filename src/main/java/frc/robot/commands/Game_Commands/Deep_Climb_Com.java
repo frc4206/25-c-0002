@@ -21,7 +21,6 @@ public class Deep_Climb_Com extends Command {
     m_climberSub = climberSub;
     addRequirements(m_intakeSub);
     addRequirements(m_climberSub);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -32,6 +31,7 @@ public class Deep_Climb_Com extends Command {
   @Override
   public void execute() {
     m_climberSub.setClimberPos_func(m_climberPosition);
+    m_intakeSub.setIntakePos_func(m_intakePosition);
   }
 
   // Called once the command ends or is interrupted.

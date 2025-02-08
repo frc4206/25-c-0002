@@ -18,7 +18,7 @@ public class Claw_Sub extends SubsystemBase {
     DefaultTalonFX.Config clawMotorConfig1 = new DefaultTalonFX.Config("Claw1Motor.toml");// TODO:change can Id back to
                                                                                           // 11
 
-    DigitalInput clawBeamBreak = new DigitalInput(9);
+    DigitalInput clawBeamBreak = new DigitalInput(2);
 
     public class Config extends LoadableConfig {
 

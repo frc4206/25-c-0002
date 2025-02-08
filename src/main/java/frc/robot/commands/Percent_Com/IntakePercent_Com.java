@@ -15,7 +15,6 @@ public class IntakePercent_Com extends Command {
   public IntakePercent_Com(Intake_Sub intakeSub, double percent) {
     m_intakeSub = intakeSub;
     m_percent = percent;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_intakeSub);
   }
 

@@ -16,7 +16,7 @@ public class Intake_Sub extends SubsystemBase {
   /** Creates a new intakeSub. */
   DefaultTalonFX.Config intakeMotorConfig1 = new DefaultTalonFX.Config("intake1Cfg");
   DefaultTalonFX.Config intakeMotorConfig2 = new DefaultTalonFX.Config("intake2Cfg");
-  CANcoder intakeCCoder = new CANcoder(53);
+  CANcoder intakeCCoder = new CANcoder(62);
   DigitalInput intakeHallSensor = new DigitalInput(6);
   DigitalInput intakeBeamBreak = new DigitalInput(7);
 

@@ -44,12 +44,18 @@ public class Claw_Sub extends SubsystemBase {
 
     public void clawLogic() throws InterruptedException
     {
-        if (!controller.getBButton() && clawBeamBreak.get() != true) {
-            clawMotor1.Duty_Cycle_Output(0);
-            System.out.print("stopping End Effector");
+        if(controller.getBButton() && clawBeamBreak.get())
+        {
+            clawMotor1.Duty_Cycle_Output(-1.0);
         } else {
-            clawMotor1.Duty_Cycle_Output(1.0);
+            clawMotor1.Duty_Cycle_Output(0);
         }
+        // if (!controller.getBButton() && clawBeamBreak.get() != true) {
+        //     clawMotor1.Duty_Cycle_Output(0);
+        //     System.out.print("stopping End Effector");
+        // } else {
+        //     clawMotor1.Duty_Cycle_Output(1.0);
+        // }
     }
 
     public void setupClawThread(){

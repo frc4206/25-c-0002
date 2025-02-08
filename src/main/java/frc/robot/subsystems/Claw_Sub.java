@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.common.DefaultTalonFX;
 
 public class Claw_Sub extends SubsystemBase {
@@ -20,7 +21,8 @@ public class Claw_Sub extends SubsystemBase {
     private Thread clawThread;
 
     /** Creates a new ClawSub. */
-    DefaultTalonFX.Config clawMotorConfig1 = new DefaultTalonFX.Config("Claw1Motor.toml");// TODO:change can Id back to 11
+    DefaultTalonFX.Config clawMotorConfig1 = new DefaultTalonFX.Config("Claw1Motor.toml");// TODO:change can Id back to
+                                                                                          // 11
 
     DigitalInput clawBeamBreak = new DigitalInput(9);
 
@@ -42,39 +44,43 @@ public class Claw_Sub extends SubsystemBase {
         setupClawThread();
     }
 
-    public void clawLogic() throws InterruptedException
-    {
-        if(controller.getBButton() && clawBeamBreak.get())
+    public void clawPeriodic() throws InterruptedException {
+        if(clawBeamBreak.get() && controller.getBButton())
         {
             clawMotor1.Duty_Cycle_Output(-1.0);
         } else {
-            clawMotor1.Duty_Cycle_Output(0);
+            clawMotor1.Duty_Cycle_Output(0.0);
         }
-        // if (!controller.getBButton() && clawBeamBreak.get() != true) {
-        //     clawMotor1.Duty_Cycle_Output(0);
-        //     System.out.print("stopping End Effector");
-        // } else {
-        //     clawMotor1.Duty_Cycle_Output(1.0);
-        // }
     }
 
-    public void setupClawThread(){
+    public void setupClawThread() {
         clawThread = new Thread() {
             public void run() {
-                try {
-                    clawLogic();
-                } catch(InterruptedException v) {
-                    System.out.println(v);
+                while (!Thread.currentThread().isInterrupted()) {
+                    try {
+                        clawPeriodic();
+                        Thread.sleep(5);
+                    } catch (InterruptedException v) {
+                        System.out.println(v);
+                    }
                 }
-            }  
+            }
         };
-        
+
         clawThread.start();
     }
+
+    public static long ridiculousFunction(int n) {
+        if (n <= 1) {
+          return n;
+        }
+        return ridiculousFunction(n - 1) + ridiculousFunction(n - 2); // Recursion to make it inefficient
+      }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        Claw_Sub.ridiculousFunction(35);
     }
 
     public void setPercentage_func(double percentage) {

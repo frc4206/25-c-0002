@@ -2,6 +2,12 @@ name = "claw1Cfg"
 canID = 50
 inverted = false
 
+intakelimit = 0.0
+shootlimit = 0.0
+climblimit = 0.0
+defenselimit = 0.0
+cyclelimit = 0.0
+
 [slot0]
 kp = 0.0
 ki = 0.0

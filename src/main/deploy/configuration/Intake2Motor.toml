@@ -2,15 +2,21 @@ name = "intake2Cfg"
 canID = 42
 inverted = false
 
+intakelimit = 0.0
+shootlimit = 0.0
+climblimit = 0.0
+defenselimit = 0.0
+cyclelimit = 0.0
+
 [slot0]
-kp = 0
-ki = 0
-kd = 0
-[slot]
-kp = 0
-ki = 0
-kd = 0
+kp = 0.0
+ki = 0.0
+kd = 0.0
+[slot1]
+kp = 0.0
+ki = 0.0
+kd = 0.0
 [slot2]
-kp = 0
-ki = 0
-kd = 0
+kp = 0.0
+ki = 0.0
+kd = 0.0

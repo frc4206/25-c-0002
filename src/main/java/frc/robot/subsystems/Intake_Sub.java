@@ -14,8 +14,8 @@ import frc.robot.common.DefaultTalonFX;
 
 public class Intake_Sub extends SubsystemBase {
   /** Creates a new intakeSub. */
-  DefaultTalonFX.Config intakeMotorConfig1 = new DefaultTalonFX.Config("intake1Cfg");
-  DefaultTalonFX.Config intakeMotorConfig2 = new DefaultTalonFX.Config("intake2Cfg");
+  DefaultTalonFX.Config intakeMotorConfig1 = new DefaultTalonFX.Config("Intake1Motor.toml");
+  DefaultTalonFX.Config intakeMotorConfig2 = new DefaultTalonFX.Config("Intake2Motor.toml");
   CANcoder intakeCCoder = new CANcoder(53);
   DigitalInput intakeHallSensor = new DigitalInput(6);
   DigitalInput intakeBeamBreak = new DigitalInput(7);

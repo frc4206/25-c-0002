@@ -14,14 +14,14 @@ import frc.robot.subsystems.Elevator_Sub;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class L4_scoring_Com extends Command {
   double m_elevatorPosition;
-  double m_clawPosition;
   double m_armPosition;
+  double m_percent; 
   Elevator_Sub m_elevatorSub;
   Claw_Sub m_clawSub;
   Arm_Sub m_armSub;
   /** Creates a new L4scoring. */
-  public L4_scoring_Com(Arm_Sub armSub, Claw_Sub clawSub, Elevator_Sub elevatorSub, double armPosition, double clawPosition, double elevatorPosition) {
-    m_clawPosition = clawPosition;
+  public L4_scoring_Com(Arm_Sub armSub, Claw_Sub clawSub, Elevator_Sub elevatorSub, double armPosition, double percent, double elevatorPosition) {
+    m_percent = percent; 
     m_armPosition = armPosition;
     m_elevatorPosition = elevatorPosition;
     m_armSub = armSub;
@@ -41,6 +41,7 @@ public class L4_scoring_Com extends Command {
   public void execute() {
     m_armSub.setArmAngle_func(m_armPosition);
     m_elevatorSub.setElevatorPos_func(m_elevatorPosition);
+    m_clawSub.setPercentageOuttake_func(m_percent);
   }
   // Called once the command ends or is interrupted.
   @Override

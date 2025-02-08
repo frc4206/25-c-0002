@@ -9,11 +9,10 @@ import frc.robot.subsystems.Elevator_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Elevator_PID_Com extends Command {
-
   Elevator_Sub m_elevatorSub;
   double m_elevatorPosition;
   /** Creates a new Elevator_PID_Com. */
-  public Elevator_PID_Com(Elevator_Sub elevatorSub, double position) {  ;
+  public Elevator_PID_Com(Elevator_Sub elevatorSub, double position) {
     m_elevatorSub = elevatorSub;
     m_elevatorPosition = position;
     addRequirements(m_elevatorSub);

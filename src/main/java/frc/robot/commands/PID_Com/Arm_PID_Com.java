@@ -10,7 +10,7 @@ import frc.robot.subsystems.Arm_Sub;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Arm_PID_Com extends Command {
   double m_armPosition;
-    Arm_Sub m_armSub;
+  Arm_Sub m_armSub;
   /** Creates a new Arm_PID_Com. */
   public Arm_PID_Com(Arm_Sub armSub, double position) {
     m_armPosition = position;

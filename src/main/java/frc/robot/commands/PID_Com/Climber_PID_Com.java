@@ -9,7 +9,7 @@ import frc.robot.subsystems.Climber_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Climber_PID_Com extends Command {
-double m_climbPosition;
+  double m_climbPosition;
   Climber_Sub m_climberSub;
   /** Creates a new Climber_PID_Com. */
   public Climber_PID_Com(Climber_Sub climberSub, double position) {

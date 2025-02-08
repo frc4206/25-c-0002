@@ -11,11 +11,11 @@ import frc.robot.subsystems.Arm_Sub;
 public class ArmPercent_Com extends Command {
   /** Creates a new ArmMoveCom. */
   Arm_Sub m_armSub;
-  double m_inputPercent;
+  double m_percent;
 
-  public ArmPercent_Com(Arm_Sub armSub, double inputPercent) {
+  public ArmPercent_Com(Arm_Sub armSub, double percent) {
     m_armSub = armSub;
-    m_inputPercent = inputPercent;
+    m_percent = percent; 
     addRequirements(m_armSub);
   }
 
@@ -26,7 +26,7 @@ public class ArmPercent_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armSub.setPercentage_func(m_inputPercent);
+    m_armSub.setPercentage_func(m_percent);
   }
 
   // Called once the command ends or is interrupted.

@@ -23,7 +23,7 @@ public class Climber_Sub extends SubsystemBase {
   public DefaultTalonFX climberMotor2 = new DefaultTalonFX(climberMotorConfig2);
 
   CANcoder climberCCoder = new CANcoder(42);
-  DigitalInput climerHalSensor = new DigitalInput(3);
+  DigitalInput climberHallSensor = new DigitalInput(3);
 
   public TalonFX[] m_climberList = {climberMotor1.motor, climberMotor2.motor};
   public ArrayList<Double[]> currentLimitList = new ArrayList<>();

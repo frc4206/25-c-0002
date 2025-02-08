@@ -1,5 +1,5 @@
-name = "intake1Cfg"
-canID = 60
+name = "intakePivotCfg"
+canID = 61
 inverted = false
 
 [slot0]

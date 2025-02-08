@@ -14,17 +14,19 @@ import frc.robot.common.DefaultTalonFX;
 
 public class Intake_Sub extends SubsystemBase {
   /** Creates a new intakeSub. */
-  DefaultTalonFX.Config intakeMotorConfig1 = new DefaultTalonFX.Config("intake1Cfg");
-  DefaultTalonFX.Config intakeMotorConfig2 = new DefaultTalonFX.Config("intake2Cfg");
-  CANcoder intakeCCoder = new CANcoder(62);
+  DefaultTalonFX.Config intakeMotorRollersConfig = new DefaultTalonFX.Config("intakeRollersCfg");
+  DefaultTalonFX.Config intakeMotorPivotConfig = new DefaultTalonFX.Config("intakePivotCfg");
   DigitalInput intakeHallSensor = new DigitalInput(6);
   DigitalInput intakeBeamBreak = new DigitalInput(7);
+  public Config intakeConfig = new Config("Intake.toml");
+
 
   public class  Config  extends LoadableConfig {
-    public double kHomePosition;
-
-    public double intakeUpPos;
-    public double intakeOutPos;
+    public double stowPosition; 
+    public double l1ScoringPosition; 
+    public double intakePosition;
+    public double intakePercent; 
+    public double outtakePercent; 
 
     public Config(String filename){
       
@@ -33,8 +35,8 @@ public class Intake_Sub extends SubsystemBase {
     }
   }
 
-  public DefaultTalonFX intakeMotor1 = new DefaultTalonFX(intakeMotorConfig1);
-  public DefaultTalonFX intakeMotor2 = new DefaultTalonFX(intakeMotorConfig2);
+  public DefaultTalonFX intakeMotorRollers = new DefaultTalonFX(intakeMotorRollersConfig);
+  public DefaultTalonFX intakeMotorPivot = new DefaultTalonFX(intakeMotorPivotConfig);
 
   public Intake_Sub() {}
 
@@ -44,12 +46,10 @@ public class Intake_Sub extends SubsystemBase {
   }
 
   public void setPercentage_func(double percentage) {
-    intakeMotor1.Duty_Cycle_Output(percentage);
-    intakeMotor2.Duty_Cycle_Output(percentage);
+    intakeMotorRollers.Duty_Cycle_Output(percentage);
   }
 
   public void setIntakePos_func(double pos) {
-    intakeMotor1.PID_Position(pos);
-    intakeMotor2.PID_Position(pos);
+    intakeMotorPivot.PID_Position(pos);
   }
 }

@@ -1,5 +1,5 @@
-name = "intake2Cfg"
-canID = 61
+name = "intakeRollersCfg"
+canID = 60
 inverted = false
 
 [slot0]

@@ -4,18 +4,16 @@
 
 package frc.robot.commands.Game_Commands;
 
-import java.lang.module.Configuration;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class L1_scoring_Com extends Command {
-  Intake_Sub m_intakeSub;
-  /** Creates a new L1_scoring_Com. */
-  public L1_scoring_Com(Intake_Sub intakeSub) {
-    m_intakeSub = intakeSub;
-    addRequirements(m_intakeSub);
+public class Floor_Intake_Com extends Command {
+  Intake_Sub m_Intake_Sub; 
+  /** Creates a new Floor_Intake_Com. */
+  public Floor_Intake_Com(Intake_Sub intakeSub) {
+    m_Intake_Sub = intakeSub; 
+    addRequirements(m_Intake_Sub);
   }
 
   // Called when the command is initially scheduled.
@@ -25,8 +23,8 @@ public class L1_scoring_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeSub.setIntakePos_func(m_intakeSub.intakeConfig.l1ScoringPosition);
-    m_intakeSub.setPercentage_func(m_intakeSub.intakeConfig.outtakePercent);
+    m_Intake_Sub.setIntakePos_func(m_Intake_Sub.intakeConfig.intakePosition);
+    m_Intake_Sub.setPercentage_func(m_Intake_Sub.intakeConfig.intakePercent);
   }
 
   // Called once the command ends or is interrupted.

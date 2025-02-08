@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.DefaultTalonFX;
 
-public class ClimberSub extends SubsystemBase {
+public class Climber_Sub extends SubsystemBase {
   /** Creates a new climberSub. */
   DefaultTalonFX.Config climberMotorConfig1 = new DefaultTalonFX.Config("Climber1Motor.toml");
   DefaultTalonFX.Config climberMotorConfig2 = new DefaultTalonFX.Config("Climber2Motor.toml");
@@ -48,7 +48,7 @@ public class ClimberSub extends SubsystemBase {
     }
   }
 
-  public ClimberSub(Config cfg) {
+  public Climber_Sub(Config cfg) {
     Double[] intakeLimits = {climberMotorConfig1.intakelimit, climberMotorConfig2.intakelimit};
     Double[] shootLimits = {climberMotorConfig1.shootlimit, climberMotorConfig2.shootlimit};
     Double[] climbLimits = {climberMotorConfig1.climblimit, climberMotorConfig2.climblimit};
@@ -59,10 +59,9 @@ public class ClimberSub extends SubsystemBase {
     currentLimitList.add(climbLimits);
     currentLimitList.add(defenseLimits);
     currentLimitList.add(cycleLimits);
-
-    climberMotor1.Enable_Sim();
-    climberMotor2.Enable_Sim();
   }
+
+  public Climber_Sub() {}
 
   @Override
   public void periodic() {
@@ -83,13 +82,7 @@ public class ClimberSub extends SubsystemBase {
     climberMotor2.Duty_Cycle_Output(percentage);
   }
 
-
-  public void climberOutPos_func(double pos) {
-    climberMotor1.PID_Position(pos);
-    climberMotor2.PID_Position(pos);
-  }
-
-  public void climberInPos_func(double pos) {
+  public void setClimberPos_func(double pos) {
     climberMotor1.PID_Position(pos);
     climberMotor2.PID_Position(pos);
   }

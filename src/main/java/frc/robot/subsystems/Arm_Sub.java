@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.DefaultTalonFX;
 
-public class ArmSub extends SubsystemBase {
+public class Arm_Sub extends SubsystemBase {
   /** Creates a new armSub. */
   DefaultTalonFX.Config armMotorConfig1 = new DefaultTalonFX.Config("arm1Cfg");
   DefaultTalonFX.Config armMotorConfig2 = new DefaultTalonFX.Config("arm2Cfg");
@@ -43,7 +43,7 @@ public class ArmSub extends SubsystemBase {
 
   
 
-  public ArmSub(Config cfg) {
+  public Arm_Sub(/*Config cfg*/) {
       armMotor1.Enable_Sim();
       armMotor2.Enable_Sim();
   }
@@ -68,17 +68,7 @@ public class ArmSub extends SubsystemBase {
       armMotor2.Update_Sim();
   }
 
-  //TODO:also default pos??
-  public void intakeAcceptAngle_func(double pos) {
-    armMotor1.PID_Position(pos);
-    armMotor2.PID_Position(pos);
-  }
-
-  public void reefTroughAngle_func(double pos) {
-    armMotor1.PID_Position(pos);
-    armMotor2.PID_Position(pos);
-  }
-  public void reefHighestAngle_func(double pos) {
+  public void setArmAngle_func(double pos) {
     armMotor1.PID_Position(pos);
     armMotor2.PID_Position(pos);
   }

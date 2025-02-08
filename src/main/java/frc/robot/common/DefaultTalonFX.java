@@ -53,9 +53,9 @@ public class DefaultTalonFX {
     private static boolean startedSimThread = false;
     private double m_lastSimTime;
     //private final DCMotorSim m_motorSimModel = new DCMotorSim(DCMotor.getKrakenX60Foc(1), 1.0, 0.001);
-    DCMotor motorsim = new DCMotor(0, 0, 0, 0, 0, 0);
-    // private LinearSystem ln = LinearSystemId.createDCMotorSystem(motorsim, .01, 1.0);
-    // private final DCMotorSim m_motorSimModel = new DCMotorSim(ln,DCMotor.getKrakenX60Foc(1), 1.0, 0.001);
+    private LinearSystem ln = LinearSystemId.createDCMotorSystem(.01, 0.1);
+    // private final DCMotorSim m_motorSimModel = new DCMotorSim(ln, DCMotor.getKrakenX60Foc(1), 0.001);
+    
     
     //SmartDashboard Logging
     private boolean LivePIDInit = false;
@@ -444,13 +444,13 @@ public class DefaultTalonFX {
     }
 
     public void Update_Sim() {
-        var talonFXSim = motor.getSimState();
+        // var talonFXSim = motor.getSimState();
      
-        // get the motor voltage of the TalonFX
-        var motorVoltage = talonFXSim.getMotorVoltage();
+        // // get the motor voltage of the TalonFX
+        // var motorVoltage = talonFXSim.getMotorVoltage();
      
-        // use the motor voltage to calculate new position and velocity
-        // using WPILib's DCMotorSim class for physics simulation
+        // // use the motor voltage to calculate new position and velocity
+        // // using WPILib's DCMotorSim class for physics simulation
         // m_motorSimModel.setInputVoltage(motorVoltage);
         // m_motorSimModel.update(0.020); // assume 20 ms loop time
      

@@ -14,6 +14,7 @@ import frc.robot.commands.Game_Commands.L4_scoring_Com;
 import frc.robot.commands.PID_Com.Arm_PID_Com;
 import frc.robot.commands.PID_Com.Intake_PID_Com;
 import frc.robot.commands.Percent_Com.ClawPercent_Com;
+import frc.robot.commands.Percent_Com.IntakePercent_Com;
 import frc.robot.common.GameStateCurrentLimiter;
 import frc.robot.subsystems.Arm_Sub;
 import frc.robot.subsystems.Claw_Sub;
@@ -80,7 +81,6 @@ public class RobotContainer {
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     m_driverController.a().whileTrue(new ClawPercent_Com(m_Claw_Sub, 0.2));
     m_driverController.b().whileTrue(new ClawPercent_Com(m_Claw_Sub, -0.5));
-    //m_driverController.axisMagnitudeGreaterThan(1, 0.1).whileTrue(new ClawPercent_Com(m_Claw_Sub, -m_driverController.getLeftY()));
 
     m_driverController.x().whileTrue(new Arm_PID_Com(m_Arm_Sub, 0));
 
@@ -91,7 +91,7 @@ public class RobotContainer {
           .andThen(new L4_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)));
     
     // L3 scoring command button line
-    m_driverController.pov(180).onTrue(new L3_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)
+    m_driverController.pov(270).onTrue(new L3_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)
           .andThen(new ClawPercent_Com(m_Claw_Sub, 0))
           .andThen(new L3_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)));
 
@@ -101,9 +101,15 @@ public class RobotContainer {
           .andThen(new L2_scoring_Com(m_Arm_Sub, m_Elevator_Sub, 0, 0)));
 
     // L1 scoring command button line
-    m_driverController.pov(270).onTrue(new L1_scoring_Com(m_Intake_Sub, 0)
+    m_driverController.pov(180).onTrue(new L1_scoring_Com(m_Intake_Sub, 0)
           .andThen(new ClawPercent_Com(m_Claw_Sub, 0))
           .andThen(new L1_scoring_Com(m_Intake_Sub, 0)));
+
+    m_driverController.pov(45).onTrue(new Intake_PID_Com(m_Intake_Sub, 0)
+          .andThen(new IntakePercent_Com(m_Intake_Sub, 0))
+          .andThen(new Intake_PID_Com(m_Intake_Sub, 0)));
+
+    
   }
 
   /**

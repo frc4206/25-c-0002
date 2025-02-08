@@ -29,16 +29,11 @@ public class Climber_Sub extends SubsystemBase {
   
 
   public static class Config  extends LoadableConfig {
-
-    // public double kHomePosition;
-
-    // public double kMaxReverseOutput;
-
-    // public double climberOutPos;
-    // public double climberInPos;
+    public double stowPosition; 
+    public double climbedFinalPosition; 
+    public double climbReadyPosition; 
     public String name;
-  //The next one probably won't be needed
-    //public double climberDefaultPos;
+
 
     public Config(String filename){
 

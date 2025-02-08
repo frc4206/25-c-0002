@@ -20,12 +20,12 @@ public class Elevator_Sub extends SubsystemBase {
   DigitalInput elevatorHallSensor2 = new DigitalInput(5);
 
   public class  Config  extends LoadableConfig {
-    public double kHomePosition;
-
-    public double elevatorL1Pos;
-    public double elevatorL2Pos;
-    public double elevatorL3Pos;
-    public double elevatorL4Pos;
+    public double stowPosition; 
+    public double sourceIntakePosition; 
+    public double l1ScoringPosition; 
+    public double l2ScoringPosition; 
+    public double l3ScoringPosition; 
+    public double l4ScoringPosition; 
 
     public Config(String filename){
       

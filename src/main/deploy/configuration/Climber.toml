@@ -1,1 +1,5 @@
 name = "climber"
+
+stowPosition = 0
+climbedFinalPostion = 0
+climbReadyPosition = 0 

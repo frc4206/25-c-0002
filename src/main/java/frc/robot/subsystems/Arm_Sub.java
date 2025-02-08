@@ -25,12 +25,11 @@ public class Arm_Sub extends SubsystemBase {
 
   //TODO:put in proper values in the tomls and check if they make sense for the subsystem, the filler values will break something if unchanged
   public class  Config  extends LoadableConfig {
-    public double kHomePosition;
-
-    public double armL1Pos;
-    public double armL2Pos;
-    public double armL3Pos;
-    public double armL4Pos;
+    public double stowPosition; 
+    public double sourceIntakePosition; 
+    public double l2ScoringPosition; 
+    public double l3ScoringPosition; 
+    public double l4ScoringPosition; 
 
 
     public Config(String filename){

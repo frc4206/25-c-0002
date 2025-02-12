@@ -22,12 +22,14 @@ public class Climber_PID_Com extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_climberSub.setClimberPos_func(m_climbPosition);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climberSub.setClimberPos_func(m_climbPosition);
+    
   }
 
   // Called once the command ends or is interrupted.

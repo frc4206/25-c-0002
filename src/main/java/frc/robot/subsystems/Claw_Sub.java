@@ -13,13 +13,26 @@ import frc.robot.common.DefaultTalonFX;
 
 public class Claw_Sub extends SubsystemBase {
     /** Creates a new ClawSub. */
+
+    /*Configs */
     DefaultTalonFX.Config clawMotorConfig1 = new DefaultTalonFX.Config("Claw1Motor.toml");
-    DigitalInput clawBeamBreak = new DigitalInput(2);
-    public Config clawConfig = new Config("Claw.toml"); 
+    public Config clawConfig;
+
+    /*Motors */
+    public DefaultTalonFX clawMotor1 = new DefaultTalonFX(clawMotorConfig1);
+
+    /*Sensors */
+    DigitalInput clawBeamBreak = new DigitalInput(clawConfig.limitSwitchPort);
+
 
     public class Config extends LoadableConfig {
+
+        /*IDs and Ports */
+        public int limitSwitchPort;
+        
+        /*Misc. */
         public double intakePercent; 
-        public double outtakePercent; 
+        public double outtakePercent;
 
         public Config(String filename) {
 
@@ -28,29 +41,17 @@ public class Claw_Sub extends SubsystemBase {
         }
     }
 
-    public DefaultTalonFX clawMotor1 = new DefaultTalonFX(clawMotorConfig1);
 
-    public Claw_Sub() {
-        clawMotor1.motor.setNeutralMode(NeutralModeValue.Brake);
+    public Claw_Sub(Config clawConfig) {
+        this.clawConfig = clawConfig;
+    }
+
+    public void setPercentage_func(double percentage) {
+        clawMotor1.Duty_Cycle_Output(percentage);
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
     }
-
-    public void setPercentage_func(double percentage) {
-        if (clawBeamBreak.get() != true) {
-            clawMotor1.Duty_Cycle_Output(0);
-            System.out.println("stopping End Effector");
-        } else {
-            clawMotor1.Duty_Cycle_Output(percentage);
-        }
-    }
-
-    public void setPercentageOuttake_func(double percentage) {
-        clawMotor1.Duty_Cycle_Output(percentage);
-    }
-
-    // public void setPercentageOverride_func(double )
 }

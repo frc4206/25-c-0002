@@ -13,14 +13,26 @@ import frc.robot.common.DefaultTalonFX;
 
 public class Elevator_Sub extends SubsystemBase {
   /** Creates a new elevatorSub. */
-  DefaultTalonFX.Config elevatorMotorConfig1 = new DefaultTalonFX.Config("elevator1Cfg");
-  DefaultTalonFX.Config elevatorMotorConfig2 = new DefaultTalonFX.Config("elevator2Cfg");
-  DigitalInput elevatorHallSensor1 = new DigitalInput(4);
-  DigitalInput elevatorHallSensor2 = new DigitalInput(5);
+  /*Configs */
+  DefaultTalonFX.Config elevatorMotorConfig1 = new DefaultTalonFX.Config("Elevator1Motor.toml");
+  DefaultTalonFX.Config elevatorMotorConfig2 = new DefaultTalonFX.Config("Elevator2Motor.toml");
   public Config elevatorConfig = new Config("Elevator");
-  public Config elevatorMotorConfig = new Config("Elevator1Motor.toml");
+
+  /*Motors */
+  public DefaultTalonFX elevatorMotor1 = new DefaultTalonFX(elevatorMotorConfig1);
+  public DefaultTalonFX elevatorMotor2 = new DefaultTalonFX(elevatorMotorConfig2);
+
+  /*Sensors */
+  DigitalInput elevatorHallSensor1 = new DigitalInput(elevatorConfig.limitSwitch1Port);
+  DigitalInput elevatorHallSensor2 = new DigitalInput(elevatorConfig.limitSwitch2Port);
 
   public class  Config  extends LoadableConfig {
+
+    /* IDs and Ports */
+    public int limitSwitch1Port;
+    public int limitSwitch2Port;
+
+    /*Positions */
     public double stowPosition; 
     public double sourceIntakePosition; 
     public double l1ScoringPosition; 
@@ -28,25 +40,16 @@ public class Elevator_Sub extends SubsystemBase {
     public double l3ScoringPosition; 
     public double l4ScoringPosition; 
 
-    public int canID; 
-
     public Config(String filename){
       super.load(this, filename);
       LoadableConfig.print(this);
     }
   }
 
-  public DefaultTalonFX elevatorMotor1 = new DefaultTalonFX(elevatorMotorConfig1);
-  public DefaultTalonFX elevatorMotor2 = new DefaultTalonFX(elevatorMotorConfig2);
 
   public Elevator_Sub(Elevator_Sub.Config elevator_Motor_Config) {
-    elevatorMotorConfig = elevator_Motor_Config; 
-    elevatorMotor2.motor.setControl(new Follower(elevator_Motor_Config.canID, false));
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+    elevatorConfig = elevator_Motor_Config; 
+    elevatorMotor2.motor.setControl(new Follower(elevatorMotorConfig1.canID, false));
   }
 
   public void setPercentage_func(double percentage) {
@@ -55,5 +58,10 @@ public class Elevator_Sub extends SubsystemBase {
 
   public void setElevatorPos_func(double pos) {
     elevatorMotor1.PID_Position(pos);
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
   }
 }

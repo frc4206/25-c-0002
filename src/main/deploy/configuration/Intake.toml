@@ -1,16 +1,9 @@
-kCruiseVelocity = 0
-kAcceleration = 0
-kMaxUnitsLimit = 0
-kMinUnitsLimit = 0
-kEnableSupplyCurrentLimit = 0
-kSupplyCurrentLimit = 0
-kSupplyCurrentThreshold = 0
-kSupplyCurrentTimeout = 0
-kMaxForwardOutput = 0
-kMaxReverseOutput = 0
+limitSwitch1 = 0
+limitSwitch2 = 0
 
-stowPosition = 0; 
-l1ScoringPosition = 0
+
+stowPosition = 0.0
+l1ScoringPosition = 0.0
 intakePosition = 0
 intakePercent = 0.5
 outtakePercent = -0.5

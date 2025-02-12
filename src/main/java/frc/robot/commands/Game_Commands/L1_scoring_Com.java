@@ -17,13 +17,15 @@ public class L1_scoring_Com extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_intakeSub.setIntakePos_func(m_intakeSub.intakeConfig.l1ScoringPosition);
+    m_intakeSub.setPercentage_func(m_intakeSub.intakeConfig.outtakePercent);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeSub.setIntakePos_func(m_intakeSub.intakeConfig.l1ScoringPosition);
-    m_intakeSub.setPercentageOuttake_func(m_intakeSub.intakeConfig.outtakePercent);
+    
   }
 
   // Called once the command ends or is interrupted.

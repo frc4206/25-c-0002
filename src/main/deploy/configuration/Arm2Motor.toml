@@ -1,16 +1,16 @@
-name = "arm2Cfg"
+name = "ArmMotor1"
 canID = 21
 inverted = false
 
 [slot0]
-kp = 0
-ki = 0
-kd = 0
+kp = 0.0
+ki = 0.0
+kd = 0.0
 [slot]
-kp = 0
-ki = 0
-kd = 0
+kp = 0.0
+ki = 0.0
+kd = 0.0
 [slot2]
-kp = 0
-ki = 0
-kd = 0
+kp = 0.0
+ki = 0.0
+kd = 0.0

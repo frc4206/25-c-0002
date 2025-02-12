@@ -20,12 +20,14 @@ public class IntakePercent_Com extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_intakeSub.setPercentage_func(m_percent);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeSub.setPercentage_func(m_percent);
+    
   }
 
   // Called once the command ends or is interrupted.

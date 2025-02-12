@@ -1,18 +1,8 @@
-kHomePosition = 0
-kCruiseVelocity = 0
-kAcceleration = 0
-kMaxUnitsLimit = 0
-kMinUnitsLimit = 0
-kEnableSupplyCurrentLimit = 0
-kSupplyCurrentLimit = 0
-kSupplyCurrentThreshold = 0
-kSupplyCurrentTimeout = 0
-kMaxForwardOutput = 0
-kMaxReverseOutput = 0
+canCoderID = 0
+limitSwitchPort = 0
 
-
-stowPosition = 0
-sourceIntakePostion = 0
-l2ScoringPosition = 0
-l3ScoringPosition = 0 
-l4ScoringPosition = 0 
+stowPosition = 0.0
+sourceIntakePostion = 0.0
+l2ScoringPosition = 0.0
+l3ScoringPosition = 0.0 
+l4ScoringPosition = 0.0

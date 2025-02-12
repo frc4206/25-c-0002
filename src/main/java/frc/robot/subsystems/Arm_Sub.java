@@ -14,25 +14,36 @@ import frc.robot.common.DefaultTalonFX;
 
 public class Arm_Sub extends SubsystemBase {
   /** Creates a new armSub. */
-  DefaultTalonFX.Config armMotorConfig1 = new DefaultTalonFX.Config("arm1Cfg");
-  DefaultTalonFX.Config armMotorConfig2 = new DefaultTalonFX.Config("arm2Cfg");
-  CANcoder armCCoder = new CANcoder(22);
-  DigitalInput armHallSensor = new DigitalInput(1);
+
+  /*Configs */
+  DefaultTalonFX.Config armMotorConfig1 = new DefaultTalonFX.Config("Arm1Motor.toml");
+  DefaultTalonFX.Config armMotorConfig2 = new DefaultTalonFX.Config("Arm2Motor.toml");
+  public Config armConfig; 
+
+  /*Motors */
   public DefaultTalonFX armMotor1 = new DefaultTalonFX(armMotorConfig1);
   public DefaultTalonFX armMotor2 = new DefaultTalonFX(armMotorConfig2);
-  public Config armConfig = new Config("Arm.toml"); 
-  public Config armMotorConfig = new Config("Arm1Motor.toml");
+  
+  /*Sensors */
+  CANcoder armCCoder = new CANcoder(armConfig.canCoderID);
+  DigitalInput armHallSensor = new DigitalInput(armConfig.limitSwitchPort);
 
   //TODO:put in proper values in the tomls and check if they make sense for the subsystem, the filler values will break something if unchanged
   public class  Config  extends LoadableConfig {
+
+    /*IDs and Ports */
+    public int canCoderID;
+    public int limitSwitchPort;
+
+    /*Positions */
     public double stowPosition; 
     public double sourceIntakePosition; 
     public double l2ScoringPosition; 
     public double l3ScoringPosition; 
     public double l4ScoringPosition; 
-    public double percent; 
 
-    public int canID; 
+    /*Misc. */
+    
 
     public Config(String filename){
       super.load(this, filename);
@@ -41,19 +52,9 @@ public class Arm_Sub extends SubsystemBase {
 
   }
 
-  public Arm_Sub(Arm_Sub.Config arm_Motor_Config) {
-    armMotorConfig = arm_Motor_Config; 
-    armMotor2.motor.setControl(new Follower(arm_Motor_Config.canID, false));
-
-    armMotor1.Enable_Sim();
-    armMotor2.Enable_Sim();
-
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-   
+  public Arm_Sub(Arm_Sub.Config arm_Config) {
+    this.armConfig = arm_Config; 
+    armMotor2.motor.setControl(new Follower(armMotorConfig1.canID, false));
   }
 
   public void setPercentage_func(double percentage) {
@@ -63,7 +64,6 @@ public class Arm_Sub extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
-      // TODO Auto-generated method stub
       super.simulationPeriodic();
       armMotor1.Update_Sim();
       armMotor2.Update_Sim();
@@ -71,5 +71,11 @@ public class Arm_Sub extends SubsystemBase {
 
   public void setArmAngle_func(double pos) {
     armMotor1.PID_Position(pos);
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+   
   }
 }

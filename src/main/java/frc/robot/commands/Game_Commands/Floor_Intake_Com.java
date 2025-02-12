@@ -18,13 +18,15 @@ public class Floor_Intake_Com extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_Intake_Sub.setIntakePos_func(m_Intake_Sub.intakeConfig.intakePosition);
+    m_Intake_Sub.setPercentage_func(m_Intake_Sub.intakeConfig.intakePercent);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Intake_Sub.setIntakePos_func(m_Intake_Sub.intakeConfig.intakePosition);
-    m_Intake_Sub.setPercentage_func(m_Intake_Sub.intakeConfig.intakePercent);
+    
   }
 
   // Called once the command ends or is interrupted.

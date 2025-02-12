@@ -26,14 +26,16 @@ public class Coral_Intake_Com extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_armSub.setArmAngle_func(m_armSub.armConfig.sourceIntakePosition);
+    m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.sourceIntakePosition);
+    m_claw_Sub.setPercentage_func(m_claw_Sub.clawConfig.intakePercent); 
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armSub.setArmAngle_func(m_armSub.armConfig.sourceIntakePosition);
-    m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.sourceIntakePosition);
-    m_claw_Sub.setPercentage_func(m_claw_Sub.clawConfig.intakePercent); 
+    
   }
 
   // Called once the command ends or is interrupted.

@@ -30,15 +30,17 @@ public class Deep_Climb_Com extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
+  public void initialize() {
     m_climberSub.setClimberPos_func(m_climberSub.climberConfig.climbReadyPosition);
     m_intakeSub.setIntakePos_func(m_intakeSub.intakeConfig.intakePosition);
     m_armSub.setArmAngle_func(m_armSub.armConfig.stowPosition);
     m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.stowPosition);
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    
   }
 
   // Called once the command ends or is interrupted.

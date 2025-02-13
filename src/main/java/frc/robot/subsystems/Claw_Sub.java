@@ -49,30 +49,22 @@ public class Claw_Sub extends SubsystemBase {
         this.controller = controller;
 
         setupClawBeamBreakInterrupt();
-
-        // setupClawThread();
     }
 
     public void setupClawBeamBreakInterrupt() {
-        // boolean rising_edge_trigger = true;
-        // boolean falling_edge_trigger = true;
 
         BiConsumer<Boolean, Boolean> trigger = new BiConsumer<Boolean, Boolean>() {
-
             @Override
             public void accept(Boolean t, Boolean u) {
-                if(u){
+                if (u) {
                     clawMotor1.motor.setControl(new DutyCycleOut(0.0d));
                     claw_state = ClawState.DETECTED;
-                    // System.out.println("claw state set to detected: " + claw_state);
                 }
 
-                if(t)
-                {
+                if (t) {
                     claw_state = ClawState.NEUTRAL;
                 }
             }
-
         };
 
         beam_break_interrupt = new AsynchronousInterrupt(clawBeamBreak, trigger);
@@ -80,69 +72,26 @@ public class Claw_Sub extends SubsystemBase {
         beam_break_interrupt.enable();
     }
 
-    public void clawPeriodic() throws InterruptedException {
-        if (clawBeamBreak.get() && controller.getBButton()) {
-            clawMotor1.Duty_Cycle_Output(-1.0);
-        } else {
-            clawMotor1.Duty_Cycle_Output(0.0);
-        }
-    }
-
-    public void setupClawThread() {
-        clawThread = new Thread() {
-            public void run() {
-                while (!Thread.currentThread().isInterrupted()) {
-                    try {
-                        clawPeriodic();
-                        Thread.sleep(5);
-                    } catch (InterruptedException v) {
-                        System.out.println(v);
-                    }
-                }
-            }
-        };
-
-        clawThread.start();
-    }
-
     public static long ridiculousFunction(int n) {
         if (n <= 1) {
             return n;
         }
-        return ridiculousFunction(n - 1) + ridiculousFunction(n - 2); // Recursion to make it inefficient
+        return ridiculousFunction(n - 1) + ridiculousFunction(n - 2); // Recursion to
+        // make it inefficient
     }
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
-        // Claw_Sub.ridiculousFunction(35);
 
-        // System.out.println("clawstate is " + claw_state);
-
-        if(claw_state == ClawState.DETECTED)
+        if (claw_state == ClawState.DETECTED)
             return;
 
-        // if(claw_state != ClawState.DETECTED)
-        // {
-        if(controller.getBButton())
-        {
+        if (controller.getBButton()) {
             clawMotor1.motor.setControl(new DutyCycleOut(-1.0d));
             claw_state = ClawState.INTAKING;
         } else {
             clawMotor1.motor.setControl(new DutyCycleOut(0.0d));
             claw_state = ClawState.NEUTRAL;
         }
-        // }
     }
-
-    public void setPercentage_func(double percentage) {
-        if (clawBeamBreak.get() != true) {
-            clawMotor1.Duty_Cycle_Output(0);
-            System.out.print("stopping End Effector");
-        } else {
-            clawMotor1.Duty_Cycle_Output(percentage);
-        }
-    }
-
-    // public void setPercentageOverride_func(double )
 }

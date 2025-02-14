@@ -36,11 +36,11 @@ public class Arm_Sub extends SubsystemBase {
     public int limitSwitchPort;
 
     /*Positions */
-    public double stowPosition; 
-    public double sourceIntakePosition; 
-    public double l2ScoringPosition; 
-    public double l3ScoringPosition; 
-    public double l4ScoringPosition; 
+    public double stowPosition;
+    public double sourceIntakePosition;
+    public double l2ScoringPosition;
+    public double l3ScoringPosition;
+    public double l4ScoringPosition;
 
     /*Misc. */
     

@@ -6,20 +6,35 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.common.DefaultTalonFX;
+import frc.robot.common.ConfigTalonFX;
 
 public class Claw_Sub extends SubsystemBase {
     /** Creates a new ClawSub. */
-    DefaultTalonFX.Config clawMotorConfig1 = new DefaultTalonFX.Config("Claw1Motor.toml");// TODO:change can Id back to 11
 
-    DigitalInput clawBeamBreak = new DigitalInput(9);
+    /*Configs */
+    ConfigTalonFX.Config clawMotorConfig1 = new ConfigTalonFX.Config("Claw1Motor.toml");
+    public Config clawConfig;
+
+    /*Motors */
+    public TalonFX clawMotor1 = new TalonFX(clawMotorConfig1.canID);
+
+    /*Sensors */
+    DigitalInput clawBeamBreak = new DigitalInput(clawConfig.limitSwitchPort);
+
 
     public class Config extends LoadableConfig {
+
+        /*IDs and Ports */
+        public int limitSwitchPort;
+        
+        /*Misc. */
+        public double intakePercent; 
+        public double outtakePercent;
 
         public Config(String filename) {
 
@@ -28,25 +43,17 @@ public class Claw_Sub extends SubsystemBase {
         }
     }
 
-    public DefaultTalonFX clawMotor1 = new DefaultTalonFX(clawMotorConfig1);
 
-    public Claw_Sub() {
-        clawMotor1.motor.setNeutralMode(NeutralModeValue.Brake);
+    public Claw_Sub(Config clawConfig) {
+        this.clawConfig = clawConfig;
+    }
+
+    public void setPercentage_func(double percentage) {
+        clawMotor1.setControl(new DutyCycleOut(percentage));
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
     }
-
-    public void setPercentage_func(double percentage) {
-        if (clawBeamBreak.get() != true) {
-            clawMotor1.Duty_Cycle_Output(0);
-            System.out.print("stopping End Effector");
-        } else {
-            clawMotor1.Duty_Cycle_Output(percentage);
-        }
-    }
-
-    // public void setPercentageOverride_func(double )
 }

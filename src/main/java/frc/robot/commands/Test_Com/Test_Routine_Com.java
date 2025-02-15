@@ -31,7 +31,6 @@ public class Test_Routine_Com extends Command {
     addRequirements(m_armSub);
     addRequirements(m_clawSub);
     addRequirements(m_elevatorSub);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.

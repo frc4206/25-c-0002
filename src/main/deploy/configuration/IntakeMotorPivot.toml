@@ -1,5 +1,5 @@
-name = "climber2Cfg"
-canID = 41
+name = "intakePivotCfg"
+canID = 61
 inverted = false
 
 [slot0]

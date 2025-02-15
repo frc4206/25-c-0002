@@ -15,18 +15,19 @@ public class IntakePercent_Com extends Command {
   public IntakePercent_Com(Intake_Sub intakeSub, double percent) {
     m_intakeSub = intakeSub;
     m_percent = percent;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_intakeSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_intakeSub.setPercentage_func(m_percent);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeSub.setPercentage_func(m_percent);
+    
   }
 
   // Called once the command ends or is interrupted.

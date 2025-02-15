@@ -6,25 +6,45 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
-import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.common.ConfigTalonFX;
 import frc.robot.common.DefaultTalonFX;
 
 public class Intake_Sub extends SubsystemBase {
   /** Creates a new intakeSub. */
-  DefaultTalonFX.Config intakeMotorConfig1 = new DefaultTalonFX.Config("intake1Cfg");
-  DefaultTalonFX.Config intakeMotorConfig2 = new DefaultTalonFX.Config("intake2Cfg");
-  CANcoder intakeCCoder = new CANcoder(53);
+  /*Configs */
+  ConfigTalonFX.Config intakeMotorRollersConfig = new ConfigTalonFX.Config("IntakeMotorRollers.toml");
+  ConfigTalonFX.Config intakeMotorPivotConfig = new ConfigTalonFX.Config("IntakeMotorPivot.toml");
+  public Config intakeConfig;
+
+  /*Motors */
+  public TalonFX intakeMotorRollers = new TalonFX(intakeMotorRollersConfig.canID);
+  public TalonFX intakeMotorPivot = new TalonFX(intakeMotorPivotConfig.canID);
+
+  /*Sensors */
   DigitalInput intakeHallSensor = new DigitalInput(6);
   DigitalInput intakeBeamBreak = new DigitalInput(7);
 
-  public class  Config  extends LoadableConfig {
-    public double kHomePosition;
 
-    public double intakeUpPos;
-    public double intakeOutPos;
+  public class  Config  extends LoadableConfig {
+
+    /*IDs and Ports */
+    public int limitSwitch1;
+    public int limitSwitch2;
+
+    /*Positions */
+    public double stowPosition; 
+    public double l1ScoringPosition; 
+    public double intakePosition;
+
+    /*Misc. */
+    public double intakePercent; 
+    public double outtakePercent; 
 
     public Config(String filename){
       
@@ -33,23 +53,20 @@ public class Intake_Sub extends SubsystemBase {
     }
   }
 
-  public DefaultTalonFX intakeMotor1 = new DefaultTalonFX(intakeMotorConfig1);
-  public DefaultTalonFX intakeMotor2 = new DefaultTalonFX(intakeMotorConfig2);
+  public Intake_Sub(Config intakeConfig) {
+    this.intakeConfig = intakeConfig;
+  } 
 
-  public Intake_Sub() {}
+  public void setPercentage_func(double percentage) {
+    intakeMotorRollers.setControl(new DutyCycleOut(percentage));
+  }
+
+  public void setIntakePos_func(double pos) {
+    intakeMotorPivot.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  }
-
-  public void setPercentage_func(double percentage) {
-    intakeMotor1.Duty_Cycle_Output(percentage);
-    intakeMotor2.Duty_Cycle_Output(percentage);
-  }
-
-  public void setIntakePos_func(double pos) {
-    intakeMotor1.PID_Position(pos);
-    intakeMotor2.PID_Position(pos);
   }
 }

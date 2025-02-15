@@ -15,18 +15,19 @@ public class ClawPercent_Com extends Command {
   public ClawPercent_Com(Claw_Sub clawSub, double percent) {
     m_clawSub = clawSub;
     m_percent = percent;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_clawSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_clawSub.setPercentage_func(m_percent);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_clawSub.setPercentage_func(m_percent);
+    
   }
 
   // Called once the command ends or is interrupted.

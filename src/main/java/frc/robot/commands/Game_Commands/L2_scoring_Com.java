@@ -8,34 +8,37 @@ package frc.robot.commands.Game_Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Arm_Sub;
+import frc.robot.subsystems.Claw_Sub;
 import frc.robot.subsystems.Elevator_Sub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class L2_scoring_Com extends Command {
-
-  double m_armPosition;
-  double m_elevatorPosition;
   Elevator_Sub m_elevatorSub;
   Arm_Sub m_armSub;
+  Claw_Sub m_clawSub;
+  
   /** Creates a new L2_scoring. */
-  public L2_scoring_Com(Arm_Sub armSub, Elevator_Sub elevatorSub, double armPosition, double elevatorPosition) {
-    m_armPosition = armPosition;
-    m_elevatorPosition = elevatorPosition;
+  public L2_scoring_Com(Arm_Sub armSub, Claw_Sub clawSub, Elevator_Sub elevatorSub) {
     m_armSub = armSub;
     m_elevatorSub = elevatorSub;
+    m_clawSub = clawSub;
     addRequirements(m_armSub);
     addRequirements(m_elevatorSub);
-    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_clawSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.l2ScoringPosition);
+    m_armSub.setArmAngle_func(m_armSub.armConfig.l2ScoringPosition); 
+    m_clawSub.setPercentage_func(m_clawSub.clawConfig.outtakePercent);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_elevatorSub.setElevatorPos_func(m_elevatorPosition);
+    
   }
 
   // Called once the command ends or is interrupted.

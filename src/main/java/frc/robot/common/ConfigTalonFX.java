@@ -35,13 +35,13 @@ public class ConfigTalonFX {
 
     public static final class Config extends LoadableConfig {
         public String name;
-        public int canID;
-        public boolean inverted;
-        public boolean isBreakMode;
+        @Required public int canID;
+        @Required public boolean inverted;
+        @Required public boolean isBreakMode;
 
-        public Slot BSslot0;
-        public Slot BSslot1;
-        public Slot BSslot2;
+        public Slot slot0;
+        public Slot slot1;
+        public Slot slot2;
 
         public double kCruiseVelocity;
         public double kAcceleration;

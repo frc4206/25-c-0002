@@ -5,21 +5,23 @@
 package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
-import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.common.DefaultTalonFX;
+import frc.robot.common.ConfigTalonFX;
 
 public class Claw_Sub extends SubsystemBase {
     /** Creates a new ClawSub. */
 
     /*Configs */
-    DefaultTalonFX.Config clawMotorConfig1 = new DefaultTalonFX.Config("Claw1Motor.toml");
+    ConfigTalonFX.Config clawMotorConfig1 = new ConfigTalonFX.Config("Claw1Motor.toml");
     public Config clawConfig;
 
     /*Motors */
-    public DefaultTalonFX clawMotor1 = new DefaultTalonFX(clawMotorConfig1);
+    public TalonFX clawMotor1 = new TalonFX(clawMotorConfig1.canID);
 
     /*Sensors */
     DigitalInput clawBeamBreak = new DigitalInput(clawConfig.limitSwitchPort);
@@ -47,7 +49,7 @@ public class Claw_Sub extends SubsystemBase {
     }
 
     public void setPercentage_func(double percentage) {
-        clawMotor1.Duty_Cycle_Output(percentage);
+        clawMotor1.setControl(new DutyCycleOut(percentage));
     }
 
     @Override

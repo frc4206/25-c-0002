@@ -5,20 +5,26 @@
 package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
+
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.common.ConfigTalonFX;
 import frc.robot.common.DefaultTalonFX;
 
 public class Intake_Sub extends SubsystemBase {
   /** Creates a new intakeSub. */
   /*Configs */
-  DefaultTalonFX.Config intakeMotorRollersConfig = new DefaultTalonFX.Config("IntakeMotorRollers.toml");
-  DefaultTalonFX.Config intakeMotorPivotConfig = new DefaultTalonFX.Config("IntakeMotorPivot.toml");
+  ConfigTalonFX.Config intakeMotorRollersConfig = new ConfigTalonFX.Config("IntakeMotorRollers.toml");
+  ConfigTalonFX.Config intakeMotorPivotConfig = new ConfigTalonFX.Config("IntakeMotorPivot.toml");
   public Config intakeConfig;
 
   /*Motors */
-  public DefaultTalonFX intakeMotorRollers = new DefaultTalonFX(intakeMotorRollersConfig);
-  public DefaultTalonFX intakeMotorPivot = new DefaultTalonFX(intakeMotorPivotConfig);
+  public TalonFX intakeMotorRollers = new TalonFX(intakeMotorRollersConfig.canID);
+  public TalonFX intakeMotorPivot = new TalonFX(intakeMotorPivotConfig.canID);
 
   /*Sensors */
   DigitalInput intakeHallSensor = new DigitalInput(6);
@@ -52,11 +58,11 @@ public class Intake_Sub extends SubsystemBase {
   } 
 
   public void setPercentage_func(double percentage) {
-    intakeMotorRollers.Duty_Cycle_Output(percentage);
+    intakeMotorRollers.setControl(new DutyCycleOut(percentage));
   }
 
   public void setIntakePos_func(double pos) {
-    intakeMotorPivot.PID_Position(pos);
+    intakeMotorPivot.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
   }
 
   @Override

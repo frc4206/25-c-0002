@@ -6,23 +6,27 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.common.DefaultTalonFX;
+import frc.robot.common.ConfigTalonFX;
 
 public class Arm_Sub extends SubsystemBase {
   /** Creates a new armSub. */
 
   /*Configs */
-  DefaultTalonFX.Config armMotorConfig1 = new DefaultTalonFX.Config("Arm1Motor.toml");
-  DefaultTalonFX.Config armMotorConfig2 = new DefaultTalonFX.Config("Arm2Motor.toml");
-  public Config armConfig; 
+  ConfigTalonFX.Config armMotorConfig1 = new ConfigTalonFX.Config("Arm1Motor.toml");
+  ConfigTalonFX.Config armMotorConfig2 = new ConfigTalonFX.Config("Arm2Motor.toml");
+  public Config armConfig;
 
   /*Motors */
-  public DefaultTalonFX armMotor1 = new DefaultTalonFX(armMotorConfig1);
-  public DefaultTalonFX armMotor2 = new DefaultTalonFX(armMotorConfig2);
+  public TalonFX armMotor1 = new TalonFX(armMotorConfig1.canID);
+  public TalonFX armMotor2 = new TalonFX(armMotorConfig2.canID);
   
   /*Sensors */
   CANcoder armCCoder = new CANcoder(armConfig.canCoderID);
@@ -54,23 +58,17 @@ public class Arm_Sub extends SubsystemBase {
 
   public Arm_Sub(Arm_Sub.Config arm_Config) {
     this.armConfig = arm_Config; 
-    armMotor2.motor.setControl(new Follower(armMotorConfig1.canID, false));
+    armMotor2.setControl(new Follower(armMotorConfig1.canID, false));
   }
 
   public void setPercentage_func(double percentage) {
         //TODO: make sure one of these doesn't need to be inverted, double check all motors
-        armMotor1.Duty_Cycle_Output(percentage);
+        armMotor1.setControl(new DutyCycleOut(percentage));
   }
 
-  @Override
-  public void simulationPeriodic() {
-      super.simulationPeriodic();
-      armMotor1.Update_Sim();
-      armMotor2.Update_Sim();
-  }
 
   public void setArmAngle_func(double pos) {
-    armMotor1.PID_Position(pos);
+    armMotor1.setControl(new PositionVoltage(0).withSlot(0).withPosition(pos));
   }
 
   @Override

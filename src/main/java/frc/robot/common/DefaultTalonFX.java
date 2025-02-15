@@ -81,6 +81,15 @@ public class DefaultTalonFX {
         public BasicSlot(){};
     }
 
+    public static final class CurrentLimitConfigs extends LoadableConfig {
+        public double intakelimit;
+        public double shootlimit;
+        public double climblimit;
+        public double defenselimit;
+        public double cyclelimit;
+
+        public CurrentLimitConfigs(){};
+    }
 
     public static class Slot extends LoadableConfig {
         public double kp; // proportional

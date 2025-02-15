@@ -8,30 +8,33 @@ import java.util.ArrayList;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.common.ConfigTalonFX;
 import frc.robot.common.DefaultTalonFX;
 
 public class Climber_Sub extends SubsystemBase {
   /** Creates a new climberSub. */
 
   /*Configs */
-  DefaultTalonFX.Config climberMotorConfig1 = new DefaultTalonFX.Config("Climber1Motor.toml");
-  DefaultTalonFX.Config climberMotorConfig2 = new DefaultTalonFX.Config("Climber2Motor.toml");
+  ConfigTalonFX.Config climberMotorConfig1 = new ConfigTalonFX.Config("Climber1Motor.toml");
+  ConfigTalonFX.Config climberMotorConfig2 = new ConfigTalonFX.Config("Climber2Motor.toml");
   public Config climberConfig;
 
   /*Motors */
-  public DefaultTalonFX climberMotor1 = new DefaultTalonFX(climberMotorConfig1);
-  public DefaultTalonFX climberMotor2 = new DefaultTalonFX(climberMotorConfig2);
+  public TalonFX climberMotor1 = new TalonFX(climberMotorConfig1.canID);
+  public TalonFX climberMotor2 = new TalonFX(climberMotorConfig2.canID);
 
   /*Sensors */
   DigitalInput climberHallSensor = new DigitalInput(3);
 
   /*Game state Lists */
-  public TalonFX[] m_climberList = {climberMotor1.motor, climberMotor2.motor};
+  public TalonFX[] m_climberList = {climberMotor1, climberMotor2};
   public ArrayList<Double[]> currentLimitList = new ArrayList<>();
   
 
@@ -68,24 +71,16 @@ public class Climber_Sub extends SubsystemBase {
     currentLimitList.add(defenseLimits);
     currentLimitList.add(cycleLimits);
 
-    climberMotor2.motor.setControl(new Follower(climberMotorConfig1.canID, false));
+    climberMotor2.setControl(new Follower(climberMotorConfig1.canID, false));
   }
   
-  @Override
-  public void simulationPeriodic() {
-    // TODO Auto-generated method stub
-
-    climberMotor1.Update_Sim();
-    climberMotor2.Update_Sim();
-    super.simulationPeriodic();
-  }
 
   public void setPercentage_func(double percentage) {
-    climberMotor1.Duty_Cycle_Output(percentage);
+    climberMotor1.setControl(new DutyCycleOut(percentage));
   }
 
   public void setClimberPos_func(double pos) {
-    climberMotor1.PID_Position(pos);
+    climberMotor1.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
   }
 
   @Override

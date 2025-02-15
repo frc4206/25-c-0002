@@ -6,21 +6,25 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.common.DefaultTalonFX;
+import frc.robot.common.ConfigTalonFX;
 
 public class Elevator_Sub extends SubsystemBase {
   /** Creates a new elevatorSub. */
   /*Configs */
-  DefaultTalonFX.Config elevatorMotorConfig1 = new DefaultTalonFX.Config("Elevator1Motor.toml");
-  DefaultTalonFX.Config elevatorMotorConfig2 = new DefaultTalonFX.Config("Elevator2Motor.toml");
+  ConfigTalonFX.Config elevatorMotorConfig1 = new ConfigTalonFX.Config("Elevator1Motor.toml");
+  ConfigTalonFX.Config elevatorMotorConfig2 = new ConfigTalonFX.Config("Elevator2Motor.toml");
   public Config elevatorConfig = new Config("Elevator");
 
   /*Motors */
-  public DefaultTalonFX elevatorMotor1 = new DefaultTalonFX(elevatorMotorConfig1);
-  public DefaultTalonFX elevatorMotor2 = new DefaultTalonFX(elevatorMotorConfig2);
+  public TalonFX elevatorMotor1 = new TalonFX(elevatorMotorConfig1.canID);
+  public TalonFX elevatorMotor2 = new TalonFX(elevatorMotorConfig2.canID);
 
   /*Sensors */
   DigitalInput elevatorHallSensor1 = new DigitalInput(elevatorConfig.limitSwitch1Port);
@@ -49,15 +53,15 @@ public class Elevator_Sub extends SubsystemBase {
 
   public Elevator_Sub(Elevator_Sub.Config elevator_Motor_Config) {
     elevatorConfig = elevator_Motor_Config; 
-    elevatorMotor2.motor.setControl(new Follower(elevatorMotorConfig1.canID, false));
+    elevatorMotor2.setControl(new Follower(elevatorMotorConfig1.canID, false));
   }
 
   public void setPercentage_func(double percentage) {
-    elevatorMotor1.Duty_Cycle_Output(percentage);
+    elevatorMotor1.setControl(new DutyCycleOut(percentage));
   }
 
   public void setElevatorPos_func(double pos) {
-    elevatorMotor1.PID_Position(pos);
+    elevatorMotor1.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
   }
 
   @Override

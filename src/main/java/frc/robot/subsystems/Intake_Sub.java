@@ -13,7 +13,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.ConfigTalonFX;
-import frc.robot.common.DefaultTalonFX;
 
 public class Intake_Sub extends SubsystemBase {
   /** Creates a new intakeSub. */

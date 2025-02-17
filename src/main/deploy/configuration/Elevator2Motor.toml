@@ -1,6 +1,7 @@
 name = "elevator2Cfg"
-canID = 51
+canID = 36
 inverted = false
+isBreakMode = true
 
 [slot0]
 kp = 0.0

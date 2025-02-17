@@ -1,5 +1,6 @@
-canCoderID = 0
-limitSwitchPort = 0
+canCoderID = 22
+limitSwitchPort = 1
+followerOpposeMaster = true
 
 stowPosition = 0.0
 sourceIntakePostion = 0.0

@@ -1,5 +1,5 @@
-limitSwitch1Port = 0
-limitSwitch2Port = 0
+limitSwitch1Port = 4
+limitSwitch2Port = 5
 
 stowPosition = 0.0
 sourceIntakePostion = 0.0

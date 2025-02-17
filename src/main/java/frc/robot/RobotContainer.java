@@ -6,7 +6,15 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.Percent_Commands.ArmPercent_Com;
 import frc.robot.commands.Percent_Commands.ClawPercent_Com;
+import frc.robot.commands.Percent_Commands.ClimberPercent_Com;
+import frc.robot.commands.Percent_Commands.ElevatorPercent_Com;
+import frc.robot.commands.Test_Commands.ArmJoystick_Com;
+import frc.robot.commands.Test_Commands.ClawJoystick_Com;
+import frc.robot.commands.Test_Commands.ClimberJoystick_Com;
+import frc.robot.commands.Test_Commands.ElevatorJoystick_Com;
+import frc.robot.commands.Test_Commands.IntakeJoystick_Com;
 import frc.robot.common.GameStateCurrentLimiter;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Arm_Sub;
@@ -17,6 +25,7 @@ import frc.robot.subsystems.Elevator_Sub;
 import frc.robot.subsystems.Intake_Sub;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,9 +47,23 @@ import static edu.wpi.first.units.Units.*;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Climber_Sub.Config m_climbercfg = new Climber_Sub.Config("Climber.toml");
+  public final Arm_Sub.Config m_armConfig = new Arm_Sub.Config("Arm.toml");
+  public final Claw_Sub.Config m_clawConfig = new Claw_Sub.Config("Claw.toml");
+  public final Climber_Sub.Config m_climberCfg = new Climber_Sub.Config("Climber.toml");
+  public final Elevator_Sub.Config m_elevatorCfg = new Elevator_Sub.Config("Elevator.toml");
+  public final Intake_Sub.Config m_intakeCfg = new Intake_Sub.Config("Intake.toml");
 
-  private final GameStateCurrentLimiter m_GameStateCurrentLimiter = new GameStateCurrentLimiter();
+  final Arm_Sub m_arm = new Arm_Sub(m_armConfig);
+  final Claw_Sub m_claw = new Claw_Sub(m_clawConfig);
+  final Climber_Sub m_climber = new Climber_Sub(m_climberCfg);
+  final Elevator_Sub m_elevator = new Elevator_Sub(m_elevatorCfg);
+  final Intake_Sub m_intake = new Intake_Sub(m_intakeCfg);
+
+  private final CommandXboxController m_armController = new CommandXboxController(1);
+  private final CommandXboxController m_clawController = new CommandXboxController(2);
+  private final CommandXboxController m_climberController = new CommandXboxController(3);
+  private final CommandXboxController m_elevatorController = new CommandXboxController(4);
+  private final CommandXboxController m_intakeController = new CommandXboxController(5);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
@@ -69,10 +92,6 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    // m_GameStateCurrentLimiter.AddSubsystem(m_climbercfg.name,
-    // m_Climber_Sub.m_climberList);
-    // m_GameStateCurrentLimiter.PopulateSubsystemLimits(m_climbercfg.name,
-    // m_Climber_Sub.currentLimitList);
   }
 
   /**
@@ -91,23 +110,53 @@ public class RobotContainer {
    */
   private void configureBindings() {
     drivetrain.setDefaultCommand(
-      // Drivetrain will execute this command periodically
-      drivetrain.applyRequest(() ->
-          drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-              .withVelocityY(-m_driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-              .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-      )
-  );
+        // Drivetrain will execute this command periodically
+        drivetrain.applyRequest(() -> drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) // Drive forward
+                                                                                                     // with negative Y
+                                                                                                     // (forward)
+            .withVelocityY(-m_driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with
+                                                                                  // negative X (left)
+        ));
 
-  m_driverController.back().and(m_driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-  m_driverController.back().and(m_driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-  m_driverController.start().and(m_driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-  m_driverController.start().and(m_driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+    m_driverController.back().and(m_driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+    m_driverController.back().and(m_driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+    m_driverController.start().and(m_driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+    m_driverController.start().and(m_driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-  m_driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+    m_driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-  drivetrain.registerTelemetry(logger::telemeterize);
+    drivetrain.registerTelemetry(logger::telemeterize);
 
+    //Joystick commands
+    //m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
+    m_claw.setDefaultCommand(new ClawJoystick_Com(m_claw, m_clawController));
+    //m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
+    //m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_elevatorController));
+    m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_intakeController));
+
+    //Make sure the motors are spinning the correct direction
+
+    m_armController.a().whileTrue(new ArmPercent_Com(m_arm, 0.1));
+    m_armController.b().whileTrue(new ArmPercent_Com(m_arm, -0.1));
+    m_armController.x().onTrue(new InstantCommand(() -> m_arm.armMotor2.setControl(new DutyCycleOut(0.1))));
+    m_armController.x().onFalse(new InstantCommand(() -> m_arm.armMotor2.setControl(new DutyCycleOut(0))));
+    m_armController.y().onTrue(new InstantCommand(() -> m_arm.armMotor2.setControl(new DutyCycleOut(-0.1))));
+    m_armController.y().onFalse(new InstantCommand(() -> m_arm.armMotor2.setControl(new DutyCycleOut(0))));
+
+    m_climberController.a().whileTrue(new ClimberPercent_Com(m_climber, 0.1));
+    m_climberController.b().whileTrue(new ClimberPercent_Com(m_climber, -0.1));
+    m_climberController.x().onTrue(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(0.1))));
+    m_climberController.x().onFalse(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(0))));
+    m_climberController.y().onTrue(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(-0.1))));
+    m_climberController.y().onFalse(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(0))));
+
+    m_elevatorController.a().whileTrue(new ElevatorPercent_Com(m_elevator, 0.1));
+    m_elevatorController.b().whileTrue(new ElevatorPercent_Com(m_elevator, -0.1));
+    m_elevatorController.x().onTrue(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0.1))));
+    m_elevatorController.x().onFalse(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0))));
+    m_elevatorController.y().onTrue(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(-0.1))));
+    m_elevatorController.y().onFalse(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0))));
   }
 
   /**

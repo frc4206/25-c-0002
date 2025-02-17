@@ -17,42 +17,44 @@ import frc.robot.common.ConfigTalonFX;
 
 public class Elevator_Sub extends SubsystemBase {
   /** Creates a new elevatorSub. */
-  /*Configs */
+  /* Configs */
   ConfigTalonFX.Config elevatorMotorConfig1 = new ConfigTalonFX.Config("Elevator1Motor.toml");
   ConfigTalonFX.Config elevatorMotorConfig2 = new ConfigTalonFX.Config("Elevator2Motor.toml");
-  public Config elevatorConfig = new Config("Elevator");
+  public Config elevatorConfig;
 
-  /*Motors */
+  /* Motors */
   public TalonFX elevatorMotor1 = new TalonFX(elevatorMotorConfig1.canID);
   public TalonFX elevatorMotor2 = new TalonFX(elevatorMotorConfig2.canID);
 
-  /*Sensors */
-  DigitalInput elevatorHallSensor1 = new DigitalInput(elevatorConfig.limitSwitch1Port);
-  DigitalInput elevatorHallSensor2 = new DigitalInput(elevatorConfig.limitSwitch2Port);
+  /* Sensors */
+  DigitalInput elevatorHallSensor1;
+  DigitalInput elevatorHallSensor2;
 
-  public class  Config  extends LoadableConfig {
+  public static class Config extends LoadableConfig {
 
     /* IDs and Ports */
     public int limitSwitch1Port;
     public int limitSwitch2Port;
 
-    /*Positions */
-    public double stowPosition; 
-    public double sourceIntakePosition; 
-    public double l1ScoringPosition; 
-    public double l2ScoringPosition; 
-    public double l3ScoringPosition; 
-    public double l4ScoringPosition; 
+    /* Positions */
+    public double stowPosition;
+    public double sourceIntakePosition;
+    public double l1ScoringPosition;
+    public double l2ScoringPosition;
+    public double l3ScoringPosition;
+    public double l4ScoringPosition;
 
-    public Config(String filename){
+    public Config(String filename) {
       super.load(this, filename);
       LoadableConfig.print(this);
     }
   }
 
-
   public Elevator_Sub(Elevator_Sub.Config elevator_Motor_Config) {
-    elevatorConfig = elevator_Motor_Config; 
+    elevatorConfig = elevator_Motor_Config;
+    elevatorHallSensor1 = new DigitalInput(elevatorConfig.limitSwitch1Port);
+    elevatorHallSensor2 = new DigitalInput(elevatorConfig.limitSwitch2Port);
+    
     elevatorMotor2.setControl(new Follower(elevatorMotorConfig1.canID, false));
   }
 

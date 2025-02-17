@@ -1,6 +1,7 @@
 name = "climber1Cfg"
-canID = 40
+canID = 30
 inverted = false
+isBreakMode = true
 
 [slot0]
 kp = 0.0

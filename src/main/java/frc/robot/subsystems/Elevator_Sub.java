@@ -55,7 +55,7 @@ public class Elevator_Sub extends SubsystemBase {
     elevatorHallSensor1 = new DigitalInput(elevatorConfig.limitSwitch1Port);
     elevatorHallSensor2 = new DigitalInput(elevatorConfig.limitSwitch2Port);
     
-    elevatorMotor2.setControl(new Follower(elevatorMotorConfig1.canID, false));
+    //elevatorMotor2.setControl(new Follower(elevatorMotorConfig1.canID, false));
   }
 
   public void setPercentage_func(double percentage) {
@@ -69,5 +69,11 @@ public class Elevator_Sub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (elevatorHallSensor1.get()) {
+      elevatorMotor1.setPosition(0);
+    }
+    if (elevatorHallSensor2.get()) {
+      elevatorMotor1.setPosition(elevatorConfig.stowPosition);
+    }
   }
 }

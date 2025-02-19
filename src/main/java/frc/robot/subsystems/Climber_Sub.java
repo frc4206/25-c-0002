@@ -72,7 +72,7 @@ public class Climber_Sub extends SubsystemBase {
 
     climberHallSensor = new DigitalInput(3);
 
-    climberMotor2.setControl(new Follower(climberMotorConfig1.canID, false));
+    //climberMotor2.setControl(new Follower(climberMotorConfig1.canID, false));
   }
   
 
@@ -87,6 +87,9 @@ public class Climber_Sub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (climberHallSensor.get()) {
+      climberMotor1.setPosition(climberConfig.stowPosition);
+    }
   }
 
 }

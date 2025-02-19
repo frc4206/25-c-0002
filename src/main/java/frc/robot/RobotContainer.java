@@ -5,17 +5,11 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
 import frc.robot.commands.Percent_Commands.ArmPercent_Com;
-import frc.robot.commands.Percent_Commands.ClawPercent_Com;
 import frc.robot.commands.Percent_Commands.ClimberPercent_Com;
 import frc.robot.commands.Percent_Commands.ElevatorPercent_Com;
-import frc.robot.commands.Test_Commands.ArmJoystick_Com;
 import frc.robot.commands.Test_Commands.ClawJoystick_Com;
-import frc.robot.commands.Test_Commands.ClimberJoystick_Com;
-import frc.robot.commands.Test_Commands.ElevatorJoystick_Com;
 import frc.robot.commands.Test_Commands.IntakeJoystick_Com;
-import frc.robot.common.GameStateCurrentLimiter;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Arm_Sub;
 import frc.robot.subsystems.Claw_Sub;

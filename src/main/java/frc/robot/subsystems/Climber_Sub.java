@@ -56,6 +56,8 @@ public class Climber_Sub extends SubsystemBase {
   }
 
   public Climber_Sub(Config cfg) {
+    climberConfig = cfg;
+
     /*Game State Constants */
     Double[] intakeLimits = {climberMotorConfig1.intakelimit, climberMotorConfig2.intakelimit};
     Double[] shootLimits = {climberMotorConfig1.shootlimit, climberMotorConfig2.shootlimit};

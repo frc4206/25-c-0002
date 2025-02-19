@@ -22,8 +22,8 @@ public class Intake_Sub extends SubsystemBase {
   public Config intakeConfig;
 
   /* Motors */
-  public TalonFX intakeMotorRollers;
-  public TalonFX intakeMotorPivot;
+  public TalonFX intakeMotorRollers = new TalonFX(intakeMotorRollersConfig.canID);
+  public TalonFX intakeMotorPivot = new TalonFX(intakeMotorPivotConfig.canID);
 
   /* Sensors */
   DigitalInput intakeHallSensor;

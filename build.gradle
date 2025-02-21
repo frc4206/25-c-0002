@@ -96,7 +96,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    implementation 'org.team4206:battleaid:0.2.0'
+    implementation 'org.team4206:battleaid:0.4.0'
 }
 
 test {

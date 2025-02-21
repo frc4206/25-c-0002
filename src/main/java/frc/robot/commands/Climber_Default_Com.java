@@ -34,11 +34,13 @@ public class Climber_Default_Com extends Command {
 		
 		// servo.setBoundsMicroseconds(2500, 2100, 1500, 500, 700);
 
+		// if the motor spins this resets the pulse time and sets servo position to 0
 		if (motor_speed_set < 0.0d) {
 			servo.setPulseTimeMicroseconds(this.disengageServoPos);
 			servo.setPosition(this.disengageServoPos);
 			// start a timer if we are just now pressing the button
 			if (!this.servoDisengaged) {
+				//when the servo turns set the startServoTime to the Systems currently registered time in miliseconds
 				this.startServoTime = System.currentTimeMillis();
 				this.servoDisengaged = true;
 			}
@@ -51,6 +53,7 @@ public class Climber_Default_Com extends Command {
 
 		long currentTime = System.currentTimeMillis();
 
+//when the servo's time needed to disengage is greater than the system's current registered time reduced by the point in the system's time the servo engaged, stop the motor
 		if (currentTime - startServoTime <= this.disengageDuractionMilliseconds && this.servoDisengaged) {
 			motor_speed_set = 0.0d;
 			// Disables the motor if nothing has been pressed

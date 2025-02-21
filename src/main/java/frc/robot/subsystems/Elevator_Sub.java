@@ -14,8 +14,8 @@ import frc.robot.common.DefaultTalonFX;
 
 public class Elevator_Sub extends SubsystemBase {
   /** Creates a new elevatorSub. */
-  DefaultTalonFX.Config elevatorMotorConfig1 = new DefaultTalonFX.Config("elevator1Cfg");
-  DefaultTalonFX.Config elevatorMotorConfig2 = new DefaultTalonFX.Config("elevator2Cfg");
+  DefaultTalonFX.Config elevatorMotorConfig1 = new DefaultTalonFX.Config("Elevator1Motor.toml");
+  DefaultTalonFX.Config elevatorMotorConfig2 = new DefaultTalonFX.Config("Elevator2Motor.toml");
   DigitalInput elevatorHallSensor1 = new DigitalInput(4);
   DigitalInput elevatorHallSensor2 = new DigitalInput(5);
 

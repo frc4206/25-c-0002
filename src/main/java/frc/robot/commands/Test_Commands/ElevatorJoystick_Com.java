@@ -23,13 +23,13 @@ public class ElevatorJoystick_Com extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_elevatorSub.setPercentage_func(m_joystick.getRightY());
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    m_elevatorSub.setPercentage_func(m_joystick.getLeftY());
   }
 
   // Called once the command ends or is interrupted.

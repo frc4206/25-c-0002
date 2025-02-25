@@ -44,6 +44,9 @@ public class Elevator_Sub extends SubsystemBase {
     public double l3ScoringPosition;
     public double l4ScoringPosition;
 
+    /*Misc. */
+    public boolean followerOpposeMaster;
+
     public Config(String filename) {
       super.load(this, filename);
       LoadableConfig.print(this);
@@ -55,7 +58,7 @@ public class Elevator_Sub extends SubsystemBase {
     elevatorHallSensor1 = new DigitalInput(elevatorConfig.limitSwitch1Port);
     elevatorHallSensor2 = new DigitalInput(elevatorConfig.limitSwitch2Port);
     
-    //elevatorMotor2.setControl(new Follower(elevatorMotorConfig1.canID, false));
+    elevatorMotor2.setControl(new Follower(elevatorMotorConfig1.canID, elevatorConfig.followerOpposeMaster));
   }
 
   public void setPercentage_func(double percentage) {

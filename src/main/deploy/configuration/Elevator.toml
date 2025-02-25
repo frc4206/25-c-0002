@@ -1,5 +1,6 @@
 limitSwitch1Port = 4
 limitSwitch2Port = 5
+followerOpposeMaster = true
 
 stowPosition = 0.0
 sourceIntakePostion = 0.0

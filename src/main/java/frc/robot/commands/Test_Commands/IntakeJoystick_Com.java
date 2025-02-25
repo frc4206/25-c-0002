@@ -4,6 +4,8 @@
 
 package frc.robot.commands.Test_Commands;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Intake_Sub;
@@ -23,13 +25,14 @@ public class IntakeJoystick_Com extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intakeSub.setPercentage_func(m_joystick.getRightY());
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    m_intakeSub.setPercentage_func(m_joystick.getRightY());
+    m_intakeSub.intakeMotorPivot.setControl(new DutyCycleOut(m_joystick.getLeftY()));
   }
 
   // Called once the command ends or is interrupted.

@@ -47,6 +47,7 @@ public class Climber_Sub extends SubsystemBase {
     public double climbReadyPosition; 
     
     /*Misc. */
+    public boolean followerOpposeMaster;
 
     public Config(String filename){
 
@@ -74,7 +75,7 @@ public class Climber_Sub extends SubsystemBase {
 
     climberHallSensor = new DigitalInput(3);
 
-    //climberMotor2.setControl(new Follower(climberMotorConfig1.canID, false));
+    climberMotor2.setControl(new Follower(climberMotorConfig1.canID, climberConfig.followerOpposeMaster));
   }
   
 

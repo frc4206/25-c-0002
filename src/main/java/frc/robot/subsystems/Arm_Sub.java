@@ -62,7 +62,7 @@ public class Arm_Sub extends SubsystemBase {
     armCANCoder = new CANcoder(armConfig.canCoderID);
     armHallSensor = new DigitalInput(armConfig.limitSwitchPort);
     
-    //armMotor2.setControl(new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster));
+    armMotor2.setControl(new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster));
   }
 
   public void setPercentage_func(double percentage) {

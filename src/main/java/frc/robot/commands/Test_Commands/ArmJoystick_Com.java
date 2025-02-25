@@ -23,13 +23,17 @@ public class ArmJoystick_Com extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_armSub.setPercentage_func(m_joystick.getRightY());
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    if (Math.abs(m_joystick.getRightY()) > 0.1) {
+      m_armSub.setPercentage_func(m_joystick.getRightY());
+    } else {
+      m_armSub.setPercentage_func(0);
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -1,6 +1,7 @@
 name = "intakePivotCfg"
-canID = 61
+canID = 41
 inverted = false
+isBreakMode = true
 
 [slot0]
 kp = 0.0

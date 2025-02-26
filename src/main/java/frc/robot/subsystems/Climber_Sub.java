@@ -30,7 +30,7 @@ public class Climber_Sub extends SubsystemBase {
   public TalonFX climberMotor2 = new TalonFX(climberMotorConfig2.canID);
 
   /*Sensors */
-  DigitalInput climberHallSensor = new DigitalInput(3);
+  DigitalInput climberHallSensor;
 
   /*Game state Lists */
   public TalonFX[] m_climberList = {climberMotor1, climberMotor2};
@@ -39,7 +39,7 @@ public class Climber_Sub extends SubsystemBase {
 
   public static class Config  extends LoadableConfig {
     /*IDs and Ports */
-    public String name;
+    public int climberHallSensorPort;
 
     /*Positions */
     public double stowPosition; 
@@ -47,6 +47,7 @@ public class Climber_Sub extends SubsystemBase {
     public double climbReadyPosition; 
     
     /*Misc. */
+    public boolean followerOpposeMaster;
 
     public Config(String filename){
 
@@ -56,6 +57,8 @@ public class Climber_Sub extends SubsystemBase {
   }
 
   public Climber_Sub(Config cfg) {
+    climberConfig = cfg;
+
     /*Game State Constants */
     Double[] intakeLimits = {climberMotorConfig1.intakelimit, climberMotorConfig2.intakelimit};
     Double[] shootLimits = {climberMotorConfig1.shootlimit, climberMotorConfig2.shootlimit};
@@ -70,7 +73,9 @@ public class Climber_Sub extends SubsystemBase {
     currentLimitList.add(defenseLimits);
     currentLimitList.add(cycleLimits);
 
-    climberMotor2.setControl(new Follower(climberMotorConfig1.canID, false));
+    climberHallSensor = new DigitalInput(3);
+
+    climberMotor2.setControl(new Follower(climberMotorConfig1.canID, climberConfig.followerOpposeMaster));
   }
   
 
@@ -85,6 +90,9 @@ public class Climber_Sub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (climberHallSensor.get()) {
+      climberMotor1.setPosition(climberConfig.stowPosition);
+    }
   }
 
 }

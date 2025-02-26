@@ -5,39 +5,50 @@ import org.team4206.battleaid.common.LoadableConfig;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class ConfigTalonFX {
 
     Config cfg;
 
-    //Creates Motor
+    // Creates Motor
     public TalonFX motor;
 
     TalonFXConfiguration talonConfigs;
 
-    public ConfigTalonFX (ConfigTalonFX.Config cfg, TalonFX motor) {
+    public ConfigTalonFX(ConfigTalonFX.Config cfg, TalonFX motor) {
         this.cfg = cfg;
 
         this.motor = motor;
         talonConfigs = new TalonFXConfiguration();
+        motor.setInverted(cfg.inverted);
+
+        if (cfg.isBreakMode) {
+            motor.setNeutralMode(NeutralModeValue.Brake);
+        } else {
+            motor.setNeutralMode(NeutralModeValue.Coast);
+        }
+
         applyConfigs();
     }
-
 
     public static class Slot extends LoadableConfig {
         public double kp; // proportional
         public double ki; // integral
         public double kd; // derivative
 
-        public Slot(){};
+        public Slot() {
+        };
     }
-
 
     public static final class Config extends LoadableConfig {
         public String name;
-        @Required public int canID;
-        @Required public boolean inverted;
-        @Required public boolean isBreakMode;
+        @Required
+        public int canID;
+        @Required
+        public boolean inverted;
+        @Required
+        public boolean isBreakMode;
 
         public Slot slot0;
         public Slot slot1;
@@ -55,26 +66,25 @@ public class ConfigTalonFX {
         public double defenselimit;
         public double cyclelimit;
 
-		public Config(String filename) {
-			super.load(this, filename);
-			LoadableConfig.print(this);
-		}
-	}
+        public Config(String filename) {
+            super.load(this, filename);
+            LoadableConfig.print(this);
+        }
+    }
 
-
-    public void setSlot0(Slot bs){
+    public void setSlot0(Slot bs) {
         talonConfigs.Slot0.kP = bs.kp;
         talonConfigs.Slot0.kI = bs.ki;
         talonConfigs.Slot0.kD = bs.kd;
     }
 
-    public void setSlot1(Slot bs){
+    public void setSlot1(Slot bs) {
         talonConfigs.Slot1.kP = bs.kp;
         talonConfigs.Slot1.kI = bs.ki;
         talonConfigs.Slot1.kD = bs.kd;
     }
 
-    public void setSlot2(Slot bs){
+    public void setSlot2(Slot bs) {
         talonConfigs.Slot2.kP = bs.kp;
         talonConfigs.Slot2.kI = bs.ki;
         talonConfigs.Slot2.kD = bs.kd;

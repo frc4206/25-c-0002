@@ -19,37 +19,38 @@ import frc.robot.common.ConfigTalonFX;
 public class Arm_Sub extends SubsystemBase {
   /** Creates a new armSub. */
 
-  /*Configs */
+  /* Configs */
   ConfigTalonFX.Config armMotorConfig1 = new ConfigTalonFX.Config("Arm1Motor.toml");
   ConfigTalonFX.Config armMotorConfig2 = new ConfigTalonFX.Config("Arm2Motor.toml");
   public Config armConfig;
 
-  /*Motors */
+  /* Motors */
   public TalonFX armMotor1 = new TalonFX(armMotorConfig1.canID);
   public TalonFX armMotor2 = new TalonFX(armMotorConfig2.canID);
-  
-  /*Sensors */
-  CANcoder armCCoder = new CANcoder(armConfig.canCoderID);
-  DigitalInput armHallSensor = new DigitalInput(armConfig.limitSwitchPort);
 
-  //TODO:put in proper values in the tomls and check if they make sense for the subsystem, the filler values will break something if unchanged
-  public class  Config  extends LoadableConfig {
+  /* Sensors */
+  CANcoder armCANCoder;
+  DigitalInput armHallSensor;
 
-    /*IDs and Ports */
+  // TODO:put in proper values in the tomls and check if they make sense for the
+  // subsystem, the filler values will break something if unchanged
+  public static class Config extends LoadableConfig {
+
+    /* IDs and Ports */
     public int canCoderID;
     public int limitSwitchPort;
 
-    /*Positions */
+    /* Positions */
     public double stowPosition;
     public double sourceIntakePosition;
     public double l2ScoringPosition;
     public double l3ScoringPosition;
     public double l4ScoringPosition;
 
-    /*Misc. */
-    
+    /* Misc. */
+    public boolean followerOpposeMaster;
 
-    public Config(String filename){
+    public Config(String filename) {
       super.load(this, filename);
       LoadableConfig.print(this);
     }
@@ -57,15 +58,18 @@ public class Arm_Sub extends SubsystemBase {
   }
 
   public Arm_Sub(Arm_Sub.Config arm_Config) {
-    this.armConfig = arm_Config; 
-    armMotor2.setControl(new Follower(armMotorConfig1.canID, false));
+    this.armConfig = arm_Config;
+    armCANCoder = new CANcoder(armConfig.canCoderID);
+    armHallSensor = new DigitalInput(armConfig.limitSwitchPort);
+    
+    armMotor2.setControl(new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster));
   }
 
   public void setPercentage_func(double percentage) {
-        //TODO: make sure one of these doesn't need to be inverted, double check all motors
-        armMotor1.setControl(new DutyCycleOut(percentage));
+    // TODO: make sure one of these doesn't need to be inverted, double check all
+    // motors
+    armMotor1.setControl(new DutyCycleOut(percentage));
   }
-
 
   public void setArmAngle_func(double pos) {
     armMotor1.setControl(new PositionVoltage(0).withSlot(0).withPosition(pos));
@@ -74,6 +78,6 @@ public class Arm_Sub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-   
+
   }
 }

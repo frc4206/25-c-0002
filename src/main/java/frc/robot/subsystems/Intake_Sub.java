@@ -16,37 +16,36 @@ import frc.robot.common.ConfigTalonFX;
 
 public class Intake_Sub extends SubsystemBase {
   /** Creates a new intakeSub. */
-  /*Configs */
+  /* Configs */
   ConfigTalonFX.Config intakeMotorRollersConfig = new ConfigTalonFX.Config("IntakeMotorRollers.toml");
   ConfigTalonFX.Config intakeMotorPivotConfig = new ConfigTalonFX.Config("IntakeMotorPivot.toml");
   public Config intakeConfig;
 
-  /*Motors */
+  /* Motors */
   public TalonFX intakeMotorRollers = new TalonFX(intakeMotorRollersConfig.canID);
   public TalonFX intakeMotorPivot = new TalonFX(intakeMotorPivotConfig.canID);
 
-  /*Sensors */
-  DigitalInput intakeHallSensor = new DigitalInput(6);
-  DigitalInput intakeBeamBreak = new DigitalInput(7);
+  /* Sensors */
+  DigitalInput intakeHallSensor;
+  DigitalInput intakeBeamBreak;
 
+  public static class Config extends LoadableConfig {
 
-  public class  Config  extends LoadableConfig {
+    /* IDs and Ports */
+    public int HalllimitSwitch;
+    public int beamBreakPort;
 
-    /*IDs and Ports */
-    public int limitSwitch1;
-    public int limitSwitch2;
-
-    /*Positions */
-    public double stowPosition; 
-    public double l1ScoringPosition; 
+    /* Positions */
+    public double stowPosition;
+    public double l1ScoringPosition;
     public double intakePosition;
 
-    /*Misc. */
-    public double intakePercent; 
-    public double outtakePercent; 
+    /* Misc. */
+    public double intakePercent;
+    public double outtakePercent;
 
-    public Config(String filename){
-      
+    public Config(String filename) {
+
       super.load(this, filename);
       LoadableConfig.print(this);
     }
@@ -54,7 +53,10 @@ public class Intake_Sub extends SubsystemBase {
 
   public Intake_Sub(Config intakeConfig) {
     this.intakeConfig = intakeConfig;
-  } 
+    intakeHallSensor = new DigitalInput(intakeConfig.HalllimitSwitch);
+    intakeBeamBreak = new DigitalInput(intakeConfig.beamBreakPort);
+
+  }
 
   public void setPercentage_func(double percentage) {
     intakeMotorRollers.setControl(new DutyCycleOut(percentage));
@@ -67,5 +69,8 @@ public class Intake_Sub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (intakeHallSensor.get()) {
+      intakeMotorPivot.setPosition(0);
+    }
   }
 }

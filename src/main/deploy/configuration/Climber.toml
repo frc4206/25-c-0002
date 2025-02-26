@@ -1,4 +1,6 @@
 name = "climber"
+climberHallSensorPort = 3
+followerOpposeMaster = false
 
 stowPosition = 0.0
 climbedFinalPostion = 0.0

@@ -24,13 +24,13 @@ public class Claw_Sub extends SubsystemBase {
     public TalonFX clawMotor1 = new TalonFX(clawMotorConfig1.canID);
 
     /*Sensors */
-    DigitalInput clawBeamBreak = new DigitalInput(clawConfig.limitSwitchPort);
+    DigitalInput clawBeamBreak;
 
 
-    public class Config extends LoadableConfig {
+    public static class Config extends LoadableConfig {
 
         /*IDs and Ports */
-        public int limitSwitchPort;
+        public int beamBreakPort;
         
         /*Misc. */
         public double intakePercent; 
@@ -46,6 +46,7 @@ public class Claw_Sub extends SubsystemBase {
 
     public Claw_Sub(Config clawConfig) {
         this.clawConfig = clawConfig;
+        clawBeamBreak = new DigitalInput(clawConfig.beamBreakPort);
     }
 
     public void setPercentage_func(double percentage) {

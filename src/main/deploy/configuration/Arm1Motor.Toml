@@ -1,6 +1,7 @@
 name = "ArmMotor1"
 canID = 20
 inverted = false
+isBreakMode = true
 
 [slot0]
 kp = 0.0

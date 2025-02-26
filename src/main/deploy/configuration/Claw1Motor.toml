@@ -1,3 +1,4 @@
 name = "claw1Cfg"
-canID = 30
+canID = 25
 inverted = false
+isBreakMode = true

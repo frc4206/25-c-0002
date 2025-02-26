@@ -14,7 +14,7 @@ public class ConfigTalonFX {
     // Creates Motor
     public TalonFX motor;
 
-    TalonFXConfiguration talonConfigs;
+    public TalonFXConfiguration talonConfigs;
 
     public ConfigTalonFX(ConfigTalonFX.Config cfg, TalonFX motor) {
         this.cfg = cfg;

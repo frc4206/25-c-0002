@@ -12,6 +12,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.ConfigTalonFX;
 
@@ -25,6 +26,8 @@ public class Elevator_Sub extends SubsystemBase {
   /* Motors */
   public TalonFX elevatorMotor1 = new TalonFX(elevatorMotorConfig1.canID);
   public TalonFX elevatorMotor2 = new TalonFX(elevatorMotorConfig2.canID);
+
+  ConfigTalonFX elevatorConfigApply = new ConfigTalonFX(elevatorMotorConfig1, elevatorMotor1);
 
   /* Sensors */
   DigitalInput elevatorHallSensor1;
@@ -57,6 +60,10 @@ public class Elevator_Sub extends SubsystemBase {
     elevatorConfig = elevator_Motor_Config;
     elevatorHallSensor1 = new DigitalInput(elevatorConfig.limitSwitch1Port);
     elevatorHallSensor2 = new DigitalInput(elevatorConfig.limitSwitch2Port);
+
+    elevatorConfigApply.setSlot0(elevatorMotorConfig1.slot0);
+    elevatorConfigApply.applyConfigs();
+
     
     elevatorMotor2.setControl(new Follower(elevatorMotorConfig1.canID, elevatorConfig.followerOpposeMaster));
   }
@@ -72,11 +79,15 @@ public class Elevator_Sub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (elevatorHallSensor1.get()) {
+    if (!elevatorHallSensor1.get()) {
       elevatorMotor1.setPosition(0);
     }
-    if (elevatorHallSensor2.get()) {
+    if (!elevatorHallSensor2.get()) {
       elevatorMotor1.setPosition(elevatorConfig.stowPosition);
     }
+
+    SmartDashboard.putBoolean("bottom break", elevatorHallSensor1.get());
+    SmartDashboard.putBoolean("top break", elevatorHallSensor2.get());
+    SmartDashboard.putNumber("intake position", elevatorMotor1.getPosition().getValueAsDouble());
   }
 }

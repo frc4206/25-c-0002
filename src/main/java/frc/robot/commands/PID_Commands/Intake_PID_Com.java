@@ -4,6 +4,8 @@
 
 package frc.robot.commands.PID_Commands;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake_Sub;
 
@@ -21,18 +23,21 @@ public class Intake_PID_Com extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("command intialized");
+    m_intakeSub.setIntakePos_func(m_intakePosition);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeSub.setIntakePos_func(m_intakePosition);
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intakeSub.setIntakePos_func(0);
+    //m_intakeSub.intakeMotorPivot.setControl(new DutyCycleOut(0));
   }
 
   // Returns true when the command should end.

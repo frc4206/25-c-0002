@@ -11,6 +11,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,6 +28,8 @@ public class Arm_Sub extends SubsystemBase {
   /* Motors */
   public TalonFX armMotor1 = new TalonFX(armMotorConfig1.canID);
   public TalonFX armMotor2 = new TalonFX(armMotorConfig2.canID);
+
+  ConfigTalonFX armMotorApply = new ConfigTalonFX(armMotorConfig1, armMotor1);
 
   /* Sensors */
   CANcoder armCANCoder;
@@ -61,6 +64,13 @@ public class Arm_Sub extends SubsystemBase {
     this.armConfig = arm_Config;
     armCANCoder = new CANcoder(armConfig.canCoderID);
     armHallSensor = new DigitalInput(armConfig.limitSwitchPort);
+
+    armMotorApply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
+    armMotorApply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+    armMotorApply.talonConfigs.Feedback.RotorToSensorRatio = 45;
+
+    armMotorApply.setSlot0(armMotorConfig1.slot0);
+    armMotorApply.applyConfigs();
     
     armMotor2.setControl(new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster));
   }

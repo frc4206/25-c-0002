@@ -1,0 +1,4 @@
+name = "intakeRollersCfg"
+canID = 40
+inverted = false
+isBreakMode = true

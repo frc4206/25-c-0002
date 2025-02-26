@@ -1,0 +1,9 @@
+HalllimitSwitch = 6
+beamBreakPort = 7
+
+
+stowPosition = 0.0
+l1ScoringPosition = 0.0
+intakePosition = 0.0
+intakePercent = 0.5
+outtakePercent = -0.5

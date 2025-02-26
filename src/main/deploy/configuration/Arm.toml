@@ -1,0 +1,9 @@
+canCoderID = 22
+limitSwitchPort = 1
+followerOpposeMaster = true
+
+stowPosition = 0.0
+sourceIntakePostion = 0.0
+l2ScoringPosition = 0.0
+l3ScoringPosition = 0.0 
+l4ScoringPosition = 0.0

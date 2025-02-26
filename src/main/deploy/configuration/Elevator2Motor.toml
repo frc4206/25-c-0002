@@ -1,0 +1,9 @@
+name = "elevator2Cfg"
+canID = 36
+inverted = false
+isBreakMode = true
+
+[slot0]
+kp = 0.0
+ki = 0.0
+kd = 0.0

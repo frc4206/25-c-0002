@@ -40,7 +40,7 @@ public class Elevator_Sub extends SubsystemBase {
     public int limitSwitch2Port;
 
     /* Positions */
-    public double stowPosition;
+    public double maxExtension;
     public double sourceIntakePosition;
     public double l1ScoringPosition;
     public double l2ScoringPosition;
@@ -83,11 +83,11 @@ public class Elevator_Sub extends SubsystemBase {
       elevatorMotor1.setPosition(0);
     }
     if (!elevatorHallSensor2.get()) {
-      elevatorMotor1.setPosition(elevatorConfig.stowPosition);
+      elevatorMotor1.setPosition(elevatorConfig.maxExtension);
     }
 
     SmartDashboard.putBoolean("bottom break", elevatorHallSensor1.get());
     SmartDashboard.putBoolean("top break", elevatorHallSensor2.get());
-    SmartDashboard.putNumber("intake position", elevatorMotor1.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("elevator position", elevatorMotor1.getPosition().getValueAsDouble());
   }
 }

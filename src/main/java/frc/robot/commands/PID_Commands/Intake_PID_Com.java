@@ -37,7 +37,7 @@ public class Intake_PID_Com extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //m_intakeSub.intakeMotorPivot.setControl(new DutyCycleOut(0));
+    m_intakeSub.intakeMotorPivot.setControl(new DutyCycleOut(0));
   }
 
   // Returns true when the command should end.

@@ -32,7 +32,7 @@ public class IntakeJoystick_Com extends Command {
   @Override
   public void execute() {
     m_intakeSub.setPercentage_func(m_joystick.getRightY());
-    m_intakeSub.intakeMotorPivot.setControl(new DutyCycleOut(m_joystick.getLeftY()));
+    // m_intakeSub.intakeMotorPivot.setControl(new DutyCycleOut(m_joystick.getLeftY()));
   }
 
   // Called once the command ends or is interrupted.

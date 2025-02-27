@@ -130,11 +130,11 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
 
     //Joystick commands
-   //m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
+    //m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
     // m_claw.setDefaultCommand(new ClawJoystick_Com(m_claw, m_armController));
-    // m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
+    m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
     //m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_elevatorController));
-    // m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_intakeController));
+     //m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_intakeController));
     // m_armController.rightBumper().whileTrue(new IntakePercent_Com(m_intake, 0.8));
     // m_armController.leftBumper().whileTrue(new IntakePercent_Com(m_intake, -0.8));
     //Make sure the motors are spinning the correct direction
@@ -145,11 +145,10 @@ public class RobotContainer {
     // m_armController.x().onFalse(new InstantCommand(() -> m_arm.armMotor2.setControl(new DutyCycleOut(0))));
     // m_armController.y().onTrue(new InstantCommand(() -> m_arm.armMotor2.setControl(new DutyCycleOut(-0.1))));
     // m_armController.y().onFalse(new InstantCommand(() -> m_arm.armMotor2.setControl(new DutyCycleOut(0))));
-
-    m_intakeController.a().onTrue(new InstantCommand(() -> m_intake.intakeMotorPivot.setPosition(0)));
-    //m_intakeController.b().onTrue(new InstantCommand(() -> System.out.println("ahhhh")));
-    m_intakeController.b().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
-    m_intakeController.y().whileTrue(new IntakePercent_Com(m_intake, 0));
+    m_intakeController.a().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
+    m_intakeController.b().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.l1ScoringPosition));
+    m_intakeController.y().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.intakePosition));
+    m_intakeController.x().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.allgePosition));
 
     m_climberController.a().whileTrue(new ClimberPercent_Com(m_climber, 0.1));
     m_climberController.b().whileTrue(new ClimberPercent_Com(m_climber, -0.1));
@@ -164,7 +163,9 @@ public class RobotContainer {
     // m_elevatorController.x().onFalse(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0))));
     // m_elevatorController.y().onTrue(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(-0.1))));
     // m_elevatorController.y().onFalse(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0))));
-    m_elevatorController.b().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l2ScoringPosition));
+    m_elevatorController.a().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l1ScoringPosition));
+    m_elevatorController.b().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l3ScoringPosition));
+    m_elevatorController.y().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
     
     //m_armController.b().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
 

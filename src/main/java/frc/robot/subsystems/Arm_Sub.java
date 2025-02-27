@@ -76,8 +76,6 @@ public class Arm_Sub extends SubsystemBase {
   }
 
   public void setPercentage_func(double percentage) {
-    // TODO: make sure one of these doesn't need to be inverted, double check all
-    // motors
     armMotor1.setControl(new DutyCycleOut(percentage));
   }
 

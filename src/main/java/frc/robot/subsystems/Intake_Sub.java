@@ -44,6 +44,7 @@ public class Intake_Sub extends SubsystemBase {
     public double stowPosition;
     public double l1ScoringPosition;
     public double intakePosition;
+    public double allgePosition;
 
     /* Misc. */
     public double intakePercent;
@@ -80,6 +81,6 @@ public class Intake_Sub extends SubsystemBase {
     if (!intakeHallSensor.get()) {
       intakeMotorPivot.setPosition(0);
     }
-    
+    SmartDashboard.putNumber("intake position", intakeMotorPivot.getPosition().getValueAsDouble());
   }
 }

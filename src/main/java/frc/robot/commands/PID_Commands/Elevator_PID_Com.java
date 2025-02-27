@@ -4,6 +4,8 @@
 
 package frc.robot.commands.PID_Commands;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator_Sub;
 
@@ -35,7 +37,9 @@ public class Elevator_PID_Com extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_elevatorSub.elevatorMotor1.setControl(new DutyCycleOut(0));
+  }
 
   // Returns true when the command should end.
   @Override

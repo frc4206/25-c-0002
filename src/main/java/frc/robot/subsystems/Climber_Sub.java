@@ -73,7 +73,7 @@ public class Climber_Sub extends SubsystemBase {
     currentLimitList.add(defenseLimits);
     currentLimitList.add(cycleLimits);
 
-    climberHallSensor = new DigitalInput(3);
+    climberHallSensor = new DigitalInput(climberConfig.climberHallSensorPort);
 
     climberMotor2.setControl(new Follower(climberMotorConfig1.canID, climberConfig.followerOpposeMaster));
   }
@@ -90,7 +90,7 @@ public class Climber_Sub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (climberHallSensor.get()) {
+    if (!climberHallSensor.get()) {
       climberMotor1.setPosition(climberConfig.stowPosition);
     }
   }

@@ -1,9 +1,9 @@
-limitSwitch1Port = 4
-limitSwitch2Port = 5
+limitSwitch1Port = 1
+limitSwitch2Port = 2
 followerOpposeMaster = true
 
-stowPosition = 0.0
+maxExtension = 40.69
 sourceIntakePostion = 0.0
 l2ScoringPosition = 0.0
-l3ScoringPosition = 0.0 
-l4ScoringPosition = 0.0
+l3ScoringPosition = 17.5 
+l4ScoringPosition = 40.69

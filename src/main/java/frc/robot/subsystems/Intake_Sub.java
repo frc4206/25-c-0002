@@ -44,7 +44,7 @@ public class Intake_Sub extends SubsystemBase {
     public double stowPosition;
     public double l1ScoringPosition;
     public double intakePosition;
-    public double allgePosition;
+    public double algePosition;
 
     /* Misc. */
     public double intakePercent;

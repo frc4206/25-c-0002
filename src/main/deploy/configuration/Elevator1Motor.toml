@@ -4,6 +4,6 @@ inverted = false
 isBreakMode = true
 
 [slot0]
-kp = 1.0
-ki = 0.0
-kd = 0.0
+kp = 6.0
+ki = 0.2
+kd = 0.1

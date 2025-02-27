@@ -54,7 +54,7 @@ public class RobotContainer {
   public final Elevator_Sub.Config m_elevatorCfg = new Elevator_Sub.Config("Elevator.toml");
   public final Intake_Sub.Config m_intakeCfg = new Intake_Sub.Config("Intake.toml");
 
-  final Arm_Sub m_arm = new Arm_Sub(m_armConfig);
+  //final Arm_Sub m_arm = new Arm_Sub(m_armConfig);
   final Claw_Sub m_claw = new Claw_Sub(m_clawConfig);
   final Climber_Sub m_climber = new Climber_Sub(m_climberCfg);
   final Elevator_Sub m_elevator = new Elevator_Sub(m_elevatorCfg);
@@ -166,7 +166,7 @@ public class RobotContainer {
     // m_elevatorController.y().onFalse(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0))));
     m_elevatorController.b().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l2ScoringPosition));
     
-    m_armController.b().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
+    //m_armController.b().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
 
 
   }

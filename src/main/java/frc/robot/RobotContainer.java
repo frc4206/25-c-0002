@@ -130,7 +130,7 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
 
     //Joystick commands
-    m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
+    // m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
     // m_claw.setDefaultCommand(new ClawJoystick_Com(m_claw, m_armController));
     m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
     //m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_elevatorController));
@@ -167,7 +167,8 @@ public class RobotContainer {
     m_elevatorController.b().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l3ScoringPosition));
     m_elevatorController.y().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
     
-    m_armController.b().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
+    m_armController.b().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
+    m_armController.a().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
   }
 
   /**

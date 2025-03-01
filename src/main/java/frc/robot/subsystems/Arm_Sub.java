@@ -6,12 +6,15 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,6 +34,10 @@ public class Arm_Sub extends SubsystemBase {
   public TalonFX armMotor2 = new TalonFX(armMotorConfig2.canID);
 
   ConfigTalonFX armMotorApply = new ConfigTalonFX(armMotorConfig1, armMotor1);
+
+
+
+  TalonFXConfiguration ltalonConfigs = new TalonFXConfiguration();
 
   /* Sensors */
   CANcoder armCANCoder;
@@ -56,7 +63,7 @@ public class Arm_Sub extends SubsystemBase {
 
     public Config(String filename) {
       super.load(this, filename);
-      LoadableConfig.print(this);
+      // LoadableConfig.print(this);
     }
 
   }
@@ -66,6 +73,9 @@ public class Arm_Sub extends SubsystemBase {
     armCANCoder = new CANcoder(armConfig.canCoderID);
     armHallSensor = new DigitalInput(armConfig.limitSwitchPort);
 
+    LoadableConfig.print(armConfig);
+    LoadableConfig.print(armMotorConfig1);
+
     armMotorApply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
     armMotorApply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     armMotorApply.talonConfigs.Feedback.RotorToSensorRatio = 45;
@@ -73,8 +83,28 @@ public class Arm_Sub extends SubsystemBase {
 
     armMotorApply.setSlot0(armMotorConfig1.slot0);
     armMotorApply.applyConfigs();
-    
+
     armMotor2.setControl(new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster));
+    
+
+    /* 
+     * This is where we are actually setting the motor RN
+     */
+    
+    ltalonConfigs.Slot0 = new Slot0Configs().withKP(armMotorConfig1.slot0.kp)
+        .withKI(armMotorConfig1.slot0.ki)
+        .withKD(armMotorConfig1.slot0.kd);
+    ltalonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
+    // ltalonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    // ltalonConfigs.Feedback.RotorToSensorRatio = 45;
+    // ltalonConfigs.Feedback.SensorToMechanismRatio = 1;
+    armMotor1.setInverted(armMotorConfig1.inverted);
+    if (armMotorConfig1.isBreakMode) {
+      armMotor1.setNeutralMode(NeutralModeValue.Brake);
+    } else {
+      armMotor1.setNeutralMode(NeutralModeValue.Coast);
+    }
+    armMotor1.getConfigurator().apply(ltalonConfigs);
   }
 
   public void setPercentage_func(double percentage) {
@@ -82,12 +112,16 @@ public class Arm_Sub extends SubsystemBase {
   }
 
   public void setArmAngle_func(double pos) {
-    armMotor1.setControl(new PositionVoltage(0).withSlot(0).withPosition(pos));
+    armMotor1.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+    var fx_pos = armMotor1.getPosition();
+    fx_pos.refresh();
+    SmartDashboard.putNumber("arm position", fx_pos.getValueAsDouble());
+    SmartDashboard.putNumber("can coder position", armCANCoder.getPosition().getValueAsDouble());
+    //armMotor1.getConfigurator().refresh(ltalonConfigs);
   }
 }

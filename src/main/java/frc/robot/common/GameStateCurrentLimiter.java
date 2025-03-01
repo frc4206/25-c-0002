@@ -33,7 +33,7 @@ public class GameStateCurrentLimiter {
 
         public Config(String filename){
             super.load(this, filename);
-            LoadableConfig.print(this);
+            // LoadableConfig.print(this);
         }
     }
 

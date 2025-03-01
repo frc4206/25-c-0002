@@ -1,4 +1,4 @@
-name = "ArmMotor1"
+name = "ArmMotor2"
 canID = 21
 inverted = false
 isBreakMode = true

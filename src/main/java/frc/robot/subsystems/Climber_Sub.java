@@ -52,7 +52,7 @@ public class Climber_Sub extends SubsystemBase {
     public Config(String filename){
 
       super.load(this, filename);
-        LoadableConfig.print(this);
+        // LoadableConfig.print(this);
     }
   }
 

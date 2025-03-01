@@ -54,7 +54,7 @@ public class RobotContainer {
   public final Elevator_Sub.Config m_elevatorCfg = new Elevator_Sub.Config("Elevator.toml");
   public final Intake_Sub.Config m_intakeCfg = new Intake_Sub.Config("Intake.toml");
 
-  //final Arm_Sub m_arm = new Arm_Sub(m_armConfig);
+  final Arm_Sub m_arm = new Arm_Sub(m_armConfig);
   final Claw_Sub m_claw = new Claw_Sub(m_clawConfig);
   final Climber_Sub m_climber = new Climber_Sub(m_climberCfg);
   final Elevator_Sub m_elevator = new Elevator_Sub(m_elevatorCfg);
@@ -130,7 +130,7 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
 
     //Joystick commands
-    //m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
+    m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
     // m_claw.setDefaultCommand(new ClawJoystick_Com(m_claw, m_armController));
     m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
     //m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_elevatorController));
@@ -148,7 +148,7 @@ public class RobotContainer {
     m_intakeController.a().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
     m_intakeController.b().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.l1ScoringPosition));
     m_intakeController.y().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.intakePosition));
-    m_intakeController.x().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.allgePosition));
+    m_intakeController.x().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.algePosition));
 
     m_climberController.a().whileTrue(new ClimberPercent_Com(m_climber, 0.1));
     m_climberController.b().whileTrue(new ClimberPercent_Com(m_climber, -0.1));
@@ -167,7 +167,7 @@ public class RobotContainer {
     m_elevatorController.b().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l3ScoringPosition));
     m_elevatorController.y().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
     
-    //m_armController.b().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
+    m_armController.b().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
 
 
   }

@@ -136,10 +136,10 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
 
     //Joystick commands
-    // m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
+    //m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
     // m_claw.setDefaultCommand(new ClawJoystick_Com(m_claw, m_armController));
     m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
-    //m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_elevatorController));
+    m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_armController));
      //m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_intakeController));
     // m_armController.rightBumper().whileTrue(new IntakePercent_Com(m_intake, 0.8));
     // m_armController.leftBumper().whileTrue(new IntakePercent_Com(m_intake, -0.8));
@@ -174,30 +174,35 @@ public class RobotContainer {
     // m_elevatorController.y().onTrue(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(-0.1))));
     // m_elevatorController.y().onFalse(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0))));
     m_elevatorController.a().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l1ScoringPosition));
-    m_armController.y().onTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
+    // m_armController.y().onTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
     m_elevatorController.y().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
     
-    m_armController.b().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
-    m_armController.a().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.l4ScoringPosition));
+    m_armController.a().onTrue(new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
+    m_armController.b().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
+    m_armController.x().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l3ScoringPosition));
+    m_armController.y().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l4ScoringPosition));
+    
 
 
 
 
-    m_armController.rightBumper().onTrue(new ClawPercent_Com(m_claw, m_clawConfig.intakePercent));
-    m_armController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.75))));
-    m_armController.x().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
+    // m_armController.rightBumper().onTrue(new ClawPercent_Com(m_claw, m_clawConfig.intakePercent));
+    // m_armController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.75))));
+    // m_armController.x().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
 
 
 
 
 
-    m_driverController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
-    m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.75))));
+    // m_driverController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
+    // m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.75))));
     m_driverController.pov(0).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
+    m_driverController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
 
-    m_driverController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
-    m_driverController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
-    m_driverController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
+    // m_driverController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
+    // m_driverController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
+    // m_driverController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
+
   }
 
   /**

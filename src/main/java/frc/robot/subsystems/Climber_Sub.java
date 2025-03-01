@@ -14,6 +14,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.ConfigTalonFX;
 
@@ -28,6 +29,8 @@ public class Climber_Sub extends SubsystemBase {
   /*Motors */
   public TalonFX climberMotor1 = new TalonFX(climberMotorConfig1.canID);
   public TalonFX climberMotor2 = new TalonFX(climberMotorConfig2.canID);
+
+  public Servo m_Servo = new Servo(0);
 
   /*Sensors */
   DigitalInput climberHallSensor;

@@ -5,6 +5,11 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.Game_Commands.Coral_Intake_Com;
+import frc.robot.commands.Game_Commands.L1_scoring_Com;
+import frc.robot.commands.Game_Commands.L2_scoring_Com;
+import frc.robot.commands.Game_Commands.L3_scoring_Com;
+import frc.robot.commands.Game_Commands.L4_scoring_Com;
 import frc.robot.commands.PID_Commands.Arm_PID_Com;
 import frc.robot.commands.PID_Commands.Elevator_PID_Com;
 import frc.robot.commands.PID_Commands.Intake_PID_Com;
@@ -151,12 +156,16 @@ public class RobotContainer {
     m_intakeController.y().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.intakePosition));
     m_intakeController.x().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.algePosition));
 
-    m_climberController.a().whileTrue(new ClimberPercent_Com(m_climber, 0.1));
-    m_climberController.b().whileTrue(new ClimberPercent_Com(m_climber, -0.1));
-    m_climberController.x().onTrue(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(0.1))));
-    m_climberController.x().onFalse(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(0))));
-    m_climberController.y().onTrue(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(-0.1))));
-    m_climberController.y().onFalse(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(0))));
+    // m_climberController.a().whileTrue(new ClimberPercent_Com(m_climber, 0.1));
+    // m_climberController.b().whileTrue(new ClimberPercent_Com(m_climber, -0.1));
+    // m_climberController.x().onTrue(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(0.1))));
+    // m_climberController.x().onFalse(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(0))));
+    // m_climberController.y().onTrue(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(-0.1))));
+    // m_climberController.y().onFalse(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(0))));
+
+    m_climberController.a().whileTrue(new ClimberPercent_Com(m_climber, 0.04));
+    // m_climberController.b().whileTrue(new InstantCommand(() -> m_climber.m_Servo.setSpeed(-.5)));
+    // m_climberController.x().onFalse(new InstantCommand(() -> m_climber.m_Servo.setSpeed(0)));
 
     // m_elevatorController.a().whileTrue(new ElevatorPercent_Com(m_elevator, 0.1));
     // m_elevatorController.b().whileTrue(new ElevatorPercent_Com(m_elevator, -0.1));
@@ -177,6 +186,18 @@ public class RobotContainer {
     m_armController.rightBumper().onTrue(new ClawPercent_Com(m_claw, m_clawConfig.intakePercent));
     m_armController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.75))));
     m_armController.x().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
+
+
+
+
+
+    m_driverController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
+    m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.75))));
+    m_driverController.pov(0).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
+
+    m_driverController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
+    m_driverController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
+    m_driverController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
   }
 
   /**

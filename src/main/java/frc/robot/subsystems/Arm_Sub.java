@@ -77,7 +77,7 @@ public class Arm_Sub extends SubsystemBase {
     LoadableConfig.print(armMotorConfig1);
 
     armMotorApply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
-    armMotorApply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    armMotorApply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
     armMotorApply.talonConfigs.Feedback.RotorToSensorRatio = 45;
     armMotorApply.talonConfigs.Feedback.SensorToMechanismRatio = 1;
 
@@ -120,8 +120,11 @@ public class Arm_Sub extends SubsystemBase {
     // This method will be called once per scheduler run
     var fx_pos = armMotor1.getPosition();
     fx_pos.refresh();
+
+    var cc_pos = armCANCoder.getPosition();
+    cc_pos.refresh();
     SmartDashboard.putNumber("arm position", fx_pos.getValueAsDouble());
-    SmartDashboard.putNumber("can coder position", armCANCoder.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("can coder position", cc_pos.getValueAsDouble());
     //armMotor1.getConfigurator().refresh(ltalonConfigs);
   }
 }

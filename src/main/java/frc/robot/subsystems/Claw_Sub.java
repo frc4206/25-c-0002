@@ -4,18 +4,31 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BiConsumer;
+
 import org.team4206.battleaid.common.LoadableConfig;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.AsynchronousInterrupt;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.ConfigTalonFX;
 
 public class Claw_Sub extends SubsystemBase {
-    /** Creates a new ClawSub. */
+    enum ClawState {
+        NEUTRAL,
+        INTAKING,
+        DETECTED,
+        EXHAUSTING
+    }
+
+    private static ClawState claw_state = ClawState.NEUTRAL;
+
+    AsynchronousInterrupt beam_break_interrupt;
+    BiConsumer<Boolean, Boolean> trigger;
 
     /*Configs */
     ConfigTalonFX.Config clawMotorConfig1 = new ConfigTalonFX.Config("Claw1Motor.toml");
@@ -44,10 +57,31 @@ public class Claw_Sub extends SubsystemBase {
         }
     }
 
-
     public Claw_Sub(Config clawConfig) {
         this.clawConfig = clawConfig;
         clawBeamBreak = new DigitalInput(clawConfig.beamBreakPort);
+        setupClawBeamBreakInterrupt();
+    }
+
+    public void setupClawBeamBreakInterrupt() {
+        trigger = new BiConsumer<Boolean, Boolean>() {
+            @Override
+            public void accept(Boolean rise, Boolean fall) {
+                if(rise){
+                    System.out.println("Detected a rising edge!");
+                    SmartDashboard.putBoolean("Beam break claw", clawBeamBreak.get());
+                    claw_state = ClawState.NEUTRAL;
+                }
+                if (fall) {
+                    System.out.print("Claw falling edge!");
+                    SmartDashboard.putBoolean("Beam break claw", clawBeamBreak.get());
+                    claw_state = ClawState.DETECTED;
+                }
+            }
+        };
+        beam_break_interrupt = new AsynchronousInterrupt(clawBeamBreak, trigger);
+        beam_break_interrupt.setInterruptEdges(true, true);
+        beam_break_interrupt.enable();
     }
 
     public void setPercentage_func(double percentage) {
@@ -56,7 +90,6 @@ public class Claw_Sub extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
         SmartDashboard.putBoolean("Beam break claw", clawBeamBreak.get());
     }
 }

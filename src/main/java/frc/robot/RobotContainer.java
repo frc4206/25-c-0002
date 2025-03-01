@@ -168,8 +168,6 @@ public class RobotContainer {
     m_elevatorController.y().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
     
     m_armController.b().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
-
-
   }
 
   /**

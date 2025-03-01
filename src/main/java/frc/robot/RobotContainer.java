@@ -165,16 +165,18 @@ public class RobotContainer {
     // m_elevatorController.y().onTrue(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(-0.1))));
     // m_elevatorController.y().onFalse(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0))));
     m_elevatorController.a().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l1ScoringPosition));
-    m_elevatorController.b().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l3ScoringPosition));
+    m_armController.y().onTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
     m_elevatorController.y().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
     
     m_armController.b().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
-    m_armController.a().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
+    m_armController.a().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.l4ScoringPosition));
 
 
 
 
     m_armController.rightBumper().onTrue(new ClawPercent_Com(m_claw, m_clawConfig.intakePercent));
+    m_armController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.75))));
+    m_armController.x().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
   }
 
   /**

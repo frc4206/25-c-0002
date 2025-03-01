@@ -9,6 +9,7 @@ import frc.robot.commands.PID_Commands.Arm_PID_Com;
 import frc.robot.commands.PID_Commands.Elevator_PID_Com;
 import frc.robot.commands.PID_Commands.Intake_PID_Com;
 import frc.robot.commands.Percent_Commands.ArmPercent_Com;
+import frc.robot.commands.Percent_Commands.ClawPercent_Com;
 import frc.robot.commands.Percent_Commands.ClimberPercent_Com;
 import frc.robot.commands.Percent_Commands.ElevatorPercent_Com;
 import frc.robot.commands.Percent_Commands.IntakePercent_Com;
@@ -169,6 +170,11 @@ public class RobotContainer {
     
     m_armController.b().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
     m_armController.a().whileTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
+
+
+
+
+    m_armController.rightBumper().onTrue(new ClawPercent_Com(m_claw, m_clawConfig.intakePercent));
   }
 
   /**

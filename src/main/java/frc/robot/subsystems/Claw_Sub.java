@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import java.util.function.BiConsumer;
 
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
+
 import org.team4206.battleaid.common.LoadableConfig;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -18,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.ConfigTalonFX;
 
 public class Claw_Sub extends SubsystemBase {
-    enum ClawState {
+    public enum ClawState {
         NEUTRAL,
         INTAKING,
         DETECTED,
@@ -68,14 +70,16 @@ public class Claw_Sub extends SubsystemBase {
             @Override
             public void accept(Boolean rise, Boolean fall) {
                 if(rise){
-                    System.out.println("Detected a rising edge!");
-                    SmartDashboard.putBoolean("Beam break claw", clawBeamBreak.get());
                     claw_state = ClawState.NEUTRAL;
+                    System.out.println("Detected a rising edge!");
+                    return;
                 }
+
                 if (fall) {
                     System.out.print("Claw falling edge!");
-                    SmartDashboard.putBoolean("Beam break claw", clawBeamBreak.get());
+                    setPercentage_func(0);
                     claw_state = ClawState.DETECTED;
+                    return;
                 }
             }
         };
@@ -88,8 +92,30 @@ public class Claw_Sub extends SubsystemBase {
         clawMotor1.setControl(new DutyCycleOut(percentage));
     }
 
+    public ClawState getClawState() {
+        return claw_state;
+    }
+
+    public void setClawState(ClawState newState) {
+        claw_state = newState;
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Beam break claw", clawBeamBreak.get());
+        // System.out.println("\n\nClaw state -->>>> " + claw_state + "\n\n");
+        // if (claw_state == ClawState.INTAKING) {
+        //     setPercentage_func(1);
+        // }
+        // switch (claw_state) {
+        //     case INTAKING:
+        //         //setPercentage_func(clawConfig.intakePercent);
+        //         break;
+        //     case DETECTED:
+                
+        //         break;
+        //     default:
+        //         break;
+        // }
     }
 }

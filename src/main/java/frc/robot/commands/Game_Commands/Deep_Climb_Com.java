@@ -34,7 +34,7 @@ public class Deep_Climb_Com extends Command {
     m_climberSub.setClimberPos_func(m_climberSub.climberConfig.climbReadyPosition);
     m_intakeSub.setIntakePos_func(m_intakeSub.intakeConfig.intakePosition);
     m_armSub.setArmAngle_func(m_armSub.armConfig.stowPosition);
-    m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.stowPosition);
+    m_elevatorSub.setElevatorPos_func(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

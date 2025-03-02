@@ -7,10 +7,12 @@ package frc.robot.subsystems;
 import org.team4206.battleaid.common.LoadableConfig;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.ConfigTalonFX;
 
@@ -19,11 +21,14 @@ public class Intake_Sub extends SubsystemBase {
   /* Configs */
   ConfigTalonFX.Config intakeMotorRollersConfig = new ConfigTalonFX.Config("IntakeMotorRollers.toml");
   ConfigTalonFX.Config intakeMotorPivotConfig = new ConfigTalonFX.Config("IntakeMotorPivot.toml");
+
   public Config intakeConfig;
 
   /* Motors */
   public TalonFX intakeMotorRollers = new TalonFX(intakeMotorRollersConfig.canID);
   public TalonFX intakeMotorPivot = new TalonFX(intakeMotorPivotConfig.canID);
+
+  ConfigTalonFX intakePivotCFGapply = new ConfigTalonFX(intakeMotorPivotConfig, intakeMotorPivot);
 
   /* Sensors */
   DigitalInput intakeHallSensor;
@@ -39,6 +44,7 @@ public class Intake_Sub extends SubsystemBase {
     public double stowPosition;
     public double l1ScoringPosition;
     public double intakePosition;
+    public double algePosition;
 
     /* Misc. */
     public double intakePercent;
@@ -47,7 +53,7 @@ public class Intake_Sub extends SubsystemBase {
     public Config(String filename) {
 
       super.load(this, filename);
-      LoadableConfig.print(this);
+      // LoadableConfig.print(this);
     }
   }
 
@@ -55,6 +61,9 @@ public class Intake_Sub extends SubsystemBase {
     this.intakeConfig = intakeConfig;
     intakeHallSensor = new DigitalInput(intakeConfig.HalllimitSwitch);
     intakeBeamBreak = new DigitalInput(intakeConfig.beamBreakPort);
+
+    intakePivotCFGapply.setSlot0(intakeMotorPivotConfig.slot0);
+    intakePivotCFGapply.applyConfigs();
 
   }
 
@@ -69,8 +78,9 @@ public class Intake_Sub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (intakeHallSensor.get()) {
+    if (!intakeHallSensor.get()) {
       intakeMotorPivot.setPosition(0);
     }
+    SmartDashboard.putNumber("intake position", intakeMotorPivot.getPosition().getValueAsDouble());
   }
 }

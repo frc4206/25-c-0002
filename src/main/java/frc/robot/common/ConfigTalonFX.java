@@ -14,7 +14,7 @@ public class ConfigTalonFX {
     // Creates Motor
     public TalonFX motor;
 
-    TalonFXConfiguration talonConfigs;
+    public TalonFXConfiguration talonConfigs;
 
     public ConfigTalonFX(ConfigTalonFX.Config cfg, TalonFX motor) {
         this.cfg = cfg;
@@ -68,7 +68,7 @@ public class ConfigTalonFX {
 
         public Config(String filename) {
             super.load(this, filename);
-            LoadableConfig.print(this);
+            // LoadableConfig.print(this);
         }
     }
 

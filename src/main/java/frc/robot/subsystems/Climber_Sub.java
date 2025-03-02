@@ -14,6 +14,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.ConfigTalonFX;
 
@@ -28,6 +29,8 @@ public class Climber_Sub extends SubsystemBase {
   /*Motors */
   public TalonFX climberMotor1 = new TalonFX(climberMotorConfig1.canID);
   public TalonFX climberMotor2 = new TalonFX(climberMotorConfig2.canID);
+
+  public Servo m_Servo = new Servo(0);
 
   /*Sensors */
   DigitalInput climberHallSensor;
@@ -52,7 +55,7 @@ public class Climber_Sub extends SubsystemBase {
     public Config(String filename){
 
       super.load(this, filename);
-        LoadableConfig.print(this);
+        // LoadableConfig.print(this);
     }
   }
 
@@ -73,7 +76,7 @@ public class Climber_Sub extends SubsystemBase {
     currentLimitList.add(defenseLimits);
     currentLimitList.add(cycleLimits);
 
-    climberHallSensor = new DigitalInput(3);
+    climberHallSensor = new DigitalInput(climberConfig.climberHallSensorPort);
 
     climberMotor2.setControl(new Follower(climberMotorConfig1.canID, climberConfig.followerOpposeMaster));
   }
@@ -90,7 +93,7 @@ public class Climber_Sub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (climberHallSensor.get()) {
+    if (!climberHallSensor.get()) {
       climberMotor1.setPosition(climberConfig.stowPosition);
     }
   }

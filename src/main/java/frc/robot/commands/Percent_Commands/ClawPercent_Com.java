@@ -21,13 +21,16 @@ public class ClawPercent_Com extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_clawSub.setPercentage_func(m_percent);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    if(m_clawSub.getClawState() == Claw_Sub.ClawState.NEUTRAL) {
+      m_clawSub.setClawState(Claw_Sub.ClawState.INTAKING);
+      m_clawSub.setPercentage_func(m_percent);
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -32,6 +32,7 @@ import frc.robot.subsystems.Elevator_Sub;
 import frc.robot.subsystems.Intake_Sub;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -96,6 +97,8 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    // NamedCommands.registerCommand("L4Arm", new Arm_PID_Com(m_arm, m_arm.armConfig.l4ScoringPosition));
+
     // Configure the trigger bindings
     configureBindings();
 

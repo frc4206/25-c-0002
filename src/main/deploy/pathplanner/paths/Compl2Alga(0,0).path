@@ -1,0 +1,65 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.798293235812183,
+        "y": 4.023179632280772
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.073475487307956,
+        "y": 3.991255673724826
+      },
+      "isLocked": false,
+      "linkedName": "Compl1Alga(0,0)"
+    },
+    {
+      "anchor": {
+        "x": 6.042434210530599,
+        "y": 4.025000000001819
+      },
+      "prevControl": {
+        "x": 5.774266103131217,
+        "y": 4.015598487544137
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Compl2Alga(0,0)"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 4.5,
+        "y": 4.0
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 0.25,
+      "maxWaypointRelativePos": 0.75,
+      "name": "Point Towards Zone"
+    }
+  ],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 179.19307054489764
+  },
+  "reversed": false,
+  "folder": "ComplAlga(0,0)",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 179.98995389009718
+  },
+  "useDefaultConstraints": true
+}

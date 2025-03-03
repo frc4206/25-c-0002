@@ -97,8 +97,22 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // NamedCommands.registerCommand("L4Arm", new Arm_PID_Com(m_arm, m_arm.armConfig.l4ScoringPosition));
+    //PATHPLANNER COMMANDS
+    //Arm Commands
+    NamedCommands.registerCommand("L4Arm", new Arm_PID_Com(m_arm, m_arm.armConfig.l4ScoringPosition));
+    NamedCommands.registerCommand("L3Arm", new Arm_PID_Com(m_arm, m_arm.armConfig.l3ScoringPosition)); 
+    
+    //Elevator Commands
+    NamedCommands.registerCommand("L4Elevator", new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.l4ScoringPosition));
+    NamedCommands.registerCommand("L3Elevator", new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.l3ScoringPosition)); 
+    NamedCommands.registerCommand("IntakeElevator", new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.sourceIntakePosition));
 
+    //Claw Commands
+    NamedCommands.registerCommand("Score", new ClawPercent_Com(m_claw, m_claw.clawConfig.outtakePercent));
+    NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent)); 
+    NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
+
+    
     // Configure the trigger bindings
     configureBindings();
 

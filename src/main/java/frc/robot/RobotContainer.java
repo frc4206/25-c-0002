@@ -32,10 +32,13 @@ import frc.robot.subsystems.Elevator_Sub;
 import frc.robot.subsystems.Intake_Sub;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -73,6 +76,8 @@ public class RobotContainer {
   private final CommandXboxController m_elevatorController = new CommandXboxController(4);
   private final CommandXboxController m_intakeController = new CommandXboxController(5);
 
+  private final SendableChooser<Command> autoChooser;
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.kDriverControllerPort);
@@ -97,24 +102,41 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    //PATHPLANNER COMMANDS
-    //Arm Commands
-    NamedCommands.registerCommand("L4Arm", new Arm_PID_Com(m_arm, m_arm.armConfig.l4ScoringPosition));
-    NamedCommands.registerCommand("L3Arm", new Arm_PID_Com(m_arm, m_arm.armConfig.l3ScoringPosition)); 
-    
-    //Elevator Commands
-    NamedCommands.registerCommand("L4Elevator", new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.l4ScoringPosition));
-    NamedCommands.registerCommand("L3Elevator", new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.l3ScoringPosition)); 
-    NamedCommands.registerCommand("IntakeElevator", new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.sourceIntakePosition));
+    // PATHPLANNER COMMANDS
+    // Arm Commands
+    // NamedCommands.registerCommand("L4Arm", new Arm_PID_Com(m_arm, m_arm.armConfig.l4ScoringPosition));
+    // NamedCommands.registerCommand("L3Arm", new Arm_PID_Com(m_arm, m_arm.armConfig.l3ScoringPosition));
 
-    //Claw Commands
-    NamedCommands.registerCommand("Score", new ClawPercent_Com(m_claw, m_claw.clawConfig.outtakePercent));
-    NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent)); 
-    NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
+    // // Elevator Commands
+    // NamedCommands.registerCommand("L4Elevator",
+    //     new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.l4ScoringPosition));
+    // NamedCommands.registerCommand("L3Elevator",
+    //     new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.l3ScoringPosition));
+    // NamedCommands.registerCommand("IntakeElevator",
+    //     new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.sourceIntakePosition));
 
-    
+    // // Claw Commands
+    // NamedCommands.registerCommand("Score", new ClawPercent_Com(m_claw, m_claw.clawConfig.outtakePercent));
+    // NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
+    // NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
+
+    // NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator));
+
     // Configure the trigger bindings
     configureBindings();
+
+    // For convenience a programmer could change this when going to competition.
+    boolean isCompetition = true;
+
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    // As an example, this will only show autos that start with "comp" while at
+    // competition as defined by the programmer
+    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+        (stream) -> isCompetition
+            ? stream.filter(auto -> auto.getName().startsWith(""))
+            : stream);
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
   }
 
@@ -152,22 +174,29 @@ public class RobotContainer {
 
     drivetrain.registerTelemetry(logger::telemeterize);
 
-    //Joystick commands
-    //m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
+    // Joystick commands
+    // m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
     // m_claw.setDefaultCommand(new ClawJoystick_Com(m_claw, m_armController));
     m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
     m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_armController));
-     //m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_intakeController));
-    // m_armController.rightBumper().whileTrue(new IntakePercent_Com(m_intake, 0.8));
-    // m_armController.leftBumper().whileTrue(new IntakePercent_Com(m_intake, -0.8));
-    //Make sure the motors are spinning the correct direction
+    // m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake,
+    // m_intakeController));
+    // m_armController.rightBumper().whileTrue(new IntakePercent_Com(m_intake,
+    // 0.8));
+    // m_armController.leftBumper().whileTrue(new IntakePercent_Com(m_intake,
+    // -0.8));
+    // Make sure the motors are spinning the correct direction
 
     // m_armController.a().whileTrue(new ArmPercent_Com(m_arm, 0.1));
     // m_armController.b().whileTrue(new ArmPercent_Com(m_arm, -0.1));
-    // m_armController.x().onTrue(new InstantCommand(() -> m_arm.armMotor2.setControl(new DutyCycleOut(0.1))));
-    // m_armController.x().onFalse(new InstantCommand(() -> m_arm.armMotor2.setControl(new DutyCycleOut(0))));
-    // m_armController.y().onTrue(new InstantCommand(() -> m_arm.armMotor2.setControl(new DutyCycleOut(-0.1))));
-    // m_armController.y().onFalse(new InstantCommand(() -> m_arm.armMotor2.setControl(new DutyCycleOut(0))));
+    // m_armController.x().onTrue(new InstantCommand(() ->
+    // m_arm.armMotor2.setControl(new DutyCycleOut(0.1))));
+    // m_armController.x().onFalse(new InstantCommand(() ->
+    // m_arm.armMotor2.setControl(new DutyCycleOut(0))));
+    // m_armController.y().onTrue(new InstantCommand(() ->
+    // m_arm.armMotor2.setControl(new DutyCycleOut(-0.1))));
+    // m_armController.y().onFalse(new InstantCommand(() ->
+    // m_arm.armMotor2.setControl(new DutyCycleOut(0))));
     m_intakeController.a().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
     m_intakeController.b().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.l1ScoringPosition));
     m_intakeController.y().whileTrue(new Intake_PID_Com(m_intake, m_intakeCfg.intakePosition));
@@ -175,50 +204,57 @@ public class RobotContainer {
 
     // m_climberController.a().whileTrue(new ClimberPercent_Com(m_climber, 0.1));
     // m_climberController.b().whileTrue(new ClimberPercent_Com(m_climber, -0.1));
-    // m_climberController.x().onTrue(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(0.1))));
-    // m_climberController.x().onFalse(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(0))));
-    // m_climberController.y().onTrue(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(-0.1))));
-    // m_climberController.y().onFalse(new InstantCommand(() -> m_climber.climberMotor2.setControl(new DutyCycleOut(0))));
+    // m_climberController.x().onTrue(new InstantCommand(() ->
+    // m_climber.climberMotor2.setControl(new DutyCycleOut(0.1))));
+    // m_climberController.x().onFalse(new InstantCommand(() ->
+    // m_climber.climberMotor2.setControl(new DutyCycleOut(0))));
+    // m_climberController.y().onTrue(new InstantCommand(() ->
+    // m_climber.climberMotor2.setControl(new DutyCycleOut(-0.1))));
+    // m_climberController.y().onFalse(new InstantCommand(() ->
+    // m_climber.climberMotor2.setControl(new DutyCycleOut(0))));
 
     m_climberController.a().whileTrue(new ClimberPercent_Com(m_climber, 0.04));
-    // m_climberController.b().whileTrue(new InstantCommand(() -> m_climber.m_Servo.setSpeed(-.5)));
-    // m_climberController.x().onFalse(new InstantCommand(() -> m_climber.m_Servo.setSpeed(0)));
+    // m_climberController.b().whileTrue(new InstantCommand(() ->
+    // m_climber.m_Servo.setSpeed(-.5)));
+    // m_climberController.x().onFalse(new InstantCommand(() ->
+    // m_climber.m_Servo.setSpeed(0)));
 
     // m_elevatorController.a().whileTrue(new ElevatorPercent_Com(m_elevator, 0.1));
-    // m_elevatorController.b().whileTrue(new ElevatorPercent_Com(m_elevator, -0.1));
-    // m_elevatorController.x().onTrue(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0.1))));
-    // m_elevatorController.x().onFalse(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0))));
-    // m_elevatorController.y().onTrue(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(-0.1))));
-    // m_elevatorController.y().onFalse(new InstantCommand(() -> m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0))));
+    // m_elevatorController.b().whileTrue(new ElevatorPercent_Com(m_elevator,
+    // -0.1));
+    // m_elevatorController.x().onTrue(new InstantCommand(() ->
+    // m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0.1))));
+    // m_elevatorController.x().onFalse(new InstantCommand(() ->
+    // m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0))));
+    // m_elevatorController.y().onTrue(new InstantCommand(() ->
+    // m_elevator.elevatorMotor2.setControl(new DutyCycleOut(-0.1))));
+    // m_elevatorController.y().onFalse(new InstantCommand(() ->
+    // m_elevator.elevatorMotor2.setControl(new DutyCycleOut(0))));
     m_elevatorController.a().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l1ScoringPosition));
-    // m_armController.y().onTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
+    // m_armController.y().onTrue(new Elevator_PID_Com(m_elevator,
+    // m_elevatorCfg.l4ScoringPosition));
     m_elevatorController.y().whileTrue(new Elevator_PID_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
-    
+
     m_armController.a().onTrue(new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
     m_armController.b().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
     m_armController.x().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l3ScoringPosition));
     m_armController.y().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l4ScoringPosition));
-    
 
+    // m_armController.rightBumper().onTrue(new ClawPercent_Com(m_claw,
+    // m_clawConfig.intakePercent));
+    // m_armController.leftBumper().onTrue(new InstantCommand(() ->
+    // m_claw.clawMotor1.setControl(new DutyCycleOut(0.75))));
+    // m_armController.x().onTrue(new InstantCommand(() ->
+    // m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
 
-
-
-    // m_armController.rightBumper().onTrue(new ClawPercent_Com(m_claw, m_clawConfig.intakePercent));
-    // m_armController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.75))));
-    // m_armController.x().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
-
-
-
-
-
-    // m_driverController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
-    // m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.75))));
+    m_driverController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
+    m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.75))));
     m_driverController.pov(0).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
     m_driverController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
 
-    // m_driverController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
-    // m_driverController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
-    // m_driverController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
+    m_driverController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
+    m_driverController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
+    m_driverController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
 
   }
 
@@ -229,6 +265,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return autoChooser.getSelected();
   }
 }

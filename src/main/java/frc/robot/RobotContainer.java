@@ -47,6 +47,9 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import static edu.wpi.first.units.Units.*;
 
+import org.team4206.battleaid.common.TunedJoystick;
+import org.team4206.battleaid.common.TunedJoystick.ResponseCurve;
+
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -81,6 +84,11 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
       OperatorConstants.kDriverControllerPort);
+
+  TunedJoystick tj = new TunedJoystick(m_driverController.getHID())
+    .setDeadzone(0.1)
+    .useResponseCurve(ResponseCurve.QUADRATIC)
+    .setPeriodMilliseconds(10);
 
   /* SWERVE */
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -157,11 +165,11 @@ public class RobotContainer {
   private void configureBindings() {
     drivetrain.setDefaultCommand(
         // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) // Drive forward
+        drivetrain.applyRequest(() -> drive.withVelocityX(-tj.getLeftY() * MaxSpeed) // Drive forward
                                                                                                      // with negative Y
                                                                                                      // (forward)
-            .withVelocityY(-m_driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with
+            .withVelocityY(-tj.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-tj.getRightX() * MaxAngularRate) // Drive counterclockwise with
                                                                                   // negative X (left)
         ));
 

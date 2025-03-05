@@ -102,7 +102,7 @@ public class Claw_Sub extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Beam break claw", clawBeamBreak.get());
+        // SmartDashboard.putBoolean("Beam break claw", clawBeamBreak.get());
         // System.out.println("\n\nClaw state -->>>> " + claw_state + "\n\n");
         // if (claw_state == ClawState.INTAKING) {
         //     setPercentage_func(1);

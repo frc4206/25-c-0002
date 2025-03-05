@@ -79,8 +79,8 @@ public class Intake_Sub extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     if (!intakeHallSensor.get()) {
-      intakeMotorPivot.setPosition(0);
+      // intakeMotorPivot.setPosition(0);
     }
-    SmartDashboard.putNumber("intake position", intakeMotorPivot.getPosition().getValueAsDouble());
+    // SmartDashboard.putNumber("intake position", intakeMotorPivot.getPosition().getValueAsDouble());
   }
 }

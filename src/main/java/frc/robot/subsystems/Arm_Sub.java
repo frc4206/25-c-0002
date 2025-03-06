@@ -31,7 +31,7 @@ public class Arm_Sub extends SubsystemBase {
 
   /* Motors */
   public TalonFX armMotor1 = new TalonFX(armMotorConfig1.canID);
-  public TalonFX armMotor2 = new TalonFX(armMotorConfig2.canID);
+  //public TalonFX armMotor2 = new TalonFX(armMotorConfig2.canID);
 
   ConfigTalonFX armMotorApply = new ConfigTalonFX(armMotorConfig1, armMotor1);
 
@@ -84,7 +84,7 @@ public class Arm_Sub extends SubsystemBase {
     armMotorApply.setSlot0(armMotorConfig1.slot0);
     armMotorApply.applyConfigs();
 
-    armMotor2.setControl(new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster));
+    // armMotor2.setControl(new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster));
     
 
     /* 

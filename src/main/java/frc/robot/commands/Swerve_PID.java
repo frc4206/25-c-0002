@@ -139,7 +139,7 @@ public class Swerve_PID extends Command {
     // m_drive.applyRequest(() -> driverequest.withVelocityX(errorX * kpx)
     // .withVelocityY(-tj.getLeftX() * MaxSpeed)
     // .withRotationalRate(-tj.getRightX() * MaxAngularRate));
-    if (Math.abs(errorTheta) < 5) {
+    if (Math.abs(errorTheta) < 2) {
       m_drive.setControl(driverequest);
     }else {
       m_drive.setControl(driverequesttheta);

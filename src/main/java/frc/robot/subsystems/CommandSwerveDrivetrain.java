@@ -60,14 +60,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
-    StructPublisher<Pose2d> odoPub = NetworkTableInstance.getDefault()
-  .getStructTopic("odoPose Pub", Pose2d.struct).publish();
+//     StructPublisher<Pose2d> odoPub = NetworkTableInstance.getDefault()
+//   .getStructTopic("odoPose Pub", Pose2d.struct).publish();
   StructPublisher<Pose2d> estmPub = NetworkTableInstance.getDefault()
   .getStructTopic("Pose Pub", Pose2d.struct).publish();
-  StructPublisher<Pose2d> mt2Pub = NetworkTableInstance.getDefault()
-  .getStructTopic("mt2Pose Pub", Pose2d.struct).publish();
-  StructPublisher<Pose2d> ogPose = NetworkTableInstance.getDefault()
-  .getStructTopic("old pose Pub", Pose2d.struct).publish();
+//   StructPublisher<Pose2d> mt2Pub = NetworkTableInstance.getDefault()
+//   .getStructTopic("mt2Pose Pub", Pose2d.struct).publish();
+//   StructPublisher<Pose2d> ogPose = NetworkTableInstance.getDefault()
+//   .getStructTopic("old pose Pub", Pose2d.struct).publish();
 
     boolean doRejectUpdate;
 
@@ -361,21 +361,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 // System.out.println("updated without mt2");
             }
 
-            mt2Pub.set(mt2.pose);
+            // mt2Pub.set(mt2.pose);
             
         }
-        SmartDashboard.putBoolean("DoRejectUpdate", doRejectUpdate);
+        // SmartDashboard.putBoolean("DoRejectUpdate", doRejectUpdate);
 
         odo.update(getPose().getRotation(), this.getState().ModulePositions);
         m_poseEstimator.update(getPose().getRotation(), this.getState().ModulePositions);
         
         
-        odoPub.set(odo.getPoseMeters());
+        // odoPub.set(odo.getPoseMeters());
         estmPub.set(getEstimatedPose());
-        ogPose.set(this.getPose());
+        // ogPose.set(this.getPose());
         // SmartDashboard.putBoolean("mt2 null", (mt2 == null));
 
-        SmartDashboard.putBoolean("ll test", LimelightHelpers.getTV("limelight-intake"));
+        // SmartDashboard.putBoolean("ll test", LimelightHelpers.getTV("limelight-intake"));
+        SmartDashboard.putNumber("gyro angle", getPigeon2().getYaw().getValueAsDouble());
     }
 
     private void startSimThread() {

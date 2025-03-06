@@ -125,8 +125,8 @@ public class Arm_Sub extends SubsystemBase {
 
     var cc_pos = armCANCoder.getPosition();
     cc_pos.refresh();
-    SmartDashboard.putNumber("arm position", fx_pos.getValueAsDouble());
-    SmartDashboard.putNumber("can coder position", cc_pos.getValueAsDouble());
-    armMotor1.getConfigurator().refresh(ltalonConfigs);
+    // SmartDashboard.putNumber("arm position", fx_pos.getValueAsDouble());
+    // SmartDashboard.putNumber("can coder position", cc_pos.getValueAsDouble());
+    // armMotor1.getConfigurator().refresh(ltalonConfigs);
   }
 }

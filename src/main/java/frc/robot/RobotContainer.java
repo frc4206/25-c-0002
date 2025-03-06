@@ -31,6 +31,7 @@ import frc.robot.subsystems.Climber_Sub;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator_Sub;
 import frc.robot.subsystems.Intake_Sub;
+import frc.robot.subsystems.Claw_Sub.ClawState;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -47,6 +48,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import static edu.wpi.first.units.Units.*;
+
+import java.util.jar.Attributes.Name;
 
 import org.team4206.battleaid.common.TunedJoystick;
 import org.team4206.battleaid.common.TunedJoystick.ResponseCurve;
@@ -128,11 +131,13 @@ public class RobotContainer {
     //     new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.sourceIntakePosition));
 
     // // Claw Commands
-    // NamedCommands.registerCommand("Score", new ClawPercent_Com(m_claw, m_claw.clawConfig.outtakePercent));
+    NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(1)).withTimeout(.5));
     // NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
-    // NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
+    NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(1));
 
-    // NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator));
+    NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(1));
+    NamedCommands.registerCommand("CoralIntake", new Coral_Intake_Com(m_arm, m_claw, m_elevator).withTimeout(1));
+    // NamedCommands.registerCommand("RunEndEffector", new ClawPercent_Com(m_claw, m_clawConfig.intakePercent).withTimeout(1));
 
     // Configure the trigger bindings
     configureBindings();
@@ -182,7 +187,7 @@ public class RobotContainer {
     m_driverController.start().and(m_driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
     m_driverController.start().and(m_driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-    m_driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+    m_driverController.leftStick().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
     drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -261,6 +266,7 @@ public class RobotContainer {
 
     m_operatorController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
     m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.65))));
+    m_operatorController.pov(0).onTrue(new InstantCommand(() -> Claw_Sub.claw_state = ClawState.NEUTRAL));
     m_operatorController.pov(0).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
     m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
 
@@ -268,8 +274,10 @@ public class RobotContainer {
     m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
     m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
 
-    // m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, -0.42, -.12, MaxSpeed, MaxAngularRate, tj));
-    // m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.42, .12, MaxSpeed, MaxAngularRate, tj));
+    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.42, -.12, MaxSpeed, MaxAngularRate, tj));
+    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, -0.42, .31, MaxSpeed, MaxAngularRate, tj));
+
+    m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 
     // m_driverController.a().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(0.1)));
   }

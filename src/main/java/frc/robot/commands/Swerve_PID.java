@@ -128,18 +128,18 @@ public class Swerve_PID extends Command {
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
         .withVelocityX(outputX)
         .withVelocityY(outputY)
-        .withRotationalRate(-errorTheta * cfg.kptheta + deltaTheta * cfg.kdtheta); // Use open-loop control for drive motors
+        .withRotationalRate(-errorTheta * cfg.kptheta); // Use open-loop control for drive motors
     SwerveRequest.RobotCentric driverequesttheta = new SwerveRequest.RobotCentric()
         .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
         .withVelocityX(0)
         .withVelocityY(0)
-        .withRotationalRate(-errorTheta * cfg.kptheta + deltaTheta * cfg.kdtheta); // Use open-loop control for drive motors
+        .withRotationalRate(-errorTheta * cfg.kptheta); // Use open-loop control for drive motors
 
     // m_drive.applyRequest(() -> driverequest.withVelocityX(errorX * kpx)
     // .withVelocityY(-tj.getLeftX() * MaxSpeed)
     // .withRotationalRate(-tj.getRightX() * MaxAngularRate));
-    if (Math.abs(errorTheta) < 2) {
+    if (Math.abs(errorTheta) < 5) {
       m_drive.setControl(driverequest);
     }else {
       m_drive.setControl(driverequesttheta);

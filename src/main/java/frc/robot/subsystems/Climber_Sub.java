@@ -81,10 +81,12 @@ public class Climber_Sub extends SubsystemBase {
 
   public void setPercentage_func(double percentage) {
     climberMotor1.setControl(new DutyCycleOut(percentage));
+    climberMotor2.setControl(new Follower(climberMotorConfig1.canID, climberConfig.followerOpposeMaster));
   }
 
   public void setClimberPos_func(double pos) {
     climberMotor1.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
+    climberMotor2.setControl(new Follower(climberMotorConfig1.canID, climberConfig.followerOpposeMaster));
   }
 
   @Override

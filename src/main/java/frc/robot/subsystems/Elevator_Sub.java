@@ -70,10 +70,12 @@ public class Elevator_Sub extends SubsystemBase {
 
   public void setPercentage_func(double percentage) {
     elevatorMotor1.setControl(new DutyCycleOut(percentage));
+    elevatorMotor2.setControl(new Follower(elevatorMotorConfig1.canID, elevatorConfig.followerOpposeMaster));
   }
 
   public void setElevatorPos_func(double pos) {
     elevatorMotor1.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
+    elevatorMotor2.setControl(new Follower(elevatorMotorConfig1.canID, elevatorConfig.followerOpposeMaster));
   }
 
   @Override

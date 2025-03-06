@@ -77,10 +77,12 @@ public class Arm_Sub extends SubsystemBase {
 
   public void setPercentage_func(double percentage) {
     armMotor1.setControl(new DutyCycleOut(percentage));
+    armMotor2.setControl(new Follower(armMotorConfig1.canID, armConfig.followerOpposeMaster));
   }
 
   public void setArmAngle_func(double pos) {
     armMotor1.setControl(new PositionVoltage(0).withSlot(0).withPosition(pos));
+    armMotor2.setControl(new Follower(armMotorConfig1.canID, armConfig.followerOpposeMaster));
   }
 
   @Override

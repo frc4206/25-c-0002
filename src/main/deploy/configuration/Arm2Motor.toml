@@ -1,5 +1,5 @@
 name = "ArmMotor2"
-canID = 20
+canID = 21
 inverted = false
 isBreakMode = true
 

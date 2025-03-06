@@ -88,6 +88,6 @@ public class Elevator_Sub extends SubsystemBase {
 
     // SmartDashboard.putBoolean("bottom break", elevatorHallSensor1.get());
     // SmartDashboard.putBoolean("top break", elevatorHallSensor2.get());
-    // SmartDashboard.putNumber("elevator position", elevatorMotor1.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("elevator position", elevatorMotor1.getPosition().getValueAsDouble());
   }
 }

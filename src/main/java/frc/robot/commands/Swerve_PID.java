@@ -15,54 +15,50 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
-import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Swerve_PID extends Command {
 
-  private final double limelight_robot_offset = 0.05;
+  /*
+   * The (bottom) Limelight lens was measured at 5 centimeters
+   * starboard from the bow-stern axis.
+   */
+  private final double limelight_starboard_offset = 0.05; // in centimeters
+  private double last_alignment_measurement = 0.0;
+
+  /**
+   * The (bottom) Limelight lens was measure at 57.15 centimeters
+   * from the bow of the robot (including the bumper on the robot).
+   * From the Limelight's perspective, forward direction is negative
+   */
+  private final double limelight_bow_offset = -0.5715; // in centimeters
+  private double last_distance_measurement = 0.0;
 
   /** Creates a new Swerve_PID. */
   public static class Config extends LoadableConfig {
 
-    double kpy;
-    double kiy;
-    double kdy;
-    double ff;
+    public double kp_strafe;
+    public double kd_strafe;
 
-    double kddiff;
+    public double kp_distance;
+    public double kd_distance;
 
     public Config(String filename) {
-
       super.load(this, filename);
-      // LoadableConfig.print(this);
     }
   }
-
-  double m_setpointY;
 
   static Config cfg = new Config("swervePID.toml");
   CommandSwerveDrivetrain m_drive;
 
-  double MaxSpeed;
-  double MaxAngularRate;
+  // offset left or right comes from RobotContainer
+  private double m_setpointY;
 
-
-  double errorY;
-  double lastErrorY = 0;
-  double deltaY;
-
-  TunedJoystick tj;
-
-  public Swerve_PID(CommandSwerveDrivetrain drive, double setpointY, double sped, double angrate, TunedJoystick _tj) {
+  public Swerve_PID(CommandSwerveDrivetrain drive, double setpointY) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     m_setpointY = setpointY;
-    tj = _tj;
 
-    MaxSpeed = sped;
-    MaxAngularRate = angrate;
     addRequirements(drive);
   }
 
@@ -77,60 +73,58 @@ public class Swerve_PID extends Command {
   public void execute() {
     Pose3d pose = LimelightHelpers.getCameraPose3d_TargetSpace("limelight-intake");
 
-    double sag_output = 0.0d;
+    double forward_speed = 0.0d;
     double x_output = 0.0d;
 
     // from the limelights perspective, Y is the nearness,
     // zero is on top of, farther away goes negative
-    double distance_to_qr_code = pose.getZ();
+    double distance_to_qr_code = pose.getZ() - limelight_bow_offset;
 
     // left is positive, right is negative
     // from the limelights perspective, X is lefty-rightness
-    double central_alignment = pose.getX() - limelight_robot_offset; 
-
-    // the closest we can bot on robot perimeter is ~-0.56
-    // so we are gonna round down to -0.5
-    if(distance_to_qr_code >= -0.5d){
-      // may need to break here
-      sag_output = 0.0d;
-    } else {
-      sag_output = -distance_to_qr_code;
-    }
+    double central_alignment = pose.getX() - limelight_starboard_offset; 
 
     // IF we are detecting the april tag
     if(LimelightHelpers.getTV("limelight-intake")){
-      // alignment is still a function of the setpoint
+
+      /*---------- move sideways ------------------- */
+      
+      // Left-rightness is function of the setpoint
       central_alignment -= m_setpointY;
 
       // Adding P
-      x_output += (central_alignment * cfg.kpy);
+      x_output += (central_alignment * cfg.kp_strafe);
 
+      // Rough estimate calculation of D
+      double stafe_d = central_alignment - last_alignment_measurement;
 
-      double diff = central_alignment - lastErrorY;
+      // Adding D
+      x_output += (stafe_d * cfg.kd_strafe);
 
-      x_output += (diff * cfg.kddiff);
+      /* ------------------------------------------- */
 
-      // if they are not the same, it means 
-      // that we need to apply a derivative error, 'diff'
-      // diff = central_alignment - lastErrorY;
+      /* ----------------move forwards---------------- */
 
-      // this OPPOSES the proportional value
-      // x_output += (diff * cfg.kddiff);
+      // Adding P
+      forward_speed += (distance_to_qr_code * cfg.kp_distance);
 
-      SmartDashboard.putNumber("Xoutput: ", x_output);
-      SmartDashboard.putNumber("Diff (d): ", diff);
-      SmartDashboard.putNumber("Central alignment 1:", central_alignment);
-      SmartDashboard.putNumber("Central alignment 2:", lastErrorY);
+      // Rought estimate calculation of D
+      double forward_d = distance_to_qr_code - last_distance_measurement;
+
+      // Adding D
+      forward_speed += (forward_d * cfg.kd_distance);
     }
 
     SwerveRequest.RobotCentric driverequest = new SwerveRequest.RobotCentric()
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-        .withVelocityY(x_output);
-        // .withVelocityX(sag_output); // Use open-loop control for drive motors
+        .withVelocityY(x_output)
+        .withVelocityX(forward_speed);
 
     m_drive.setControl(driverequest);
 
-    lastErrorY = central_alignment;
+    // Make sure we remember last alignment value
+    // so we can roughly calculate D
+    last_alignment_measurement = central_alignment;
   }
 
   // Called once the command ends or is interrupted.

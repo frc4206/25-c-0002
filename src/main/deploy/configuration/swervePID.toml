@@ -1,16 +1,12 @@
-kpx = 3.0
-kdx = 0.0
-
 # DO NOT CHANGE these bruh, 
 # these are HOly.  If Christian 
 # finds a git diff on this he will
 # destroy who changes them bruh
-kpy = 3.3
-kddiff = 3.0
 
-kdy = 0.0
+# Strafe values
+kp_strafe = 3.3
+kd_strafe = 3.0
 
-kptheta = 0.3
-kdtheta = 0.3
-
-ff = 0.0
+# Forward values
+kp_distance = 1.0
+kd_distance = 1.0

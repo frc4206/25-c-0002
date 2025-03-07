@@ -274,8 +274,12 @@ public class RobotContainer {
     // m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
     // m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
 
-    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165, MaxSpeed, MaxAngularRate, tj));
-    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165, MaxSpeed, MaxAngularRate, tj));
+    /* 
+     * The values '0.165' and '-0.165' are in meters, i.e. +/-16.5 centimeters.
+     * The distance between two reef bars is on average 32.5 or 33 centimeters.
+     */
+    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165));
+    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165));
 
     // m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 

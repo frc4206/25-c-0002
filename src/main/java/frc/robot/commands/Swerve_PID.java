@@ -21,7 +21,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Swerve_PID extends Command {
 
-  private final double limelight_robot_offset = 0.06;
+  private final double limelight_robot_offset = 0.05;
 
   /** Creates a new Swerve_PID. */
   public static class Config extends LoadableConfig {
@@ -30,6 +30,8 @@ public class Swerve_PID extends Command {
     double kiy;
     double kdy;
     double ff;
+
+    double kddiff;
 
     public Config(String filename) {
 
@@ -84,7 +86,7 @@ public class Swerve_PID extends Command {
 
     // left is positive, right is negative
     // from the limelights perspective, X is lefty-rightness
-    double central_alignment = pose.getX(); 
+    double central_alignment = pose.getX() - limelight_robot_offset; 
 
     // the closest we can bot on robot perimeter is ~-0.56
     // so we are gonna round down to -0.5
@@ -95,20 +97,26 @@ public class Swerve_PID extends Command {
       sag_output = -distance_to_qr_code;
     }
 
-    // NOT detecting a april tag right now
-    if(central_alignment == 0.0d){
-      // do nothing
-    } else {
-      x_output += central_alignment;
+    // IF we are detecting the april tag
+    if(LimelightHelpers.getTV("limelight-intake")){
+      x_output = central_alignment;
 
-      // the robot limelight is mounted NOT in the 
-      // center on the robot-oriented persepctive
-      x_output += limelight_robot_offset;
+      // x_output += (central_alignment * cfg.kpy);
 
-      // then we adjust to the setpoint, and 
-      // multiply proportionally because transverse
-      // wasn't super powerful moving
-      x_output += -m_setpointY * cfg.kpy;
+      // double diff = 0.0d;
+
+      // if they are not the same, it means 
+      // that we need to apply a derivative error, 'diff'
+      // diff = central_alignment - lastErrorY;
+    
+
+      // this OPPOSES the proportional value
+      // x_output += (diff * cfg.kddiff);
+
+      SmartDashboard.putNumber("Xoutput: ", x_output);
+      // SmartDashboard.putNumber("Diff (d): ", diff);
+      SmartDashboard.putNumber("Central alignment 1:", central_alignment);
+      SmartDashboard.putNumber("Central alignment 2:", lastErrorY);
     }
 
     SwerveRequest.RobotCentric driverequest = new SwerveRequest.RobotCentric()
@@ -116,8 +124,9 @@ public class Swerve_PID extends Command {
         .withVelocityY(x_output);
         // .withVelocityX(sag_output); // Use open-loop control for drive motors
 
-      m_drive.setControl(driverequest);
+    m_drive.setControl(driverequest);
 
+    lastErrorY = central_alignment;
   }
 
   // Called once the command ends or is interrupted.

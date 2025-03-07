@@ -99,11 +99,16 @@ public class Swerve_PID extends Command {
 
     // IF we are detecting the april tag
     if(LimelightHelpers.getTV("limelight-intake")){
+      // alignment is still a function of the setpoint
       central_alignment -= m_setpointY;
 
+      // Adding P
       x_output += (central_alignment * cfg.kpy);
 
-      // double diff = 0.0d;
+
+      double diff = central_alignment - lastErrorY;
+
+      x_output += (diff * cfg.kddiff);
 
       // if they are not the same, it means 
       // that we need to apply a derivative error, 'diff'
@@ -113,7 +118,7 @@ public class Swerve_PID extends Command {
       // x_output += (diff * cfg.kddiff);
 
       SmartDashboard.putNumber("Xoutput: ", x_output);
-      // SmartDashboard.putNumber("Diff (d): ", diff);
+      SmartDashboard.putNumber("Diff (d): ", diff);
       SmartDashboard.putNumber("Central alignment 1:", central_alignment);
       SmartDashboard.putNumber("Central alignment 2:", lastErrorY);
     }

@@ -1,10 +1,13 @@
 kpx = 3.0
 kdx = 0.0
 
-kddiff = 0.1
+# DO NOT CHANGE these bruh, 
+# these are HOly.  If Christian 
+# finds a git diff on this he will
+# destroy who changes them bruh
+kpy = 3.3
+kddiff = 3.0
 
-
-kpy = 2.0
 kdy = 0.0
 
 kptheta = 0.3

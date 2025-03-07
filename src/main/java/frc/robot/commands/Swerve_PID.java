@@ -99,7 +99,7 @@ public class Swerve_PID extends Command {
 
     // IF we are detecting the april tag
     if(LimelightHelpers.getTV("limelight-intake")){
-      // x_output = central_alignment;
+      central_alignment -= m_setpointY;
 
       x_output += (central_alignment * cfg.kpy);
 
@@ -108,7 +108,6 @@ public class Swerve_PID extends Command {
       // if they are not the same, it means 
       // that we need to apply a derivative error, 'diff'
       // diff = central_alignment - lastErrorY;
-    
 
       // this OPPOSES the proportional value
       // x_output += (diff * cfg.kddiff);

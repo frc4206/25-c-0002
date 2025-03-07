@@ -20,6 +20,9 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Swerve_PID extends Command {
+
+  private final double limelight_robot_offset = 0.06;
+
   /** Creates a new Swerve_PID. */
   public static class Config extends LoadableConfig {
 
@@ -70,29 +73,48 @@ public class Swerve_PID extends Command {
   
   @Override
   public void execute() {
-    double feed_forward; 
     Pose3d pose = LimelightHelpers.getCameraPose3d_TargetSpace("limelight-intake");
-    errorY = pose.getX() - m_setpointY;
-    double outputY = errorY * cfg.kpy;
 
-    if (Math.abs(errorY) < 0.0181) {
-      outputY = 0;
+    double sag_output = 0.0d;
+    double x_output = 0.0d;
+
+    // from the limelights perspective, Y is the nearness,
+    // zero is on top of, farther away goes negative
+    double distance_to_qr_code = pose.getZ();
+
+    // left is positive, right is negative
+    // from the limelights perspective, X is lefty-rightness
+    double central_alignment = pose.getX(); 
+
+    // the closest we can bot on robot perimeter is ~-0.56
+    // so we are gonna round down to -0.5
+    if(distance_to_qr_code >= -0.5d){
+      // may need to break here
+      sag_output = 0.0d;
+    } else {
+      sag_output = -distance_to_qr_code;
     }
 
-    SmartDashboard.putNumber("output Y", outputY);
-    SmartDashboard.putNumber("error y", errorY);
-    if (outputY < 0) {
-      cfg.ff = -cfg.ff;
+    // NOT detecting a april tag right now
+    if(central_alignment == 0.0d){
+      // do nothing
+    } else {
+      x_output += central_alignment;
+
+      // the robot limelight is mounted NOT in the 
+      // center on the robot-oriented persepctive
+      x_output += limelight_robot_offset;
+
+      // then we adjust to the setpoint, and 
+      // multiply proportionally because transverse
+      // wasn't super powerful moving
+      x_output += -m_setpointY * cfg.kpy;
     }
-    // outputY = 0;
-
-
 
     SwerveRequest.RobotCentric driverequest = new SwerveRequest.RobotCentric()
-        //.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-        .withVelocityX(0.2)
-        .withVelocityY(outputY + cfg.ff); // Use open-loop control for drive motors
+        .withVelocityY(x_output);
+        // .withVelocityX(sag_output); // Use open-loop control for drive motors
 
       m_drive.setControl(driverequest);
 

@@ -104,7 +104,7 @@ public class RobotContainer {
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+      // .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -274,8 +274,8 @@ public class RobotContainer {
     m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
     m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
 
-    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -.1, MaxSpeed, MaxAngularRate, tj));
-    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, .22, MaxSpeed, MaxAngularRate, tj));
+    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -.11, MaxSpeed, MaxAngularRate, tj));
+    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, .18, MaxSpeed, MaxAngularRate, tj));
 
     m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 

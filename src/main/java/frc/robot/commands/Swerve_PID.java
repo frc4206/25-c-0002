@@ -99,9 +99,9 @@ public class Swerve_PID extends Command {
 
     // IF we are detecting the april tag
     if(LimelightHelpers.getTV("limelight-intake")){
-      x_output = central_alignment;
+      // x_output = central_alignment;
 
-      // x_output += (central_alignment * cfg.kpy);
+      x_output += (central_alignment * cfg.kpy);
 
       // double diff = 0.0d;
 

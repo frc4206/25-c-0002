@@ -20,19 +20,18 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Swerve_PID extends Command {
+
+  private final double limelight_robot_offset = 0.05;
+
   /** Creates a new Swerve_PID. */
   public static class Config extends LoadableConfig {
-    double kpx;
-    double kix;
-    double kdx;
 
     double kpy;
     double kiy;
     double kdy;
+    double ff;
 
-    double kptheta;
-    double kitheta;
-    double kdtheta;
+    double kddiff;
 
     public Config(String filename) {
 
@@ -41,9 +40,7 @@ public class Swerve_PID extends Command {
     }
   }
 
-  double m_setpointX;
   double m_setpointY;
-  double m_setpointTheta;
 
   static Config cfg = new Config("swervePID.toml");
   CommandSwerveDrivetrain m_drive;
@@ -51,24 +48,16 @@ public class Swerve_PID extends Command {
   double MaxSpeed;
   double MaxAngularRate;
 
-  double errorX;
-  double lastErrorX = 0;
-  double deltaX;
 
   double errorY;
   double lastErrorY = 0;
   double deltaY;
 
-  double errorTheta;
-  double lastErrorTheta = 0;
-  double deltaTheta;
-
   TunedJoystick tj;
 
-  public Swerve_PID(CommandSwerveDrivetrain drive, double setpointX, double setpointY, double sped, double angrate, TunedJoystick _tj) {
+  public Swerve_PID(CommandSwerveDrivetrain drive, double setpointY, double sped, double angrate, TunedJoystick _tj) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
-    m_setpointX = setpointX;
     m_setpointY = setpointY;
     tj = _tj;
 
@@ -80,72 +69,68 @@ public class Swerve_PID extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_setpointTheta = getTagThetaSetpoint();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
-
-  public double getTagThetaSetpoint() {
-    int tagID = (int) LimelightHelpers.getFiducialID("limelight-intake");
-    if (tagID == 18) {
-      return 0;
-    } else {
-      return 0;
-    }
-  }
+  
   @Override
   public void execute() {
     Pose3d pose = LimelightHelpers.getCameraPose3d_TargetSpace("limelight-intake");
-    double theta = m_drive.getPigeon2().getRotation2d().getDegrees();
-    errorX = pose.getZ() - m_setpointX;
-    deltaX = errorX - lastErrorX;
 
-    errorY = pose.getX() - m_setpointY;
-    deltaY = errorY - lastErrorY;
+    double sag_output = 0.0d;
+    double x_output = 0.0d;
 
-    errorTheta = theta - m_setpointTheta;
-    deltaTheta = errorTheta - lastErrorTheta;
+    // from the limelights perspective, Y is the nearness,
+    // zero is on top of, farther away goes negative
+    double distance_to_qr_code = pose.getZ();
 
-    double outputX = -errorX * cfg.kpx - deltaX * cfg.kdx;
-    double outputY = errorY * cfg.kpy + deltaY * cfg.kdy;
+    // left is positive, right is negative
+    // from the limelights perspective, X is lefty-rightness
+    double central_alignment = pose.getX() - limelight_robot_offset; 
 
-    if (Math.abs(errorX) < 0.0181) {
-      outputX = 0;
+    // the closest we can bot on robot perimeter is ~-0.56
+    // so we are gonna round down to -0.5
+    if(distance_to_qr_code >= -0.5d){
+      // may need to break here
+      sag_output = 0.0d;
+    } else {
+      sag_output = -distance_to_qr_code;
     }
 
-    if (Math.abs(errorY) < 0.0181) {
-      outputY = 0;
+    // IF we are detecting the april tag
+    if(LimelightHelpers.getTV("limelight-intake")){
+      // alignment is still a function of the setpoint
+      central_alignment -= m_setpointY;
+
+      // Adding P
+      x_output += (central_alignment * cfg.kpy);
+
+
+      double diff = central_alignment - lastErrorY;
+
+      x_output += (diff * cfg.kddiff);
+
+      // if they are not the same, it means 
+      // that we need to apply a derivative error, 'diff'
+      // diff = central_alignment - lastErrorY;
+
+      // this OPPOSES the proportional value
+      // x_output += (diff * cfg.kddiff);
+
+      SmartDashboard.putNumber("Xoutput: ", x_output);
+      SmartDashboard.putNumber("Diff (d): ", diff);
+      SmartDashboard.putNumber("Central alignment 1:", central_alignment);
+      SmartDashboard.putNumber("Central alignment 2:", lastErrorY);
     }
-
-    // SmartDashboard.putNumber("pid x", -errorX * cfg.kpx);
-    // SmartDashboard.putNumber("error x", errorX);
-
-    // SmartDashboard.putNumber("pid D", -deltaX * cfg.kdx);
-    // SmartDashboard.putNumber("delta x", deltaX);
 
     SwerveRequest.RobotCentric driverequest = new SwerveRequest.RobotCentric()
-        .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-        .withVelocityX(outputX)
-        .withVelocityY(outputY)
-        .withRotationalRate(-errorTheta * cfg.kptheta); // Use open-loop control for drive motors
-    SwerveRequest.RobotCentric driverequesttheta = new SwerveRequest.RobotCentric()
-        .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-        .withVelocityX(0)
-        .withVelocityY(0)
-        .withRotationalRate(-errorTheta * cfg.kptheta); // Use open-loop control for drive motors
+        .withVelocityY(x_output);
+        // .withVelocityX(sag_output); // Use open-loop control for drive motors
 
-    // m_drive.applyRequest(() -> driverequest.withVelocityX(errorX * kpx)
-    // .withVelocityY(-tj.getLeftX() * MaxSpeed)
-    // .withRotationalRate(-tj.getRightX() * MaxAngularRate));
-    if (Math.abs(errorTheta) < 5) {
-      m_drive.setControl(driverequest);
-    }else {
-      m_drive.setControl(driverequesttheta);
-    }
-    
-    lastErrorX = errorX;
+    m_drive.setControl(driverequest);
+
+    lastErrorY = central_alignment;
   }
 
   // Called once the command ends or is interrupted.

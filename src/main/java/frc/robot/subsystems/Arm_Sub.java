@@ -73,8 +73,8 @@ public class Arm_Sub extends SubsystemBase {
     armCANCoder = new CANcoder(armConfig.canCoderID);
     armHallSensor = new DigitalInput(armConfig.limitSwitchPort);
 
-    LoadableConfig.print(armConfig);
-    LoadableConfig.print(armMotorConfig1);
+    // LoadableConfig.print(armConfig);
+    // LoadableConfig.print(armMotorConfig1);
 
     armMotorApply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
     armMotorApply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;

@@ -274,8 +274,8 @@ public class RobotContainer {
     m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
     m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
 
-    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.42, -.12, MaxSpeed, MaxAngularRate, tj));
-    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, -0.42, .31, MaxSpeed, MaxAngularRate, tj));
+    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -.1, MaxSpeed, MaxAngularRate, tj));
+    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, .22, MaxSpeed, MaxAngularRate, tj));
 
     m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 

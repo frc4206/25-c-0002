@@ -118,6 +118,6 @@ public class Claw_Sub extends SubsystemBase {
                 break;
         }
 
-        System.out.println(claw_state);
+        // System.out.println(claw_state);
     }
 }

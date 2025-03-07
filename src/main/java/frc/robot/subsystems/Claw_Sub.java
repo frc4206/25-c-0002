@@ -27,7 +27,7 @@ public class Claw_Sub extends SubsystemBase {
         EXHAUSTING
     }
 
-    private static ClawState claw_state = ClawState.NEUTRAL;
+    public static ClawState claw_state = ClawState.NEUTRAL;
 
     AsynchronousInterrupt beam_break_interrupt;
     BiConsumer<Boolean, Boolean> trigger;
@@ -102,20 +102,22 @@ public class Claw_Sub extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Beam break claw", clawBeamBreak.get());
+        // SmartDashboard.putBoolean("Beam break claw", clawBeamBreak.get());
         // System.out.println("\n\nClaw state -->>>> " + claw_state + "\n\n");
         // if (claw_state == ClawState.INTAKING) {
         //     setPercentage_func(1);
         // }
-        // switch (claw_state) {
-        //     case INTAKING:
-        //         //setPercentage_func(clawConfig.intakePercent);
-        //         break;
-        //     case DETECTED:
+        switch (claw_state) {
+            case INTAKING:
+                setPercentage_func(clawConfig.intakePercent);
+                break;
+            case NEUTRAL:
                 
-        //         break;
-        //     default:
-        //         break;
-        // }
+                break;
+            default:
+                break;
+        }
+
+        // System.out.println(claw_state);
     }
 }

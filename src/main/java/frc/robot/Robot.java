@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.common.LimelightHelpers;
@@ -24,7 +26,7 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   public Robot() {
-    super(0.015);
+    // super(0.015);
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -45,6 +47,11 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     LimelightHelpers.SetRobotOrientation("limelight-intake", m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 0,0.0,0.0,0.0,0.0,0.0);
+
+    Pose3d pose = LimelightHelpers.getCameraPose3d_TargetSpace("limelight-intake");
+    SmartDashboard.putNumber("Limelight X ", pose.getX());
+    SmartDashboard.putNumber("Limelight Y", pose.getY());
+    SmartDashboard.putNumber("Limelight Z", pose.getZ());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

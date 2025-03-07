@@ -73,8 +73,8 @@ public class Arm_Sub extends SubsystemBase {
     armCANCoder = new CANcoder(armConfig.canCoderID);
     armHallSensor = new DigitalInput(armConfig.limitSwitchPort);
 
-    LoadableConfig.print(armConfig);
-    LoadableConfig.print(armMotorConfig1);
+    // LoadableConfig.print(armConfig);
+    // LoadableConfig.print(armMotorConfig1);
 
     armMotorApply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
     armMotorApply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
@@ -84,7 +84,9 @@ public class Arm_Sub extends SubsystemBase {
     armMotorApply.setSlot0(armMotorConfig1.slot0);
     armMotorApply.applyConfigs();
 
-    armMotor2.setControl(new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster));
+    var request = new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster);
+    request.UpdateFreqHz = 50;
+    armMotor2.setControl(request);
     
 
     /* 
@@ -98,7 +100,7 @@ public class Arm_Sub extends SubsystemBase {
     // ltalonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     // ltalonConfigs.Feedback.RotorToSensorRatio = 45;
     // ltalonConfigs.Feedback.SensorToMechanismRatio = 1;
-    armMotor1.setInverted(armMotorConfig1.inverted);
+    // armMotor1.setInverted(armMotorConfig1.inverted);
     if (armMotorConfig1.isBreakMode) {
       armMotor1.setNeutralMode(NeutralModeValue.Brake);
     } else {
@@ -123,8 +125,8 @@ public class Arm_Sub extends SubsystemBase {
 
     var cc_pos = armCANCoder.getPosition();
     cc_pos.refresh();
-    SmartDashboard.putNumber("arm position", fx_pos.getValueAsDouble());
-    SmartDashboard.putNumber("can coder position", cc_pos.getValueAsDouble());
-    //armMotor1.getConfigurator().refresh(ltalonConfigs);
+    // SmartDashboard.putNumber("arm position", fx_pos.getValueAsDouble());
+    // SmartDashboard.putNumber("can coder position", cc_pos.getValueAsDouble());
+    // armMotor1.getConfigurator().refresh(ltalonConfigs);
   }
 }

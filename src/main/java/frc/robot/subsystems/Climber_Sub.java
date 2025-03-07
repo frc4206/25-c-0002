@@ -15,6 +15,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.ConfigTalonFX;
 
@@ -93,9 +94,10 @@ public class Climber_Sub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (!climberHallSensor.get()) {
-      climberMotor1.setPosition(climberConfig.stowPosition);
-    }
+    // if (!climberHallSensor.get()) {
+    //   climberMotor1.setPosition(climberConfig.stowPosition);
+    // }
+
   }
 
 }

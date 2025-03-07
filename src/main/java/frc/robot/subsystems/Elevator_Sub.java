@@ -80,14 +80,14 @@ public class Elevator_Sub extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     if (!elevatorHallSensor1.get()) {
-      elevatorMotor1.setPosition(0);
+      // elevatorMotor1.setPosition(0);
     }
     if (!elevatorHallSensor2.get()) {
       elevatorMotor1.setPosition(elevatorConfig.maxExtension);
     }
 
-    SmartDashboard.putBoolean("bottom break", elevatorHallSensor1.get());
-    SmartDashboard.putBoolean("top break", elevatorHallSensor2.get());
-    SmartDashboard.putNumber("elevator position", elevatorMotor1.getPosition().getValueAsDouble());
+    // SmartDashboard.putBoolean("bottom break", elevatorHallSensor1.get());
+    // SmartDashboard.putBoolean("top break", elevatorHallSensor2.get());
+    // SmartDashboard.putNumber("elevator position", elevatorMotor1.getPosition().getValueAsDouble());
   }
 }

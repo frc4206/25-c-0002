@@ -1,5 +1,5 @@
 name = "elevator2Cfg"
-canID = 36
+canID = 35
 inverted = false
 isBreakMode = true
 

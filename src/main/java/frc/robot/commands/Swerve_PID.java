@@ -125,6 +125,7 @@ public class Swerve_PID extends Command {
     // Make sure we remember last alignment value
     // so we can roughly calculate D
     last_alignment_measurement = central_alignment;
+    last_distance_measurement = distance_to_qr_code;
   }
 
   // Called once the command ends or is interrupted.

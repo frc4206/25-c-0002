@@ -69,8 +69,11 @@ public class Claw_Sub extends SubsystemBase {
             @Override
             public void accept(Boolean rise, Boolean fall) {
                 if (rise) {
-                    claw_state = ClawState.NEUTRAL;
-                    System.out.println("Detected a rising edge!");
+                    if (claw_state != ClawState.EXHAUSTING) {
+                        claw_state = ClawState.NEUTRAL;
+                        System.out.println("Detected a rising edge!");
+                    }
+
                     return;
                 }
 

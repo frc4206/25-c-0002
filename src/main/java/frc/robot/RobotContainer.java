@@ -139,7 +139,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(1));
     NamedCommands.registerCommand("CoralIntake", new Coral_Intake_Com(m_arm, m_claw, m_elevator).withTimeout(1));
     // NamedCommands.registerCommand("RunEndEffector", new ClawPercent_Com(m_claw, m_clawConfig.intakePercent).withTimeout(1));
-    NamedCommands.registerCommand("NeutralizeEndEffector", new SetClawStateCommand(m_claw, ClawState.NEUTRAL));
+    NamedCommands.registerCommand("NeutralizeEndEffector", new SetClawStateCommand(m_claw, ClawState.EXHAUSTING).withTimeout(1));
 
     // Configure the trigger bindings
     configureBindings();
@@ -267,11 +267,11 @@ public class RobotContainer {
     // m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
 
     m_operatorController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
-    m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.65))));
+    m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
 
 
     m_operatorController.pov(0).onTrue(new SetClawStateCommand(m_claw, ClawState.EXHAUSTING));
-    m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
+    m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
     m_operatorController.pov(270).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.algePosition));
     m_operatorController.pov(180).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.intakePosition));
 
@@ -287,7 +287,7 @@ public class RobotContainer {
     // m_operatorController.getHID().getRawButton(8).onTrue(new IntakePercent_Com(m_intake, .7));
     JoystickButton back = new JoystickButton(m_operatorController.getHID(), 7);
     JoystickButton start = new JoystickButton(m_operatorController.getHID(), 8);
-    back.onTrue(new IntakePercent_Com(m_intake, .7));
+    back.onTrue(new IntakePercent_Com(m_intake, .4));
     start.onTrue(new IntakePercent_Com(m_intake, -.7));
     back.onFalse(new IntakePercent_Com(m_intake, 0));
     start.onFalse(new IntakePercent_Com(m_intake, 0));

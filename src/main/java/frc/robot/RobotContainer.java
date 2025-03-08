@@ -270,7 +270,7 @@ public class RobotContainer {
     m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.65))));
 
 
-    m_operatorController.pov(0).onTrue(new SetClawStateCommand(m_claw, ClawState.NEUTRAL));
+    m_operatorController.pov(0).onTrue(new SetClawStateCommand(m_claw, ClawState.EXHAUSTING));
     m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
     m_operatorController.pov(270).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.algePosition));
     m_operatorController.pov(180).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.intakePosition));
@@ -283,7 +283,7 @@ public class RobotContainer {
     m_operatorController.rightTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.l1ScoringPosition));
     m_operatorController.leftTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
     m_operatorController.rightStick().onTrue(new InstantCommand(() -> m_arm.setArms()));
-    
+
     // m_operatorController.getHID().getRawButton(8).onTrue(new IntakePercent_Com(m_intake, .7));
     JoystickButton back = new JoystickButton(m_operatorController.getHID(), 7);
     JoystickButton start = new JoystickButton(m_operatorController.getHID(), 8);

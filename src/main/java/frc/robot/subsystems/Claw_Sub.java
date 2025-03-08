@@ -114,12 +114,12 @@ public class Claw_Sub extends SubsystemBase {
                 setPercentage_func(0);
                 break;
             case DETECTED:
-                setPercentage_func(0);
+                // setPercentage_func(0);
                 break;
             default:
                 break;
         }
 
-        // System.out.println(claw_state);
+        System.out.println(claw_state);
     }
 }

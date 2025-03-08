@@ -87,12 +87,12 @@ public class Arm_Sub extends SubsystemBase {
     armMotorApply.setSlot0(armMotorConfig1.slot0);
     armMotorApply.applyConfigs();
 
-    armMotor2Apply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
-    armMotor2Apply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
-    armMotor2Apply.talonConfigs.Feedback.RotorToSensorRatio = 45;
-    armMotor2Apply.talonConfigs.Feedback.SensorToMechanismRatio = 1;
+    // armMotor2Apply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
+    // armMotor2Apply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
+    // armMotor2Apply.talonConfigs.Feedback.RotorToSensorRatio = 45;
+    // armMotor2Apply.talonConfigs.Feedback.SensorToMechanismRatio = 1;
 
-    armMotor2Apply.setSlot0(armMotorConfig2.slot0);
+    armMotor2Apply.setSlot0(armMotorConfig1.slot0);
     armMotor2Apply.applyConfigs();
 
     // var request = new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster);
@@ -118,14 +118,21 @@ public class Arm_Sub extends SubsystemBase {
       armMotor1.setNeutralMode(NeutralModeValue.Coast);
     }
     armMotor1.getConfigurator().apply(ltalonConfigs);
-
-    armMotor1.setPosition(armConfig.maxExtenstion);
-    armMotor2.setPosition(armConfig.maxExtenstion);
+    // setArms();
   }
 
   public void setPercentage_func(double percentage) {
     armMotor1.setControl(new DutyCycleOut(percentage));
     armMotor2.setControl(new DutyCycleOut(percentage));
+  }
+
+  public void setArms() {
+    armMotor1.setPosition(0);
+    armMotor2.setPosition(0);
+  }
+
+  public void setArm2() {
+    // armMotor2.setPosition(armConfig.maxExtenstion);
   }
 
   public void setArmAngle_func(double pos) {
@@ -140,9 +147,13 @@ public class Arm_Sub extends SubsystemBase {
     var fx_pos = armMotor1.getPosition();
     fx_pos.refresh();
 
+    var fx2_pos = armMotor2.getPosition();
+    fx2_pos.refresh();
+
     var cc_pos = armCANCoder.getPosition();
     cc_pos.refresh();
     SmartDashboard.putNumber("arm position", fx_pos.getValueAsDouble());
+    SmartDashboard.putNumber("arm2 position", fx2_pos.getValueAsDouble());
     // SmartDashboard.putNumber("can coder position", cc_pos.getValueAsDouble());
     // armMotor1.getConfigurator().refresh(ltalonConfigs);
   }

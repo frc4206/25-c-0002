@@ -45,6 +45,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
@@ -195,7 +196,7 @@ public class RobotContainer {
     // Joystick commands
     // m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
     // m_claw.setDefaultCommand(new ClawJoystick_Com(m_claw, m_armController));
-    // m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController));
+    m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController));
     // m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_elevatorController));
     // m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake,
     // m_intakeController));
@@ -281,15 +282,20 @@ public class RobotContainer {
 
     m_operatorController.rightTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.l1ScoringPosition));
     m_operatorController.leftTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
-
-    m_operatorController.back().onTrue(new IntakePercent_Com(m_intake, .7));
-    m_operatorController.start().onTrue(new IntakePercent_Com(m_intake, -.7));
+    m_operatorController.rightStick().onTrue(new InstantCommand(() -> m_arm.setArms()));
+    
+    // m_operatorController.getHID().getRawButton(8).onTrue(new IntakePercent_Com(m_intake, .7));
+    JoystickButton back = new JoystickButton(m_operatorController.getHID(), 7);
+    JoystickButton start = new JoystickButton(m_operatorController.getHID(), 8);
+    back.onTrue(new IntakePercent_Com(m_intake, .7));
+    start.onTrue(new IntakePercent_Com(m_intake, -.7));
+    back.onFalse(new IntakePercent_Com(m_intake, 0));
+    start.onFalse(new IntakePercent_Com(m_intake, 0));
 
     
     m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165, MaxSpeed, MaxAngularRate, tj));
     m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165, MaxSpeed, MaxAngularRate, tj));
-
-
+;
     // m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 
     // m_driverController.a().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(0.1)));

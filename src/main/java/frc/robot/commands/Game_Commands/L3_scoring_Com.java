@@ -28,7 +28,7 @@ public class L3_scoring_Com extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.l3ScoringPosition);
+    m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.l3ScoringPosition );
     m_armSub.setArmAngle_func(m_armSub.armConfig.l3ScoringPosition); 
     m_clawSub.setPercentage_func(m_clawSub.clawConfig.outtakePercent);
   }

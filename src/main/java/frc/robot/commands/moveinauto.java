@@ -15,9 +15,12 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 public class moveinauto extends Command {
   /** Creates a new moveinauto. */
   CommandSwerveDrivetrain m_drivetrain;
-  SwerveRequest.RobotCentric driverequest = new SwerveRequest.RobotCentric()
+  SwerveRequest.RobotCentric go = new SwerveRequest.RobotCentric()
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-        .withVelocityY(1);
+        .withVelocityX(1);
+  SwerveRequest.RobotCentric stop = new SwerveRequest.RobotCentric()
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+        .withVelocityX(0);
   double initTime;
   double timeElapsed;
   public moveinauto(CommandSwerveDrivetrain drivetrain) {
@@ -36,7 +39,11 @@ public class moveinauto extends Command {
   @Override
   public void execute() {
     timeElapsed = Timer.getFPGATimestamp() - initTime;
-    m_drivetrain.setControl(driverequest);
+    if (Math.abs(timeElapsed) < 1) {
+      m_drivetrain.setControl(go);
+    } else {
+      m_drivetrain.setControl(stop);
+    }
     
   }
 

@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.SetClawStateCommand;
 import frc.robot.commands.Swerve_PID;
+import frc.robot.commands.moveinauto;
 import frc.robot.commands.Game_Commands.Coral_Intake_Com;
 import frc.robot.commands.Game_Commands.L1_scoring_Com;
 import frc.robot.commands.Game_Commands.L2_scoring_Com;
@@ -287,7 +288,7 @@ public class RobotContainer {
     // m_operatorController.getHID().getRawButton(8).onTrue(new IntakePercent_Com(m_intake, .7));
     JoystickButton back = new JoystickButton(m_operatorController.getHID(), 7);
     JoystickButton start = new JoystickButton(m_operatorController.getHID(), 8);
-    back.onTrue(new IntakePercent_Com(m_intake, .4));
+    back.onTrue(new IntakePercent_Com(m_intake, .25));
     start.onTrue(new IntakePercent_Com(m_intake, -.7));
     back.onFalse(new IntakePercent_Com(m_intake, 0));
     start.onFalse(new IntakePercent_Com(m_intake, 0));
@@ -308,6 +309,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return autoChooser.getSelected();
+    return new moveinauto(drivetrain);
   }
 }

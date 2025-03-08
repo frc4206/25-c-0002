@@ -34,6 +34,7 @@ public class Arm_Sub extends SubsystemBase {
   public TalonFX armMotor2 = new TalonFX(armMotorConfig2.canID);
 
   ConfigTalonFX armMotorApply = new ConfigTalonFX(armMotorConfig1, armMotor1);
+  ConfigTalonFX armMotor2Apply = new ConfigTalonFX(armMotorConfig1, armMotor2);
 
 
 
@@ -57,6 +58,8 @@ public class Arm_Sub extends SubsystemBase {
     public double l2ScoringPosition;
     public double l3ScoringPosition;
     public double l4ScoringPosition;
+
+    public double maxExtenstion;
 
     /* Misc. */
     public boolean followerOpposeMaster;
@@ -84,9 +87,17 @@ public class Arm_Sub extends SubsystemBase {
     armMotorApply.setSlot0(armMotorConfig1.slot0);
     armMotorApply.applyConfigs();
 
-    var request = new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster);
-    request.UpdateFreqHz = 50;
-    armMotor2.setControl(request);
+    armMotor2Apply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
+    armMotor2Apply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
+    armMotor2Apply.talonConfigs.Feedback.RotorToSensorRatio = 45;
+    armMotor2Apply.talonConfigs.Feedback.SensorToMechanismRatio = 1;
+
+    armMotor2Apply.setSlot0(armMotorConfig2.slot0);
+    armMotor2Apply.applyConfigs();
+
+    // var request = new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster);
+    // request.UpdateFreqHz = 50;
+    // armMotor2.setControl(request);
     
 
     /* 
@@ -107,14 +118,20 @@ public class Arm_Sub extends SubsystemBase {
       armMotor1.setNeutralMode(NeutralModeValue.Coast);
     }
     armMotor1.getConfigurator().apply(ltalonConfigs);
+
+    armMotor1.setPosition(armConfig.maxExtenstion);
+    armMotor2.setPosition(armConfig.maxExtenstion);
   }
 
   public void setPercentage_func(double percentage) {
     armMotor1.setControl(new DutyCycleOut(percentage));
+    armMotor2.setControl(new DutyCycleOut(percentage));
   }
 
   public void setArmAngle_func(double pos) {
     armMotor1.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
+    armMotor2.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
+
   }
 
   @Override

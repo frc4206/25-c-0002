@@ -271,18 +271,25 @@ public class RobotContainer {
 
     m_operatorController.pov(0).onTrue(new SetClawStateCommand(m_claw, ClawState.NEUTRAL));
     m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
+    m_operatorController.pov(270).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.algePosition));
+    m_operatorController.pov(180).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.intakePosition));
 
     m_operatorController.x().onTrue(new L1_scoring_Com(m_intake)); 
     m_operatorController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
     m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
     m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
 
-    m_operatorController.rightBumper().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.l1ScoringPosition));
-    m_operatorController.leftBumper().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.algePosition));
+    m_operatorController.rightTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.l1ScoringPosition));
+    m_operatorController.leftTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
+
+    m_operatorController.back().onTrue(new IntakePercent_Com(m_intake, .7));
+    m_operatorController.start().onTrue(new IntakePercent_Com(m_intake, -.7));
 
     
     m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165, MaxSpeed, MaxAngularRate, tj));
     m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165, MaxSpeed, MaxAngularRate, tj));
+
+
     // m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 
     // m_driverController.a().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(0.1)));

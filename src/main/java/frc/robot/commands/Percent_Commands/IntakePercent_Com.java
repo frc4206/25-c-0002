@@ -21,7 +21,7 @@ public class IntakePercent_Com extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("command intialized percent");
+    // System.out.println("command intialized percent");
     m_intakeSub.setPercentage_func(m_percent);
   }
 

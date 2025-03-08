@@ -32,24 +32,23 @@ public class Claw_Sub extends SubsystemBase {
     AsynchronousInterrupt beam_break_interrupt;
     BiConsumer<Boolean, Boolean> trigger;
 
-    /*Configs */
+    /* Configs */
     ConfigTalonFX.Config clawMotorConfig1 = new ConfigTalonFX.Config("Claw1Motor.toml");
     public Config clawConfig;
 
-    /*Motors */
+    /* Motors */
     public TalonFX clawMotor1 = new TalonFX(clawMotorConfig1.canID);
 
-    /*Sensors */
+    /* Sensors */
     DigitalInput clawBeamBreak;
-
 
     public static class Config extends LoadableConfig {
 
-        /*IDs and Ports */
+        /* IDs and Ports */
         public int beamBreakPort;
-        
-        /*Misc. */
-        public double intakePercent; 
+
+        /* Misc. */
+        public double intakePercent;
         public double outtakePercent;
 
         public Config(String filename) {
@@ -69,7 +68,7 @@ public class Claw_Sub extends SubsystemBase {
         trigger = new BiConsumer<Boolean, Boolean>() {
             @Override
             public void accept(Boolean rise, Boolean fall) {
-                if(rise){
+                if (rise) {
                     claw_state = ClawState.NEUTRAL;
                     System.out.println("Detected a rising edge!");
                     return;
@@ -105,14 +104,17 @@ public class Claw_Sub extends SubsystemBase {
         // SmartDashboard.putBoolean("Beam break claw", clawBeamBreak.get());
         // System.out.println("\n\nClaw state -->>>> " + claw_state + "\n\n");
         // if (claw_state == ClawState.INTAKING) {
-        //     setPercentage_func(1);
+        // setPercentage_func(1);
         // }
         switch (claw_state) {
             case INTAKING:
                 setPercentage_func(clawConfig.intakePercent);
                 break;
             case NEUTRAL:
-                
+                setPercentage_func(0);
+                break;
+            case DETECTED:
+                setPercentage_func(0);
                 break;
             default:
                 break;

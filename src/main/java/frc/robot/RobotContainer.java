@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.SetClawStateCommand;
 import frc.robot.commands.Swerve_PID;
 import frc.robot.commands.Game_Commands.Coral_Intake_Com;
 import frc.robot.commands.Game_Commands.L1_scoring_Com;
@@ -77,11 +78,11 @@ public class RobotContainer {
   final Elevator_Sub m_elevator = new Elevator_Sub(m_elevatorCfg);
   final Intake_Sub m_intake = new Intake_Sub(m_intakeCfg);
 
-  // private final CommandXboxController m_operatorController = new CommandXboxController(1); 
+  private final CommandXboxController m_operatorController = new CommandXboxController(1); 
   //private final CommandXboxController m_armController = new CommandXboxController(1);
   // private final CommandXboxController m_clawController = new CommandXboxController(2);
-  private final CommandXboxController m_climberController = new CommandXboxController(3);
-  private final CommandXboxController m_elevatorController = new CommandXboxController(4);
+  // private final CommandXboxController m_climberController = new CommandXboxController(3);
+  // private final CommandXboxController m_elevatorController = new CommandXboxController(4);
   // private final CommandXboxController m_intakeController = new CommandXboxController(5);
 
   
@@ -104,7 +105,6 @@ public class RobotContainer {
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      // .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -138,6 +138,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(1));
     NamedCommands.registerCommand("CoralIntake", new Coral_Intake_Com(m_arm, m_claw, m_elevator).withTimeout(1));
     // NamedCommands.registerCommand("RunEndEffector", new ClawPercent_Com(m_claw, m_clawConfig.intakePercent).withTimeout(1));
+    NamedCommands.registerCommand("NeutralizeEndEffector", new SetClawStateCommand(m_claw, ClawState.NEUTRAL));
 
     // Configure the trigger bindings
     configureBindings();
@@ -194,8 +195,8 @@ public class RobotContainer {
     // Joystick commands
     // m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
     // m_claw.setDefaultCommand(new ClawJoystick_Com(m_claw, m_armController));
-    m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
-    m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_elevatorController));
+    // m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController));
+    // m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_elevatorController));
     // m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake,
     // m_intakeController));
     // m_armController.rightBumper().whileTrue(new IntakePercent_Com(m_intake,
@@ -264,19 +265,24 @@ public class RobotContainer {
     // m_armController.x().onTrue(new InstantCommand(() ->
     // m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
 
-    // m_operatorController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
-    // m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.65))));
-    // m_operatorController.pov(0).onTrue(new InstantCommand(() -> Claw_Sub.claw_state = ClawState.NEUTRAL));
-    // m_operatorController.pov(0).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
-    // m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
+    m_operatorController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
+    m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.65))));
 
-    // m_operatorController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
-    // m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
-    // m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
 
+    m_operatorController.pov(0).onTrue(new SetClawStateCommand(m_claw, ClawState.NEUTRAL));
+    m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
+
+    m_operatorController.x().onTrue(new L1_scoring_Com(m_intake)); 
+    m_operatorController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
+    m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
+    m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
+
+    m_operatorController.rightBumper().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.l1ScoringPosition));
+    m_operatorController.leftBumper().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.algePosition));
+
+    
     m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165, MaxSpeed, MaxAngularRate, tj));
     m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165, MaxSpeed, MaxAngularRate, tj));
-
     // m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 
     // m_driverController.a().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(0.1)));

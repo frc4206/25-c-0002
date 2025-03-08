@@ -23,7 +23,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "L4Score"
+                  "name": "NeutralizeEndEffector"
                 }
               },
               {
@@ -38,13 +38,13 @@
         {
           "type": "named",
           "data": {
-            "name": "CoralIntake"
+            "name": "NeutralizeEndEffector"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "RunEndEffector"
+            "name": "CoralIntake"
           }
         },
         {
@@ -61,12 +61,6 @@
                 "type": "named",
                 "data": {
                   "name": "CoralIntake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
                 }
               }
             ]
@@ -86,6 +80,12 @@
                 "type": "named",
                 "data": {
                   "name": "L4Score"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "NeutralizeEndEffector"
                 }
               },
               {
@@ -118,12 +118,6 @@
                 "data": {
                   "name": "CoralIntake"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
               }
             ]
           }
@@ -142,6 +136,12 @@
                 "type": "named",
                 "data": {
                   "name": "L4Score"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "NeutralizeEndEffector"
                 }
               },
               {

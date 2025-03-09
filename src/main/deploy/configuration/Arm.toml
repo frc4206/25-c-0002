@@ -4,8 +4,8 @@ followerOpposeMaster = true
 
 stowPosition = 0.0
 sourceIntakePosition = 3.01
-l2ScoringPosition = 28.1
-l3ScoringPosition = 28.1
+l2ScoringPosition = 27.73
+l3ScoringPosition = 27.73
 l4ScoringPosition = 19.75
  
  maxExtenstion = 34.762

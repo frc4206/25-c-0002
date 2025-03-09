@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -14,6 +15,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -84,16 +86,24 @@ public class Arm_Sub extends SubsystemBase {
     armMotorApply.talonConfigs.Feedback.RotorToSensorRatio = 45;
     armMotorApply.talonConfigs.Feedback.SensorToMechanismRatio = 1;
 
-    armMotorApply.setSlot0(armMotorConfig1.slot0);
-    armMotorApply.applyConfigs();
+    
 
     // armMotor2Apply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
     // armMotor2Apply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
     // armMotor2Apply.talonConfigs.Feedback.RotorToSensorRatio = 45;
     // armMotor2Apply.talonConfigs.Feedback.SensorToMechanismRatio = 1;
 
+    var mc = new MotorOutputConfigs();
+    mc.Inverted = InvertedValue.Clockwise_Positive;
+    
+    
+    armMotorApply.applyConfigs();
+
+    armMotor2Apply.applyConfigs();
+
     armMotor2Apply.setSlot0(armMotorConfig1.slot0);
     armMotor2Apply.applyConfigs();
+    armMotor2.getConfigurator().apply(mc);
 
     // var request = new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster);
     // request.UpdateFreqHz = 50;
@@ -119,6 +129,7 @@ public class Arm_Sub extends SubsystemBase {
     }
     armMotor1.getConfigurator().apply(ltalonConfigs);
     // setArms();
+    
   }
 
   public void setPercentage_func(double percentage) {
@@ -152,8 +163,11 @@ public class Arm_Sub extends SubsystemBase {
 
     var cc_pos = armCANCoder.getPosition();
     cc_pos.refresh();
+
     SmartDashboard.putNumber("arm position", fx_pos.getValueAsDouble());
     SmartDashboard.putNumber("arm2 position", fx2_pos.getValueAsDouble());
+
+    // armMotor2.setPosition(fx_pos.getValueAsDouble());
     // SmartDashboard.putNumber("can coder position", cc_pos.getValueAsDouble());
     // armMotor1.getConfigurator().refresh(ltalonConfigs);
   }

@@ -93,12 +93,15 @@ public class Arm_Sub extends SubsystemBase {
     // armMotor2Apply.talonConfigs.Feedback.RotorToSensorRatio = 45;
     // armMotor2Apply.talonConfigs.Feedback.SensorToMechanismRatio = 1;
 
+
+    //JP: Create a MotorOuptConfigs to set the invert value
     var mc = new MotorOutputConfigs();
     mc.Inverted = InvertedValue.Clockwise_Positive;
     
     
+    //JP: Apply the motor configs
+    
     armMotorApply.applyConfigs();
-
     armMotor2Apply.applyConfigs();
 
     armMotor2Apply.setSlot0(armMotorConfig1.slot0);

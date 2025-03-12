@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Swerve_PID;
+import frc.robot.commands.Full_Systems_Test_Commands.Full_Robot_TestSequence;
 import frc.robot.commands.Game_Commands.Coral_Intake_Com;
 import frc.robot.commands.Game_Commands.L1_scoring_Com;
 import frc.robot.commands.Game_Commands.L2_scoring_Com;
@@ -280,6 +281,8 @@ public class RobotContainer {
     // m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 
     // m_driverController.a().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(0.1)));
+
+    m_driverController.pov(45).whileTrue(new Full_Robot_TestSequence(m_arm, m_claw, m_elevator, m_climber, m_intake, m_intakeCfg.intakePosition, m_intakeCfg.stowPosition, m_climberCfg.climbReadyPosition, m_climberCfg.stowPosition, m_climberCfg.climbedFinalPosition));
   }
 
   /**

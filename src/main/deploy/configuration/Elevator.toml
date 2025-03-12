@@ -3,7 +3,7 @@ limitSwitch2Port = 2
 followerOpposeMaster = true
 
 maxExtension = -40.69
-sourceIntakePostion = 0.0
+sourceIntakePosition = 0.0
 l2ScoringPosition = 0.0
 l3ScoringPosition = -18.7
 l4ScoringPosition = -40.69

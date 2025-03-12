@@ -62,6 +62,13 @@ public class Claw_Sub extends SubsystemBase {
         this.clawConfig = clawConfig;
         clawBeamBreak = new DigitalInput(clawConfig.beamBreakPort);
         setupClawBeamBreakInterrupt();
+
+        // check if we start with something in the claw
+        if(!clawBeamBreak.get()){
+            claw_state = ClawState.DETECTED;
+        } else {
+            claw_state = ClawState.NEUTRAL;
+        }
     }
 
     public void setupClawBeamBreakInterrupt() {
@@ -69,16 +76,11 @@ public class Claw_Sub extends SubsystemBase {
             @Override
             public void accept(Boolean rise, Boolean fall) {
                 if (rise) {
-                    if (claw_state != ClawState.EXHAUSTING) {
-                        claw_state = ClawState.NEUTRAL;
-                        System.out.println("Detected a rising edge!");
-                    }
-
+                    claw_state = ClawState.NEUTRAL;
                     return;
                 }
 
                 if (fall) {
-                    System.out.print("Claw falling edge!");
                     setPercentage_func(0);
                     claw_state = ClawState.DETECTED;
                     return;
@@ -94,35 +96,15 @@ public class Claw_Sub extends SubsystemBase {
         clawMotor1.setControl(new DutyCycleOut(percentage));
     }
 
-    public ClawState getClawState() {
+    public static ClawState getClawState() {
         return claw_state;
     }
 
-    public void setClawState(ClawState newState) {
+    public static void setClawState(ClawState newState) {
         claw_state = newState;
     }
 
     @Override
     public void periodic() {
-        // SmartDashboard.putBoolean("Beam break claw", clawBeamBreak.get());
-        // System.out.println("\n\nClaw state -->>>> " + claw_state + "\n\n");
-        // if (claw_state == ClawState.INTAKING) {
-        // setPercentage_func(1);
-        // }
-        switch (claw_state) {
-            case INTAKING:
-                setPercentage_func(clawConfig.intakePercent);
-                break;
-            case NEUTRAL:
-                setPercentage_func(0);
-                break;
-            case DETECTED:
-                // setPercentage_func(0);
-                break;
-            default:
-                break;
-        }
-
-        System.out.println(claw_state);
     }
 }

@@ -21,14 +21,16 @@ public class ClawPercent_Com extends Command {
   }
 
   @Override
-  public void initialize(){
+  public void initialize() {
     ClawState current = Claw_Sub.getClawState();
-    if(current == ClawState.NEUTRAL){
+    if (current == ClawState.NEUTRAL) {
       Claw_Sub.setClawState(ClawState.INTAKING);
       m_clawSub.setPercentage_func(m_percent);
-    } else if(current == ClawState.DETECTED){
+    } else if (current == ClawState.DETECTED) {
       Claw_Sub.setClawState(ClawState.EXHAUSTING);
       m_clawSub.setPercentage_func(m_percent);
+    } else {
+      m_clawSub.setPercentage_func(0);
     }
   }
 
@@ -38,7 +40,9 @@ public class ClawPercent_Com extends Command {
     ClawState current = Claw_Sub.getClawState();
     if (current == ClawState.INTAKING) {
       m_clawSub.setPercentage_func(m_percent);
-    } else if(current == ClawState.DETECTED){
+    } else if (current == ClawState.EXHAUSTING) {
+      m_clawSub.setPercentage_func(m_percent);
+    } else if (current == ClawState.DETECTED) {
       m_clawSub.setPercentage_func(0);
     }
   }
@@ -46,7 +50,12 @@ public class ClawPercent_Com extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_clawSub.setPercentage_func(0);
+    ClawState current = Claw_Sub.getClawState();
+    if(current == ClawState.INTAKING){
+      Claw_Sub.setClawState(ClawState.NEUTRAL);
+    } else if (current == ClawState.EXHAUSTING){
+      Claw_Sub.setClawState(ClawState.DETECTED);
+    }
   }
 
   // Returns true when the command should end.

@@ -117,7 +117,7 @@ public class AutoLineUp extends Command {
       // this OPPOSES the proportional value
       // x_output += (diff * cfg.kddiff);
 
-      SmartDashboard.putNumber("Xoutput: ", x_output);
+      SmartDashboard.putNumber("Xoutput Auto: ", x_output);
       SmartDashboard.putNumber("Diff ", diff);
       SmartDashboard.putNumber("Central alignment 1:", central_alignment);
       SmartDashboard.putNumber("Central alignment 2:", lastErrorY);
@@ -134,15 +134,19 @@ public class AutoLineUp extends Command {
     if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY < 0) {
       driverequest = new SwerveRequest.RobotCentric()
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-        .withVelocityY(0.5);
+        .withVelocityY(-0.5);
     }
     if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY > 0) {
       driverequest = new SwerveRequest.RobotCentric()
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-        .withVelocityY(-0.5);
+        .withVelocityY(0.5);
     }
 
     if (Math.abs(central_alignment) < 0.025) {
+      driverequest = new SwerveRequest.RobotCentric()
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+        .withVelocityY(0);
+        m_drive.setControl(driverequest);
       isFinished = true;
       isFinished();
     }
@@ -152,9 +156,7 @@ public class AutoLineUp extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SwerveRequest.RobotCentric driverequest = new SwerveRequest.RobotCentric()
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-        .withVelocityY(0);
+    
   }
 
   // Returns true when the command should end.

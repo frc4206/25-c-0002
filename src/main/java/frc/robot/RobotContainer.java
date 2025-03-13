@@ -146,9 +146,15 @@ public class RobotContainer {
     //new Swerve_PID(drivetrain, -0.165 - 0.0127, MaxSpeed, MaxAngularRate, tj)
     NamedCommands.registerCommand("LeftLineUp", new AutoLineUp(drivetrain, -0.165, MaxSpeed, MaxAngularRate, tj));
     NamedCommands.registerCommand("RightLineUp", new AutoLineUp(drivetrain, 0.165, MaxSpeed, MaxAngularRate, tj));
+    NamedCommands.registerCommand("FloorIntakeUp", new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
 
     int[] twenty2 = {22};
     NamedCommands.registerCommand("TAG22", new InstantCommand(() -> LimelightHelpers.SetFiducialIDFiltersOverride("limelight-intake", twenty2)));
+
+    NamedCommands.registerCommand("PivotIntake", new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
+    NamedCommands.registerCommand("ElevatorIntake", new Elevator_PID_Com(m_elevator, m_elevatorCfg.sourceIntakePosition));
+    NamedCommands.registerCommand("ResetClaw", new SetClawStateCommand(m_claw, ClawState.NEUTRAL).withTimeout(1));
+
 
     // Configure the trigger bindings
     configureBindings();
@@ -208,8 +214,7 @@ public class RobotContainer {
     // m_claw.setDefaultCommand(new ClawJoystick_Com(m_claw, m_armController));
     m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController));
     // m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_elevatorController));
-    // m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake,
-    // m_intakeController));
+    // m_intake.setDefaultComma.nd(new IntakeJoystick_Com(m_intake, m_intakeController));
     // m_armController.rightBumper().whileTrue(new IntakePercent_Com(m_intake,
     // 0.8));
     // m_armController.leftBumper().whileTrue(new IntakePercent_Com(m_intake,
@@ -308,7 +313,7 @@ public class RobotContainer {
     m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165 - 0.0127, MaxSpeed, MaxAngularRate, tj));
     m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165 + 0.0127, MaxSpeed, MaxAngularRate, tj));
 ;
-    // m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
+    m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 
     // m_driverController.a().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(0.1)));
   }

@@ -130,12 +130,12 @@ public class Swerve_PID extends Command {
         if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY < 0) {
           driverequest = new SwerveRequest.RobotCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-            .withVelocityY(0.5);
+            .withVelocityY(-0.5);
         }
         if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY > 0) {
           driverequest = new SwerveRequest.RobotCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-            .withVelocityY(-0.5);
+            .withVelocityY(0.5);
         }
     m_drive.setControl(driverequest);
 

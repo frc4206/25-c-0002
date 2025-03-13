@@ -23,22 +23,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "NeutralizeEndEffector"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "Score"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "NeutralizeEndEffector"
           }
         },
         {

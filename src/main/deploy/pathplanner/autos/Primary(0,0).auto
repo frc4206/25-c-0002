@@ -17,6 +17,12 @@
               {
                 "type": "named",
                 "data": {
+                  "name": "RightLineUp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
                   "name": "L4Score"
                 }
               },
@@ -24,6 +30,12 @@
                 "type": "named",
                 "data": {
                   "name": "Score"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
                 }
               },
               {

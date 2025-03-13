@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AutoLineUp;
 import frc.robot.commands.SetClawStateCommand;
 import frc.robot.commands.Swerve_PID;
 import frc.robot.commands.moveinauto;
@@ -36,6 +37,7 @@ import frc.robot.subsystems.Intake_Sub;
 import frc.robot.subsystems.Claw_Sub.ClawState;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -141,6 +143,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("CoralIntake", new Coral_Intake_Com(m_arm, m_claw, m_elevator).withTimeout(1));
     // NamedCommands.registerCommand("RunEndEffector", new ClawPercent_Com(m_claw, m_clawConfig.intakePercent).withTimeout(1));
     NamedCommands.registerCommand("NeutralizeEndEffector", new SetClawStateCommand(m_claw, ClawState.EXHAUSTING).withTimeout(1));
+    //new Swerve_PID(drivetrain, -0.165 - 0.0127, MaxSpeed, MaxAngularRate, tj)
+    NamedCommands.registerCommand("LeftLineUp", new AutoLineUp(drivetrain, -0.165 - 0.0127, MaxSpeed, MaxAngularRate, tj));
+    NamedCommands.registerCommand("RightLineUp", new AutoLineUp(drivetrain, 0.165 + 0.0127, MaxSpeed, MaxAngularRate, tj));
 
     // Configure the trigger bindings
     configureBindings();

@@ -32,8 +32,8 @@ public class Arm_Sub extends SubsystemBase {
   public Config armConfig;
 
   /* Motors */
-  public TalonFX armMotor1 = new TalonFX(armMotorConfig1.canID);
-  public TalonFX armMotor2 = new TalonFX(armMotorConfig2.canID);
+  public TalonFX armMotor1 = new TalonFX(armMotorConfig1.canID, "Default Name");
+  public TalonFX armMotor2 = new TalonFX(armMotorConfig2.canID, "Default Name");
 
   ConfigTalonFX armMotorApply = new ConfigTalonFX(armMotorConfig1, armMotor1);
   ConfigTalonFX armMotor2Apply = new ConfigTalonFX(armMotorConfig1, armMotor2);

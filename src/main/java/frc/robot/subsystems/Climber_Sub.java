@@ -28,8 +28,8 @@ public class Climber_Sub extends SubsystemBase {
   public Config climberConfig;
 
   /*Motors */
-  public TalonFX climberMotor1 = new TalonFX(climberMotorConfig1.canID);
-  public TalonFX climberMotor2 = new TalonFX(climberMotorConfig2.canID);
+  public TalonFX climberMotor1 = new TalonFX(climberMotorConfig1.canID, "Default Name");
+  public TalonFX climberMotor2 = new TalonFX(climberMotorConfig2.canID, "Default Name");
 
   public Servo m_Servo = new Servo(0);
 

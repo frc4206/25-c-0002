@@ -24,8 +24,8 @@ public class Elevator_Sub extends SubsystemBase {
   public Config elevatorConfig;
 
   /* Motors */
-  public TalonFX elevatorMotor1 = new TalonFX(elevatorMotorConfig1.canID);
-  public TalonFX elevatorMotor2 = new TalonFX(elevatorMotorConfig2.canID);
+  public TalonFX elevatorMotor1 = new TalonFX(elevatorMotorConfig1.canID, "Default Name");
+  public TalonFX elevatorMotor2 = new TalonFX(elevatorMotorConfig2.canID, "Default Name");
 
   ConfigTalonFX elevatorConfigApply = new ConfigTalonFX(elevatorMotorConfig1, elevatorMotor1);
 
@@ -80,7 +80,7 @@ public class Elevator_Sub extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     if (!elevatorHallSensor1.get()) {
-      // elevatorMotor1.setPosition(0);
+      elevatorMotor1.setPosition(0);
     }
     if (!elevatorHallSensor2.get()) {
       elevatorMotor1.setPosition(elevatorConfig.maxExtension);

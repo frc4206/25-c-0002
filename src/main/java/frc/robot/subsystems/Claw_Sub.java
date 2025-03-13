@@ -37,7 +37,7 @@ public class Claw_Sub extends SubsystemBase {
     public Config clawConfig;
 
     /* Motors */
-    public TalonFX clawMotor1 = new TalonFX(clawMotorConfig1.canID);
+    public TalonFX clawMotor1 = new TalonFX(clawMotorConfig1.canID, "Default Name");
 
     /* Sensors */
     DigitalInput clawBeamBreak;

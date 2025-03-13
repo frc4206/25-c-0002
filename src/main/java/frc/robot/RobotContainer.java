@@ -191,6 +191,7 @@ public class RobotContainer {
     m_driverController.start().and(m_driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
     m_driverController.leftStick().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+    m_driverController.a().onTrue(new InstantCommand(() -> drivetrain.getPigeon2().reset()));
 
     drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -268,15 +269,17 @@ public class RobotContainer {
     // m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
 
     m_operatorController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
-    m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
+    m_operatorController.leftBumper().whileTrue(new ClawPercent_Com(m_claw, m_clawConfig.intakePercent));
+    // m_operatorController.leftBumper().whileTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
+    // m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
 
 
     m_operatorController.pov(0).onTrue(new SetClawStateCommand(m_claw, ClawState.EXHAUSTING));
-    m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
+    // m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
     m_operatorController.pov(270).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.algePosition));
     m_operatorController.pov(180).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.intakePosition));
 
-    m_operatorController.x().onTrue(new L1_scoring_Com(m_intake)); 
+    m_operatorController.x().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0)))); 
     m_operatorController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
     m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
     m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
@@ -309,6 +312,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new moveinauto(drivetrain);
+    
+    return autoChooser.getSelected();
   }
 }

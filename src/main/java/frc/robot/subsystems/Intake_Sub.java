@@ -25,8 +25,8 @@ public class Intake_Sub extends SubsystemBase {
   public Config intakeConfig;
 
   /* Motors */
-  public TalonFX intakeMotorRollers = new TalonFX(intakeMotorRollersConfig.canID);
-  public TalonFX intakeMotorPivot = new TalonFX(intakeMotorPivotConfig.canID);
+  public TalonFX intakeMotorRollers = new TalonFX(intakeMotorRollersConfig.canID, "Default Name");
+  public TalonFX intakeMotorPivot = new TalonFX(intakeMotorPivotConfig.canID, "Default Name");
 
   ConfigTalonFX intakePivotCFGapply = new ConfigTalonFX(intakeMotorPivotConfig, intakeMotorPivot);
 

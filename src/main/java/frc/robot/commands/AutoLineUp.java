@@ -128,14 +128,25 @@ public class AutoLineUp extends Command {
         .withVelocityY(x_output);
         // .withVelocityX(sag_output); // Use open-loop control for drive motors
 
-    m_drive.setControl(driverequest);
+    
 
     lastErrorY = central_alignment;
+    if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY < 0) {
+      driverequest = new SwerveRequest.RobotCentric()
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+        .withVelocityY(0.5);
+    }
+    if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY > 0) {
+      driverequest = new SwerveRequest.RobotCentric()
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+        .withVelocityY(-0.5);
+    }
+
     if (Math.abs(central_alignment) < 0.025) {
       isFinished = true;
       isFinished();
     }
-
+    m_drive.setControl(driverequest);
   }
 
   // Called once the command ends or is interrupted.

@@ -127,7 +127,16 @@ public class Swerve_PID extends Command {
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
         .withVelocityY(x_output);
         // .withVelocityX(sag_output); // Use open-loop control for drive motors
-
+        if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY < 0) {
+          driverequest = new SwerveRequest.RobotCentric()
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+            .withVelocityY(0.5);
+        }
+        if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY > 0) {
+          driverequest = new SwerveRequest.RobotCentric()
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+            .withVelocityY(-0.5);
+        }
     m_drive.setControl(driverequest);
 
     lastErrorY = central_alignment;

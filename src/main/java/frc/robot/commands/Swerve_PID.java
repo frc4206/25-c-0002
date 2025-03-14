@@ -21,7 +21,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Swerve_PID extends Command {
 
-  private final double limelight_robot_offset = 0.05;
+  private final double limelight_robot_offset = 0.035; //Old offset 0.05 -> remeasred by Senor CAD
 
   /** Creates a new Swerve_PID. */
   public static class Config extends LoadableConfig {

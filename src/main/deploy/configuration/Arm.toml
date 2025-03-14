@@ -3,9 +3,9 @@ limitSwitchPort = 8
 followerOpposeMaster = true
 
 stowPosition = 0.0
-sourceIntakePosition = 3.01
+sourceIntakePosition = 4.0
 l2ScoringPosition = 27.73
 l3ScoringPosition = 27.73
-l4ScoringPosition = 19.75
+l4ScoringPosition = 19.45
  
  maxExtenstion = 34.762

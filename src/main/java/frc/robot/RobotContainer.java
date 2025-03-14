@@ -135,7 +135,7 @@ public class RobotContainer {
     //     new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.sourceIntakePosition));
 
     // // Claw Commands
-    NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(0.5)).withTimeout(.5));
+    NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(0.7)).withTimeout(.5));
     // NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
     NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(1));
 
@@ -310,8 +310,8 @@ public class RobotContainer {
     start.onFalse(new IntakePercent_Com(m_intake, 0));
 
     
-    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165 - 0.0127, MaxSpeed, MaxAngularRate, tj));
-    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165 + 0.0127, MaxSpeed, MaxAngularRate, tj));
+    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165 - 0, MaxSpeed, MaxAngularRate, tj));
+    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165 + 0.03, MaxSpeed, MaxAngularRate, tj));
 ;
     m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 

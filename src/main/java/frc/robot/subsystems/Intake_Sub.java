@@ -82,5 +82,6 @@ public class Intake_Sub extends SubsystemBase {
       intakeMotorPivot.setPosition(0);
     }
     SmartDashboard.putNumber("intake position", intakeMotorPivot.getPosition().getValueAsDouble());
+    SmartDashboard.putBoolean("intake beam", !intakeHallSensor.get());
   }
 }

@@ -106,5 +106,6 @@ public class Claw_Sub extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putBoolean("claw beam break", clawBeamBreak.get());
     }
 }

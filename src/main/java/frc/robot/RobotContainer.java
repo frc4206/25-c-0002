@@ -137,10 +137,10 @@ public class RobotContainer {
     // // Claw Commands
     NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(0.7)).withTimeout(.5));
     // NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
-    NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(1));
+    NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(0.5));
 
-    NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(1));
-    NamedCommands.registerCommand("CoralIntake", new Coral_Intake_Com(m_arm, m_claw, m_elevator).withTimeout(1));
+    NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(0.5));
+    NamedCommands.registerCommand("CoralIntake", new Coral_Intake_Com(m_arm, m_claw, m_elevator).withTimeout(0.5));
     // NamedCommands.registerCommand("RunEndEffector", new ClawPercent_Com(m_claw, m_clawConfig.intakePercent).withTimeout(1));
     NamedCommands.registerCommand("NeutralizeEndEffector", new SetClawStateCommand(m_claw, ClawState.EXHAUSTING).withTimeout(1));
     //new Swerve_PID(drivetrain, -0.165 - 0.0127, MaxSpeed, MaxAngularRate, tj)
@@ -149,7 +149,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("FloorIntakeUp", new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
 
     int[] twenty2 = {22};
-    NamedCommands.registerCommand("TAG22", new InstantCommand(() -> LimelightHelpers.SetFiducialIDFiltersOverride("limelight-intake", twenty2)));
+    // NamedCommands.registerCommand("TAG22", new InstantCommand(() -> LimelightHelpers.SetFiducialIDFiltersOverride("limelight-intake", twenty2)));
 
     NamedCommands.registerCommand("PivotIntake", new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
     NamedCommands.registerCommand("ElevatorIntake", new Elevator_PID_Com(m_elevator, m_elevatorCfg.sourceIntakePosition));

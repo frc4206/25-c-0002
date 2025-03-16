@@ -13,6 +13,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -68,6 +69,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   .getStructTopic("mt2Pose Pub", Pose2d.struct).publish();
 //   StructPublisher<Pose2d> ogPose = NetworkTableInstance.getDefault()
 //   .getStructTopic("old pose Pub", Pose2d.struct).publish();
+
+
 
     boolean doRejectUpdate;
 
@@ -136,7 +139,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     );
 
     /* The SysId routine to test */
-    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
+    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineSteer;
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.

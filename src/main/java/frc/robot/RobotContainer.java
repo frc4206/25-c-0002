@@ -40,6 +40,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -135,11 +136,11 @@ public class RobotContainer {
     //     new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.sourceIntakePosition));
 
     // // Claw Commands
-    NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(0.7)).withTimeout(.5));
+    NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(0.6)).withTimeout(.5));
     // NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
     NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(0.5));
 
-    NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(0.5));
+    NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(0.7));
     NamedCommands.registerCommand("CoralIntake", new Coral_Intake_Com(m_arm, m_claw, m_elevator).withTimeout(0.5));
     // NamedCommands.registerCommand("RunEndEffector", new ClawPercent_Com(m_claw, m_clawConfig.intakePercent).withTimeout(1));
     NamedCommands.registerCommand("NeutralizeEndEffector", new SetClawStateCommand(m_claw, ClawState.EXHAUSTING).withTimeout(1));
@@ -201,6 +202,7 @@ public class RobotContainer {
 
     m_driverController.back().and(m_driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
     m_driverController.back().and(m_driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+
     m_driverController.start().and(m_driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
     m_driverController.start().and(m_driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
@@ -310,11 +312,14 @@ public class RobotContainer {
     start.onFalse(new IntakePercent_Com(m_intake, 0));
 
     
-    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165 - 0, MaxSpeed, MaxAngularRate, tj));
+    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165 - 0.01, MaxSpeed, MaxAngularRate, tj));
     m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165 + 0.03, MaxSpeed, MaxAngularRate, tj));
 ;
     m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 
+
+    m_driverController.b().onTrue(new InstantCommand(() -> SignalLogger.start()));
+    m_driverController.pov(0).onTrue(new InstantCommand(() -> SignalLogger.stop()));
     // m_driverController.a().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(0.1)));
   }
 
@@ -325,7 +330,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    
     return autoChooser.getSelected();
   }
 }

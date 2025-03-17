@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     LimelightHelpers.SetRobotOrientation("limelight-intake", m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 0,0.0,0.0,0.0,0.0,0.0);
-
+    LimelightHelpers.SetRobotOrientation("limelight-high", m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 0,0.0,0.0,0.0,0.0,0.0);
     // print all the time just to see what is going on
     SmartDashboard.putString("Claw Subsystem State", Claw_Sub.getClawState().toString());
   }

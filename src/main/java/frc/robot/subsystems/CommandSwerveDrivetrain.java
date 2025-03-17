@@ -174,7 +174,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         // Configure AutoBuilder last
         AutoBuilder.configure(
                 this::getEstimatedPose, // Robot pose supplier
-                this::resetPoseEstimator, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
                 new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
@@ -339,8 +339,21 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+        LimelightHelpers.PoseEstimate mt2;
+
+        double tagarea;
+        if (LimelightHelpers.getTV("limelight-high")) {
+            mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-high");
+            tagarea = LimelightHelpers.getTA("limelight-high");
+        } else {
+            mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-intake");
+            tagarea = LimelightHelpers.getTA("limelight-intake");
+        }
+
+
+
+        SmartDashboard.putNumber("tag area", tagarea);
         
-        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-intake");
         double[] distPose = LimelightHelpers.getCameraPose_TargetSpace("limelight-intake");
         
         doRejectUpdate = false;
@@ -352,7 +365,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             if(mt2.tagCount == 0)
             {
             doRejectUpdate = true;
-            } else if (Math.sqrt(Math.abs(distPose[0] * distPose[0] + distPose[1] * distPose[1])) > 3) {
+            } 
+            else if (tagarea < 0.6) {
                 doRejectUpdate = true;
             }
             if(!doRejectUpdate)
@@ -365,7 +379,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     mt2.pose,
                     mt2.timestampSeconds);
             }else {
-                m_poseEstimator.update(getPose().getRotation(), this.getState().ModulePositions);
+                Rotation2d rot = new Rotation2d(getPose().getRotation().getRadians());
+                m_poseEstimator.update(rot, this.getState().ModulePositions);
                 // System.out.println("updated without mt2");
             }
 

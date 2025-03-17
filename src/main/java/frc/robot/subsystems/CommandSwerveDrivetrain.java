@@ -19,6 +19,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.Odometry;
@@ -340,6 +341,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
         
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-intake");
+        double[] distPose = LimelightHelpers.getCameraPose_TargetSpace("limelight-intake");
+        
         doRejectUpdate = false;
         if (mt2 != null) {
             if(Math.abs(Math.toDegrees(drive.Speeds.omegaRadiansPerSecond)) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
@@ -349,6 +352,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             if(mt2.tagCount == 0)
             {
             doRejectUpdate = true;
+            } else if (Math.sqrt(Math.abs(distPose[0] * distPose[0] + distPose[1] * distPose[1])) > 3) {
+                doRejectUpdate = true;
             }
             if(!doRejectUpdate)
             {
@@ -367,7 +372,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             mt2Pub.set(mt2.pose);
             
         }
-        // SmartDashboard.putBoolean("DoRejectUpdate", doRejectUpdate);
+        SmartDashboard.putBoolean("DoRejectUpdate", doRejectUpdate);
+        SmartDashboard.putNumber("distance to tag", Math.sqrt(Math.abs(distPose[0] * distPose[0] + distPose[1] * distPose[1])));
 
         odo.update(getPose().getRotation(), this.getState().ModulePositions);
         m_poseEstimator.update(getPose().getRotation(), this.getState().ModulePositions);

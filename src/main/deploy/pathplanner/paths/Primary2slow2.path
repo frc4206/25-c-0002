@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.939747203605005,
-        "y": 2.8256850165938694
+        "x": 4.945713267278819,
+        "y": 2.835860587555999
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.793824163326349,
-        "y": 2.2425571827372
+        "x": 4.7997902270001624,
+        "y": 2.2527327536993296
       },
       "isLocked": false,
       "linkedName": "Primary2slow1"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 2.5,
+    "maxAcceleration": 2.5,
     "maxAngularVelocity": 740.0,
     "maxAngularAcceleration": 920.0,
     "nominalVoltage": 12.0,

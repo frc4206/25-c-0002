@@ -136,7 +136,7 @@ public class RobotContainer {
     //     new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.sourceIntakePosition));
 
     // // Claw Commands
-    NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(0.5)).withTimeout(.5));
+    NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(0.7)).withTimeout(.5));
     // NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
     NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(0.5));
 

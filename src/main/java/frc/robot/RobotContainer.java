@@ -85,7 +85,7 @@ public class RobotContainer {
   final Intake_Sub m_intake = new Intake_Sub(m_intakeCfg);
 
   private final CommandXboxController m_operatorController = new CommandXboxController(1); 
-  //private final CommandXboxController m_armController = new CommandXboxController(1);
+  private final CommandXboxController m_armController = new CommandXboxController(2);
   // private final CommandXboxController m_clawController = new CommandXboxController(2);
   // private final CommandXboxController m_climberController = new CommandXboxController(3);
   private final CommandXboxController m_elevatorController = new CommandXboxController(4);
@@ -326,6 +326,10 @@ public class RobotContainer {
     m_elevatorController.a().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l2ScoringPosition));
     m_elevatorController.b().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l3ScoringPosition));
     m_elevatorController.y().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
+
+    m_armController.a().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
+    m_armController.b().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l4ScoringPosition));
+    m_armController.y().onTrue(new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
   }
 
   /**

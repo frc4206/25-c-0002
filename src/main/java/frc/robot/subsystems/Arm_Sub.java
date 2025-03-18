@@ -75,18 +75,21 @@ public class Arm_Sub extends SubsystemBase {
 
   public Arm_Sub(Arm_Sub.Config arm_Config) {
     this.armConfig = arm_Config;
-    armCANCoder = new CANcoder(armConfig.canCoderID);
+    armCANCoder = new CANcoder(armConfig.canCoderID, "Default Name");
     armHallSensor = new DigitalInput(armConfig.limitSwitchPort);
 
     // LoadableConfig.print(armConfig);
     // LoadableConfig.print(armMotorConfig1);
 
-    armMotorApply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
-    armMotorApply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
-    armMotorApply.talonConfigs.Feedback.RotorToSensorRatio = 45;
-    armMotorApply.talonConfigs.Feedback.SensorToMechanismRatio = 1;
+    // armMotorApply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
+    // armMotorApply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    // armMotorApply.talonConfigs.Feedback.RotorToSensorRatio = 45;
+    // armMotorApply.talonConfigs.Feedback.SensorToMechanismRatio = 1;
 
-    
+    // armMotor2Apply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
+    // armMotor2Apply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    // armMotor2Apply.talonConfigs.Feedback.RotorToSensorRatio = 45;
+    // armMotor2Apply.talonConfigs.Feedback.SensorToMechanismRatio = 1;
 
     // armMotor2Apply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
     // armMotor2Apply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
@@ -114,21 +117,24 @@ public class Arm_Sub extends SubsystemBase {
      * This is where we are actually setting the motor RN
      */
     
-    ltalonConfigs.Slot0 = new Slot0Configs().withKP(armMotorConfig1.slot0.kp)
-        .withKI(armMotorConfig1.slot0.ki)
-        .withKD(armMotorConfig1.slot0.kd);
-    ltalonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
-    // ltalonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-    // ltalonConfigs.Feedback.RotorToSensorRatio = 45;
-    // ltalonConfigs.Feedback.SensorToMechanismRatio = 1;
-    // armMotor1.setInverted(armMotorConfig1.inverted);
-    if (armMotorConfig1.isBreakMode) {
-      armMotor1.setNeutralMode(NeutralModeValue.Brake);
-    } else {
-      armMotor1.setNeutralMode(NeutralModeValue.Coast);
-    }
-    armMotor1.getConfigurator().apply(ltalonConfigs);
+    // ltalonConfigs.Slot0 = new Slot0Configs().withKP(armMotorConfig1.slot0.kp)
+    //     .withKI(armMotorConfig1.slot0.ki)
+    //     .withKD(armMotorConfig1.slot0.kd);
+    // ltalonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
+    // // ltalonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    // // ltalonConfigs.Feedback.RotorToSensorRatio = 45;
+    // // ltalonConfigs.Feedback.SensorToMechanismRatio = 1;
+    // // armMotor1.setInverted(armMotorConfig1.inverted);
+    // if (armMotorConfig1.isBreakMode) {
+    //   armMotor1.setNeutralMode(NeutralModeValue.Brake);
+    // } else {
+    //   armMotor1.setNeutralMode(NeutralModeValue.Coast);
+    // }
+    // armMotor1.getConfigurator().apply(ltalonConfigs);
     // setArms();
+
+    armMotor1.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
+    armMotor2.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
     
   }
 
@@ -147,6 +153,9 @@ public class Arm_Sub extends SubsystemBase {
   }
 
   public void setArmAngle_func(double pos) {
+    armMotor1.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
+    armMotor2.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
+
     armMotor1.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
     armMotor2.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
 
@@ -161,14 +170,15 @@ public class Arm_Sub extends SubsystemBase {
     var fx2_pos = armMotor2.getPosition();
     fx2_pos.refresh();
 
-    var cc_pos = armCANCoder.getPosition();
-    cc_pos.refresh();
+    // var cc_pos = armCANCoder.getAbsolutePosition();
+    // cc_pos.refresh();
 
     SmartDashboard.putNumber("arm position", fx_pos.getValueAsDouble());
     SmartDashboard.putNumber("arm2 position", fx2_pos.getValueAsDouble());
 
-    armMotor2.setPosition(fx_pos.getValueAsDouble());
-    // SmartDashboard.putNumber("can coder position", cc_pos.getValueAsDouble());
+    // armMotor2.setPosition(fx_pos.getValueAsDouble());
+    // SmartDashboard.putNumber("can coder position", armCANCoder.getAbsolutePosition().getValueAsDouble());
+    // SmartDashboard.putNumber("can coder adjusted position", armCANCoder.getAbsolutePosition().getValueAsDouble() * 45);
     // armMotor1.getConfigurator().refresh(ltalonConfigs);
   }
 }

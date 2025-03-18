@@ -6,10 +6,14 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.pathplanner.lib.trajectory.SwerveModuleTrajectoryState;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,6 +32,7 @@ public class Elevator_Sub extends SubsystemBase {
   public TalonFX elevatorMotor2 = new TalonFX(elevatorMotorConfig2.canID, "Default Name");
 
   ConfigTalonFX elevatorConfigApply = new ConfigTalonFX(elevatorMotorConfig1, elevatorMotor1);
+  ConfigTalonFX elevatorConfigApply2 = new ConfigTalonFX(elevatorMotorConfig1, elevatorMotor2);
 
   /* Sensors */
   DigitalInput elevatorHallSensor1;
@@ -64,16 +69,37 @@ public class Elevator_Sub extends SubsystemBase {
     elevatorConfigApply.setSlot0(elevatorMotorConfig1.slot0);
     elevatorConfigApply.applyConfigs();
 
-    
-    elevatorMotor2.setControl(new Follower(elevatorMotorConfig1.canID, elevatorConfig.followerOpposeMaster));
+    elevatorConfigApply2.setSlot0(elevatorMotorConfig1.slot0);
+    elevatorConfigApply2.applyConfigs();
+
+    elevatorConfigApply.setSlot0SVA(elevatorMotorConfig1.slot0);
+    elevatorConfigApply2.setSlot0SVA(elevatorMotorConfig1.slot0);
+
+    elevatorConfigApply.applyTrapezoidalMotionProfile();
+    elevatorConfigApply2.applyTrapezoidalMotionProfile();
+
+    var mc = new MotorOutputConfigs();
+    mc.Inverted = InvertedValue.Clockwise_Positive;
+
+    elevatorMotor2.getConfigurator().apply(mc);
+
   }
 
   public void setPercentage_func(double percentage) {
     elevatorMotor1.setControl(new DutyCycleOut(percentage));
+    elevatorMotor2.setControl(new DutyCycleOut(percentage));
   }
 
   public void setElevatorPos_func(double pos) {
+    elevatorMotor2.setPosition(elevatorMotor1.getPosition().getValueAsDouble());
     elevatorMotor1.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
+    elevatorMotor2.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
+  }
+
+  public void setElevatorMotionMagic(double pos) {
+    elevatorMotor2.setPosition(elevatorMotor1.getPosition().getValueAsDouble());
+    elevatorMotor1.setControl(new MotionMagicVoltage(0).withPosition(pos));
+    elevatorMotor2.setControl(new MotionMagicVoltage(0).withPosition(pos));
   }
 
   @Override
@@ -81,13 +107,19 @@ public class Elevator_Sub extends SubsystemBase {
     // This method will be called once per scheduler run
     if (!elevatorHallSensor1.get()) {
       elevatorMotor1.setPosition(0);
+      elevatorMotor2.setPosition(0);
     }
     if (!elevatorHallSensor2.get()) {
       elevatorMotor1.setPosition(elevatorConfig.maxExtension);
+      elevatorMotor2.setPosition(elevatorConfig.maxExtension);
     }
 
     // SmartDashboard.putBoolean("bottom break", elevatorHallSensor1.get());
     // SmartDashboard.putBoolean("top break", elevatorHallSensor2.get());
+    
     SmartDashboard.putNumber("elevator position", elevatorMotor1.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("elevator 2 position", elevatorMotor2.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("evevatorVelocity", elevatorMotor1.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("elevatorMotorCommandedVelo", elevatorMotor1.getClosedLoopError().getValueAsDouble());
   }
 }

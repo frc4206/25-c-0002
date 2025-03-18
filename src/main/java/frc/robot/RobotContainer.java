@@ -15,6 +15,7 @@ import frc.robot.commands.Game_Commands.L2_scoring_Com;
 import frc.robot.commands.Game_Commands.L3_scoring_Com;
 import frc.robot.commands.Game_Commands.L4_scoring_Com;
 import frc.robot.commands.PID_Commands.Arm_PID_Com;
+import frc.robot.commands.PID_Commands.Elevator_MotionMagic_Com;
 import frc.robot.commands.PID_Commands.Elevator_PID_Com;
 import frc.robot.commands.PID_Commands.Intake_PID_Com;
 import frc.robot.commands.Percent_Commands.ArmPercent_Com;
@@ -87,7 +88,7 @@ public class RobotContainer {
   //private final CommandXboxController m_armController = new CommandXboxController(1);
   // private final CommandXboxController m_clawController = new CommandXboxController(2);
   // private final CommandXboxController m_climberController = new CommandXboxController(3);
-  // private final CommandXboxController m_elevatorController = new CommandXboxController(4);
+  private final CommandXboxController m_elevatorController = new CommandXboxController(4);
   // private final CommandXboxController m_intakeController = new CommandXboxController(5);
 
   
@@ -321,6 +322,10 @@ public class RobotContainer {
     m_driverController.b().onTrue(new InstantCommand(() -> SignalLogger.start()));
     m_driverController.pov(0).onTrue(new InstantCommand(() -> SignalLogger.stop()));
     // m_driverController.a().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(0.1)));
+
+    m_elevatorController.a().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l2ScoringPosition));
+    m_elevatorController.b().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l3ScoringPosition));
+    m_elevatorController.y().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
   }
 
   /**

@@ -1,0 +1,49 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.commands.PID_Commands;
+
+import com.ctre.phoenix6.controls.DutyCycleOut;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Elevator_Sub;
+
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+public class Elevator_MotionMagic_Com extends Command {
+  Elevator_Sub m_elevatorSub;
+  double m_elevatorPosition;
+  /** Creates a new Elevator_PID_Com. */
+  public Elevator_MotionMagic_Com(Elevator_Sub elevatorSub, double position) {
+    m_elevatorSub = elevatorSub;
+    m_elevatorPosition = position;
+    addRequirements(m_elevatorSub);
+  }
+
+    // Use addRequirements() here to declare subsystem dependencies.
+  
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    m_elevatorSub.setElevatorMotionMagic(m_elevatorPosition);
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    m_elevatorSub.elevatorMotor1.setControl(new DutyCycleOut(0));
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
+}

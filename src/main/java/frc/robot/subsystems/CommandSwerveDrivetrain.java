@@ -388,7 +388,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             
         }
         SmartDashboard.putBoolean("DoRejectUpdate", doRejectUpdate);
-        SmartDashboard.putNumber("distance to tag", Math.sqrt(Math.abs(distPose[0] * distPose[0] + distPose[1] * distPose[1])));
+        // SmartDashboard.putNumber("distance to tag", Math.sqrt(Math.abs(distPose[0] * distPose[0] + distPose[1] * distPose[1])));
 
         odo.update(getPose().getRotation(), this.getState().ModulePositions);
         m_poseEstimator.update(getPose().getRotation(), this.getState().ModulePositions);

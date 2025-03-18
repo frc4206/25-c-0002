@@ -37,6 +37,10 @@ public class ConfigTalonFX {
         public double ki; // integral
         public double kd; // derivative
 
+        public double ks;
+        public double kv;
+        public double ka;
+
         public Slot() {
         };
     }
@@ -78,6 +82,12 @@ public class ConfigTalonFX {
         talonConfigs.Slot0.kD = bs.kd;
     }
 
+    public void setSlot0SVA(Slot s) {
+        talonConfigs.Slot0.kS = s.ks;
+        talonConfigs.Slot0.kV = s.kv;
+        talonConfigs.Slot0.kA = s.ka;
+    }
+
     public void setSlot1(Slot bs) {
         talonConfigs.Slot1.kP = bs.kp;
         talonConfigs.Slot1.kI = bs.ki;
@@ -91,11 +101,15 @@ public class ConfigTalonFX {
     }
 
     public void applyTrapezoidalMotionProfile() {
-        talonConfigs.MotionMagic.MotionMagicCruiseVelocity = cfg.kCruiseVelocity;
-        talonConfigs.MotionMagic.MotionMagicAcceleration = cfg.kAcceleration;
-        talonConfigs.MotionMagic.MotionMagicJerk = cfg.kJerk;
-        talonConfigs.withCurrentLimits(new CurrentLimitsConfigs().withSupplyCurrentLimit(cfg.kSupplyCurrentLimit));
-        talonConfigs.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(cfg.kStatorCurrentLimit));
+        // talonConfigs.MotionMagic.MotionMagicCruiseVelocity = cfg.kCruiseVelocity;
+        // talonConfigs.MotionMagic.MotionMagicAcceleration = cfg.kAcceleration;
+        // talonConfigs.MotionMagic.MotionMagicJerk = cfg.kJerk;
+        var motionMagicConfigs = talonConfigs.MotionMagic;
+        motionMagicConfigs.MotionMagicCruiseVelocity = cfg.kCruiseVelocity; // Target cruise velocity of 80 rps
+        motionMagicConfigs.MotionMagicAcceleration = cfg.kAcceleration; // Target acceleration of 160 rps/s (0.5 seconds)
+        motionMagicConfigs.MotionMagicJerk = cfg.kJerk;
+        // talonConfigs.withCurrentLimits(new CurrentLimitsConfigs().withSupplyCurrentLimit(cfg.kSupplyCurrentLimit));
+        // talonConfigs.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(cfg.kStatorCurrentLimit));
 
         motor.getConfigurator().apply(talonConfigs);
     }

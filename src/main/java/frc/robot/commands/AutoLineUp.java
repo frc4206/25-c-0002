@@ -19,10 +19,10 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Swerve_PID extends Command {
+public class AutoLineUp extends Command {
 
-  private final double limelight_robot_offset = 0.035; //Old offset 0.05 -> remeasred by Senor CAD
-
+  private final double limelight_robot_offset = 0.05;
+  public boolean isFinished = false;
   /** Creates a new Swerve_PID. */
   public static class Config extends LoadableConfig {
 
@@ -55,7 +55,7 @@ public class Swerve_PID extends Command {
 
   TunedJoystick tj;
 
-  public Swerve_PID(CommandSwerveDrivetrain drive, double setpointY, double sped, double angrate, TunedJoystick _tj) {
+  public AutoLineUp(CommandSwerveDrivetrain drive, double setpointY, double sped, double angrate, TunedJoystick _tj) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     m_setpointY = setpointY;
@@ -117,8 +117,8 @@ public class Swerve_PID extends Command {
       // this OPPOSES the proportional value
       // x_output += (diff * cfg.kddiff);
 
-      SmartDashboard.putNumber("Xoutput: ", x_output);
-      SmartDashboard.putNumber("Diff (d): ", diff);
+      SmartDashboard.putNumber("Xoutput Auto: ", x_output);
+      SmartDashboard.putNumber("Diff ", diff);
       SmartDashboard.putNumber("Central alignment 1:", central_alignment);
       SmartDashboard.putNumber("Central alignment 2:", lastErrorY);
     }
@@ -127,29 +127,41 @@ public class Swerve_PID extends Command {
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
         .withVelocityY(x_output);
         // .withVelocityX(sag_output); // Use open-loop control for drive motors
-        if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY < 0) {
-          driverequest = new SwerveRequest.RobotCentric()
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-            .withVelocityY(-0.5);
-        }
-        if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY > 0) {
-          driverequest = new SwerveRequest.RobotCentric()
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-            .withVelocityY(0.5);
-        }
-    m_drive.setControl(driverequest);
+
+    
 
     lastErrorY = central_alignment;
+    if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY < 0) {
+      driverequest = new SwerveRequest.RobotCentric()
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+        .withVelocityY(-0.5);
+    }
+    if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY > 0) {
+      driverequest = new SwerveRequest.RobotCentric()
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+        .withVelocityY(0.5);
+    }
+
+    if (Math.abs(central_alignment) < 0.025) {
+      driverequest = new SwerveRequest.RobotCentric()
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+        .withVelocityY(0);
+        m_drive.setControl(driverequest);
+      isFinished = true;
+      isFinished();
+    }
+    m_drive.setControl(driverequest);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isFinished;
   }
 }

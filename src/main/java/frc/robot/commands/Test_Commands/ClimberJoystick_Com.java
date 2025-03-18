@@ -29,7 +29,12 @@ public class ClimberJoystick_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climberSub.setPercentage_func(m_joystick.getRightY());
+    if (Math.abs(m_joystick.getRightY()) > 0.1) {
+      m_climberSub.setPercentage_func(m_joystick.getRightY());
+    } else {
+      m_climberSub.setPercentage_func(0);
+    }
+    
   }
 
   // Called once the command ends or is interrupted.

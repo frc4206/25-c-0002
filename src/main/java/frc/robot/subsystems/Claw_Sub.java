@@ -32,24 +32,23 @@ public class Claw_Sub extends SubsystemBase {
     AsynchronousInterrupt beam_break_interrupt;
     BiConsumer<Boolean, Boolean> trigger;
 
-    /*Configs */
+    /* Configs */
     ConfigTalonFX.Config clawMotorConfig1 = new ConfigTalonFX.Config("Claw1Motor.toml");
     public Config clawConfig;
 
-    /*Motors */
-    public TalonFX clawMotor1 = new TalonFX(clawMotorConfig1.canID);
+    /* Motors */
+    public TalonFX clawMotor1 = new TalonFX(clawMotorConfig1.canID, "Default Name");
 
-    /*Sensors */
+    /* Sensors */
     DigitalInput clawBeamBreak;
-
 
     public static class Config extends LoadableConfig {
 
-        /*IDs and Ports */
+        /* IDs and Ports */
         public int beamBreakPort;
-        
-        /*Misc. */
-        public double intakePercent; 
+
+        /* Misc. */
+        public double intakePercent;
         public double outtakePercent;
 
         public Config(String filename) {
@@ -63,20 +62,25 @@ public class Claw_Sub extends SubsystemBase {
         this.clawConfig = clawConfig;
         clawBeamBreak = new DigitalInput(clawConfig.beamBreakPort);
         setupClawBeamBreakInterrupt();
+
+        // check if we start with something in the claw
+        if(!clawBeamBreak.get()){
+            claw_state = ClawState.DETECTED;
+        } else {
+            claw_state = ClawState.NEUTRAL;
+        }
     }
 
     public void setupClawBeamBreakInterrupt() {
         trigger = new BiConsumer<Boolean, Boolean>() {
             @Override
             public void accept(Boolean rise, Boolean fall) {
-                if(rise){
+                if (rise) {
                     claw_state = ClawState.NEUTRAL;
-                    System.out.println("Detected a rising edge!");
                     return;
                 }
 
                 if (fall) {
-                    System.out.print("Claw falling edge!");
                     setPercentage_func(0);
                     claw_state = ClawState.DETECTED;
                     return;
@@ -92,32 +96,16 @@ public class Claw_Sub extends SubsystemBase {
         clawMotor1.setControl(new DutyCycleOut(percentage));
     }
 
-    public ClawState getClawState() {
+    public static ClawState getClawState() {
         return claw_state;
     }
 
-    public void setClawState(ClawState newState) {
+    public static void setClawState(ClawState newState) {
         claw_state = newState;
     }
 
     @Override
     public void periodic() {
-        // SmartDashboard.putBoolean("Beam break claw", clawBeamBreak.get());
-        // System.out.println("\n\nClaw state -->>>> " + claw_state + "\n\n");
-        // if (claw_state == ClawState.INTAKING) {
-        //     setPercentage_func(1);
-        // }
-        switch (claw_state) {
-            case INTAKING:
-                setPercentage_func(clawConfig.intakePercent);
-                break;
-            case NEUTRAL:
-                
-                break;
-            default:
-                break;
-        }
-
-        // System.out.println(claw_state);
+        // SmartDashboard.putBoolean("claw beam break", clawBeamBreak.get());
     }
 }

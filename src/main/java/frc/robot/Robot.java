@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.common.LimelightHelpers;
+import frc.robot.subsystems.Claw_Sub;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -48,10 +49,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     LimelightHelpers.SetRobotOrientation("limelight-intake", m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 0,0.0,0.0,0.0,0.0,0.0);
 
-    Pose3d pose = LimelightHelpers.getCameraPose3d_TargetSpace("limelight-intake");
-    SmartDashboard.putNumber("Limelight X ", pose.getX());
-    SmartDashboard.putNumber("Limelight Y", pose.getY());
-    SmartDashboard.putNumber("Limelight Z", pose.getZ());
+    // print all the time just to see what is going on
+    SmartDashboard.putString("Claw Subsystem State", Claw_Sub.getClawState().toString());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

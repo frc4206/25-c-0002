@@ -319,8 +319,8 @@ public class RobotContainer {
     start.onFalse(new IntakePercent_Com(m_intake, 0));
 
     
-    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165 - 0.03, MaxSpeed, MaxAngularRate, tj));
-    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165 + 0.03 , MaxSpeed, MaxAngularRate, tj));
+    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165 - 0.0, MaxSpeed, MaxAngularRate, tj));
+    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165 + 0.0 , MaxSpeed, MaxAngularRate, tj));
 ;
     m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 
@@ -336,6 +336,12 @@ public class RobotContainer {
     m_armController.a().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
     m_armController.b().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l4ScoringPosition));
     m_armController.y().onTrue(new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
+
+    m_armController.rightBumper().onTrue(m_arm.runOnce(() -> m_arm.armMotor1.set(0.2)));
+    m_armController.rightBumper().onFalse(m_arm.runOnce(() -> m_arm.armMotor1.set(0)));
+
+    m_armController.leftBumper().onTrue(m_arm.runOnce(() -> m_arm.armMotor1.set(-0.2)));
+    m_armController.leftBumper().onFalse(m_arm.runOnce(() -> m_arm.armMotor1.set(0)));
   }
 
   /**

@@ -342,7 +342,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         LimelightHelpers.PoseEstimate mt2;
 
         double tagarea;
-        if (LimelightHelpers.getTV("limelight-high")) {
+        if (LimelightHelpers.getTV("limelight-high") && LimelightHelpers.getTA("limelight-high") > 0.6) {
             mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-high");
             tagarea = LimelightHelpers.getTA("limelight-high");
         } else {

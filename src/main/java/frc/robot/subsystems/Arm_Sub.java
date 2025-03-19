@@ -78,23 +78,9 @@ public class Arm_Sub extends SubsystemBase {
     armCANCoder = new CANcoder(armConfig.canCoderID, "Default Name");
     armHallSensor = new DigitalInput(armConfig.limitSwitchPort);
 
-    // LoadableConfig.print(armConfig);
-    // LoadableConfig.print(armMotorConfig1);
+    LoadableConfig.print(armConfig);
+    LoadableConfig.print(armMotorConfig1);
 
-    // armMotorApply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
-    // armMotorApply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-    // armMotorApply.talonConfigs.Feedback.RotorToSensorRatio = 45;
-    // armMotorApply.talonConfigs.Feedback.SensorToMechanismRatio = 1;
-
-    // armMotor2Apply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
-    // armMotor2Apply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-    // armMotor2Apply.talonConfigs.Feedback.RotorToSensorRatio = 45;
-    // armMotor2Apply.talonConfigs.Feedback.SensorToMechanismRatio = 1;
-
-    // armMotor2Apply.talonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
-    // armMotor2Apply.talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
-    // armMotor2Apply.talonConfigs.Feedback.RotorToSensorRatio = 45;
-    // armMotor2Apply.talonConfigs.Feedback.SensorToMechanismRatio = 1;
 
     var mc = new MotorOutputConfigs();
     mc.Inverted = InvertedValue.Clockwise_Positive;
@@ -104,37 +90,16 @@ public class Arm_Sub extends SubsystemBase {
 
     armMotor2Apply.applyConfigs();
 
+    armMotorApply.setSlot0(armMotorConfig1.slot0);
+    armMotorApply.setSlot0(armMotorConfig1.slot0);
+
     armMotor2Apply.setSlot0(armMotorConfig1.slot0);
     armMotor2Apply.applyConfigs();
+
+    armMotorApply.applyConfigs();
+
     armMotor2.getConfigurator().apply(mc);
 
-    // var request = new Follower(armMotorConfig1.canID, arm_Config.followerOpposeMaster);
-    // request.UpdateFreqHz = 50;
-    // armMotor2.setControl(request);
-    
-
-    /* 
-     * This is where we are actually setting the motor RN
-     */
-    
-    // ltalonConfigs.Slot0 = new Slot0Configs().withKP(armMotorConfig1.slot0.kp)
-    //     .withKI(armMotorConfig1.slot0.ki)
-    //     .withKD(armMotorConfig1.slot0.kd);
-    // ltalonConfigs.Feedback.FeedbackRemoteSensorID = armCANCoder.getDeviceID();
-    // // ltalonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-    // // ltalonConfigs.Feedback.RotorToSensorRatio = 45;
-    // // ltalonConfigs.Feedback.SensorToMechanismRatio = 1;
-    // // armMotor1.setInverted(armMotorConfig1.inverted);
-    // if (armMotorConfig1.isBreakMode) {
-    //   armMotor1.setNeutralMode(NeutralModeValue.Brake);
-    // } else {
-    //   armMotor1.setNeutralMode(NeutralModeValue.Coast);
-    // }
-    // armMotor1.getConfigurator().apply(ltalonConfigs);
-    // setArms();
-
-    // armMotor1.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
-    // armMotor2.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
     
   }
 
@@ -155,7 +120,7 @@ public class Arm_Sub extends SubsystemBase {
   public void setArmAngle_func(double pos) {
     // armMotor1.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
     // armMotor2.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
-
+    armMotor2.setPosition(armMotor1.getPosition().getValueAsDouble());
     armMotor1.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
     armMotor2.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
 

@@ -221,7 +221,7 @@ public class RobotContainer {
     // Joystick commands
     // m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
     // m_claw.setDefaultCommand(new ClawJoystick_Com(m_claw, m_armController));
-    m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController));
+    // m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController));
     // m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_elevatorController));
     // m_intake.setDefaultComma.nd(new IntakeJoystick_Com(m_intake, m_intakeController));
     // m_armController.rightBumper().whileTrue(new IntakePercent_Com(m_intake,
@@ -290,33 +290,33 @@ public class RobotContainer {
     // m_armController.x().onTrue(new InstantCommand(() ->
     // m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
 
-    m_operatorController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
-    m_operatorController.leftBumper().whileTrue(new ClawPercent_Com(m_claw, m_clawConfig.outtakePercent));
-    // m_operatorController.leftBumper().whileTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
-    // m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
+    // m_operatorController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
+    // m_operatorController.leftBumper().whileTrue(new ClawPercent_Com(m_claw, m_clawConfig.outtakePercent));
+    // // m_operatorController.leftBumper().whileTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
+    // // m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
 
 
-    m_operatorController.pov(0).onTrue(new SetClawStateCommand(m_claw, ClawState.EXHAUSTING));
-    // m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
-    m_operatorController.pov(270).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.algePosition));
-    m_operatorController.pov(180).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.intakePosition));
+    // m_operatorController.pov(0).onTrue(new SetClawStateCommand(m_claw, ClawState.EXHAUSTING));
+    // // m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
+    // m_operatorController.pov(270).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.algePosition));
+    // m_operatorController.pov(180).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.intakePosition));
 
-    m_operatorController.x().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0)))); 
-    m_operatorController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
-    m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
-    m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
+    // m_operatorController.x().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0)))); 
+    // m_operatorController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
+    // m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
+    // m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
 
-    m_operatorController.rightTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.l1ScoringPosition));
-    m_operatorController.leftTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
-    m_operatorController.rightStick().onTrue(new InstantCommand(() -> m_arm.setArms()));
+    // m_operatorController.rightTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.l1ScoringPosition));
+    // m_operatorController.leftTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
+    // m_operatorController.rightStick().onTrue(new InstantCommand(() -> m_arm.setArms()));
 
     // m_operatorController.getHID().getRawButton(8).onTrue(new IntakePercent_Com(m_intake, .7));
-    JoystickButton back = new JoystickButton(m_operatorController.getHID(), 7);
-    JoystickButton start = new JoystickButton(m_operatorController.getHID(), 8);
-    back.onTrue(new IntakePercent_Com(m_intake, .25));
-    start.onTrue(new IntakePercent_Com(m_intake, -.7));
-    back.onFalse(new IntakePercent_Com(m_intake, 0));
-    start.onFalse(new IntakePercent_Com(m_intake, 0));
+    // JoystickButton back = new JoystickButton(m_operatorController.getHID(), 7);
+    // JoystickButton start = new JoystickButton(m_operatorController.getHID(), 8);
+    // back.onTrue(new IntakePercent_Com(m_intake, .25));
+    // start.onTrue(new IntakePercent_Com(m_intake, -.7));
+    // back.onFalse(new IntakePercent_Com(m_intake, 0));
+    // start.onFalse(new IntakePercent_Com(m_intake, 0));
 
     
     m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165 - 0.03, MaxSpeed, MaxAngularRate, tj));
@@ -329,13 +329,13 @@ public class RobotContainer {
     m_driverController.pov(0).onTrue(new InstantCommand(() -> SignalLogger.stop()));
     // m_driverController.a().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(0.1)));
 
-    m_elevatorController.a().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l2ScoringPosition));
-    m_elevatorController.b().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l3ScoringPosition));
-    m_elevatorController.y().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
+    // m_elevatorController.a().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l2ScoringPosition));
+    // m_elevatorController.b().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l3ScoringPosition));
+    // m_elevatorController.y().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
 
-    m_armController.a().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
-    m_armController.b().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l4ScoringPosition));
-    m_armController.y().onTrue(new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
+    // m_armController.a().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
+    // m_armController.b().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l4ScoringPosition));
+    // m_armController.y().onTrue(new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
   }
 
   /**

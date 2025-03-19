@@ -144,7 +144,7 @@ public class RobotContainer {
     // NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
     NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(0.5));
 
-    NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator));
+    NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(0.7));
     NamedCommands.registerCommand("L4ScoreReact", new L4_scoring_React_Com(m_arm, m_elevator));
     NamedCommands.registerCommand("CoralIntakeReact", new Coral_Intake_React_Com(m_arm, m_claw, m_elevator));
 
@@ -291,7 +291,7 @@ public class RobotContainer {
     // m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
 
     m_operatorController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
-    m_operatorController.leftBumper().whileTrue(new ClawPercent_Com(m_claw, m_clawConfig.intakePercent));
+    m_operatorController.leftBumper().whileTrue(new ClawPercent_Com(m_claw, m_clawConfig.outtakePercent));
     // m_operatorController.leftBumper().whileTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
     // m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
 

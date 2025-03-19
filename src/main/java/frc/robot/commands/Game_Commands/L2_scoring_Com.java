@@ -32,7 +32,7 @@ public class L2_scoring_Com extends Command {
   public void initialize() {
     m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.l2ScoringPosition);
     m_armSub.setArmAngle_func(m_armSub.armConfig.l2ScoringPosition); 
-    m_clawSub.setPercentage_func(m_clawSub.clawConfig.outtakePercent);
+    // m_clawSub.setPercentage_func(m_clawSub.clawConfig.outtakePercent);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

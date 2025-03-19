@@ -30,7 +30,7 @@ public class L3_scoring_Com extends Command {
   public void initialize() {
     m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.l3ScoringPosition );
     m_armSub.setArmAngle_func(m_armSub.armConfig.l3ScoringPosition); 
-    m_clawSub.setPercentage_func(m_clawSub.clawConfig.outtakePercent);
+    // m_clawSub.setPercentage_func(m_clawSub.clawConfig.outtakePercent);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

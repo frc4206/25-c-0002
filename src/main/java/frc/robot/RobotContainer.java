@@ -9,6 +9,8 @@ import frc.robot.commands.AutoLineUp;
 import frc.robot.commands.SetClawStateCommand;
 import frc.robot.commands.Swerve_PID;
 import frc.robot.commands.moveinauto;
+import frc.robot.commands.Auto_Commands.Coral_Intake_React_Com;
+import frc.robot.commands.Auto_Commands.L4_scoring_React_Com;
 import frc.robot.commands.Game_Commands.Coral_Intake_Com;
 import frc.robot.commands.Game_Commands.L1_scoring_Com;
 import frc.robot.commands.Game_Commands.L2_scoring_Com;
@@ -137,11 +139,15 @@ public class RobotContainer {
     //     new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.sourceIntakePosition));
 
     // // Claw Commands
-    NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(0.7)).withTimeout(.5));
+    NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(0.5)).withTimeout(0.5));
+    NamedCommands.registerCommand("ScoreReact", new ClawPercent_Com(m_claw, m_clawConfig.outtakePercent));
     // NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
     NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(0.5));
 
-    NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(0.7));
+    NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator));
+    NamedCommands.registerCommand("L4ScoreReact", new L4_scoring_React_Com(m_arm, m_elevator));
+    NamedCommands.registerCommand("CoralIntakeReact", new Coral_Intake_React_Com(m_arm, m_claw, m_elevator));
+
     NamedCommands.registerCommand("CoralIntake", new Coral_Intake_Com(m_arm, m_claw, m_elevator).withTimeout(0.5));
     // NamedCommands.registerCommand("RunEndEffector", new ClawPercent_Com(m_claw, m_clawConfig.intakePercent).withTimeout(1));
     NamedCommands.registerCommand("NeutralizeEndEffector", new SetClawStateCommand(m_claw, ClawState.EXHAUSTING).withTimeout(1));

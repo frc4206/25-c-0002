@@ -40,7 +40,7 @@ public class Claw_Sub extends SubsystemBase {
     public TalonFX clawMotor1 = new TalonFX(clawMotorConfig1.canID, "Default Name");
 
     /* Sensors */
-    DigitalInput clawBeamBreak;
+    public DigitalInput clawBeamBreak;
 
     public static class Config extends LoadableConfig {
 
@@ -106,6 +106,6 @@ public class Claw_Sub extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // SmartDashboard.putBoolean("claw beam break", clawBeamBreak.get());
+        SmartDashboard.putBoolean("claw beam break", clawBeamBreak.get());
     }
 }

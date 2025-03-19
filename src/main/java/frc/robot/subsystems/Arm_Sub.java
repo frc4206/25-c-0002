@@ -133,8 +133,8 @@ public class Arm_Sub extends SubsystemBase {
     // armMotor1.getConfigurator().apply(ltalonConfigs);
     // setArms();
 
-    armMotor1.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
-    armMotor2.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
+    // armMotor1.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
+    // armMotor2.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
     
   }
 
@@ -153,8 +153,8 @@ public class Arm_Sub extends SubsystemBase {
   }
 
   public void setArmAngle_func(double pos) {
-    armMotor1.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
-    armMotor2.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
+    // armMotor1.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
+    // armMotor2.setPosition(armCANCoder.getAbsolutePosition().getValueAsDouble());
 
     armMotor1.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
     armMotor2.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
@@ -178,7 +178,7 @@ public class Arm_Sub extends SubsystemBase {
 
     // armMotor2.setPosition(fx_pos.getValueAsDouble());
     // SmartDashboard.putNumber("can coder position", armCANCoder.getAbsolutePosition().getValueAsDouble());
-    // SmartDashboard.putNumber("can coder adjusted position", armCANCoder.getAbsolutePosition().getValueAsDouble() * 45);
+    SmartDashboard.putNumber("can coder adjusted position", armCANCoder.getAbsolutePosition().getValueAsDouble() * 45);
     // armMotor1.getConfigurator().refresh(ltalonConfigs);
   }
 }

@@ -7,57 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Primary1(0,8)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4Score"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Score"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CoralIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Primary2(0,8)"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "CoralIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Primary3(0,8)"
+            "pathName": "Primary2slowRight1(0,8)"
           }
         },
         {
@@ -71,9 +21,9 @@
                 }
               },
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "NeutralizeEndEffector"
+                  "waitTime": 0.2
                 }
               },
               {
@@ -83,24 +33,11 @@
                 }
               },
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "CoralIntake"
+                  "waitTime": 0.5
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Primary4(0,8)"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "named",
                 "data": {
@@ -113,7 +50,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Primary5(0,8)"
+            "pathName": "Primary2slowRight2(0,8)"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Primary2slowRight3(0,8)"
           }
         },
         {
@@ -127,9 +76,9 @@
                 }
               },
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "NeutralizeEndEffector"
+                  "waitTime": 0.2
                 }
               },
               {
@@ -139,18 +88,18 @@
                 }
               },
               {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              },
+              {
                 "type": "named",
                 "data": {
                   "name": "CoralIntake"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Primary6(0,8)"
           }
         }
       ]

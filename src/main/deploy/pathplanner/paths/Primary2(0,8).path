@@ -28,20 +28,28 @@
       "linkedName": "Primary2(0,8)"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
-  "pointTowardsZones": [
+  "rotationTargets": [
     {
-      "fieldPosition": {
-        "x": 1.0,
-        "y": 7.5
-      },
-      "rotationOffset": 180.0,
-      "minWaypointRelativePos": 0.18491921005385967,
-      "maxWaypointRelativePos": 0.7719928186714542,
-      "name": "Point Towards Zone"
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": -39.55921251369819
     }
   ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.8470149253731343,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 740.0,
+        "maxAngularAcceleration": 920.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 6.5,
@@ -59,7 +67,7 @@
   "folder": "Primary(0,8)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -151.82140989004085
+    "rotation": -119.00446299710254
   },
   "useDefaultConstraints": true
 }

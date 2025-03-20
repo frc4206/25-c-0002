@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1617228001401414,
-        "y": 2.245106656462952
+        "x": 3.161722800140142,
+        "y": 2.2451066564629523
       },
       "isLocked": false,
       "linkedName": "PrimarySide2"
@@ -20,8 +20,8 @@
         "y": 2.870394736842105
       },
       "prevControl": {
-        "x": 2.8370121717087455,
-        "y": 1.7723764368163608
+        "x": 3.001973684210526,
+        "y": 1.7061677631578949
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,7 +35,7 @@
       "minWaypointRelativePos": 0.49910233393177716,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 3.5,
+        "maxVelocity": 2.0,
         "maxAcceleration": 2.0,
         "maxAngularVelocity": 740.0,
         "maxAngularAcceleration": 920.0,
@@ -47,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 6.5,
+    "maxAcceleration": 7.0,
     "maxAngularVelocity": 740.0,
     "maxAngularAcceleration": 920.0,
     "nominalVoltage": 12.0,

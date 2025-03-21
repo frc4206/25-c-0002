@@ -15,12 +15,15 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 public class moveinauto extends Command {
   /** Creates a new moveinauto. */
   CommandSwerveDrivetrain m_drivetrain;
+
   SwerveRequest.RobotCentric go = new SwerveRequest.RobotCentric()
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
         .withVelocityX(1);
+
   SwerveRequest.RobotCentric stop = new SwerveRequest.RobotCentric()
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
         .withVelocityX(0);
+        
   double initTime;
   double timeElapsed;
   public moveinauto(CommandSwerveDrivetrain drivetrain) {

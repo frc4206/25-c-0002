@@ -1,4 +1,4 @@
 beamBreakPort = 0
 
-intakePercent = 1.0
-outtakePercent = 0.0
+intakePercent = 0.6
+outtakePercent = 0.5

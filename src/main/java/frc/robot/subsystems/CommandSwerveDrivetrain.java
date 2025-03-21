@@ -13,11 +13,13 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.Odometry;
@@ -60,14 +62,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
-//     StructPublisher<Pose2d> odoPub = NetworkTableInstance.getDefault()
-//   .getStructTopic("odoPose Pub", Pose2d.struct).publish();
+
+    public boolean isEnabled = false;
+
+    StructPublisher<Pose2d> odoPub = NetworkTableInstance.getDefault()
+  .getStructTopic("odoPose Pub", Pose2d.struct).publish();
   StructPublisher<Pose2d> estmPub = NetworkTableInstance.getDefault()
   .getStructTopic("Pose Pub", Pose2d.struct).publish();
-//   StructPublisher<Pose2d> mt2Pub = NetworkTableInstance.getDefault()
-//   .getStructTopic("mt2Pose Pub", Pose2d.struct).publish();
+  StructPublisher<Pose2d> mt2Pub = NetworkTableInstance.getDefault()
+  .getStructTopic("mt2Pose Pub", Pose2d.struct).publish();
 //   StructPublisher<Pose2d> ogPose = NetworkTableInstance.getDefault()
 //   .getStructTopic("old pose Pub", Pose2d.struct).publish();
+
+
 
     boolean doRejectUpdate;
 
@@ -136,7 +143,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     );
 
     /* The SysId routine to test */
-    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
+    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineSteer;
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -170,7 +177,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         // Configure AutoBuilder last
         AutoBuilder.configure(
                 this::getEstimatedPose, // Robot pose supplier
-                this::resetPoseEstimator, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
                 new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
@@ -335,8 +342,23 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+        LimelightHelpers.PoseEstimate mt2;
+
+        double tagarea;
+        if (LimelightHelpers.getTV("limelight-high") && LimelightHelpers.getTA("limelight-high") > 0.6) {
+            mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-high");
+            tagarea = LimelightHelpers.getTA("limelight-high");
+        } else {
+            mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-intake");
+            tagarea = LimelightHelpers.getTA("limelight-intake");
+        }
+
+
+
+        SmartDashboard.putNumber("tag area", tagarea);
         
-        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-intake");
+        double[] distPose = LimelightHelpers.getCameraPose_TargetSpace("limelight-intake");
+        
         doRejectUpdate = false;
         if (mt2 != null) {
             if(Math.abs(Math.toDegrees(drive.Speeds.omegaRadiansPerSecond)) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
@@ -346,6 +368,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             if(mt2.tagCount == 0)
             {
             doRejectUpdate = true;
+            }
+            else if (tagarea < 0.6) {
+                doRejectUpdate = true;
             }
             if(!doRejectUpdate)
             {
@@ -357,26 +382,34 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     mt2.pose,
                     mt2.timestampSeconds);
             }else {
-                m_poseEstimator.update(getPose().getRotation(), this.getState().ModulePositions);
+                Rotation2d rot = new Rotation2d(getPose().getRotation().getRadians());
+                m_poseEstimator.update(rot, this.getState().ModulePositions);
                 // System.out.println("updated without mt2");
             }
 
-            // mt2Pub.set(mt2.pose);
+            mt2Pub.set(mt2.pose);
             
         }
-        // SmartDashboard.putBoolean("DoRejectUpdate", doRejectUpdate);
+        SmartDashboard.putBoolean("DoRejectUpdate", doRejectUpdate);
+        // SmartDashboard.putNumber("distance to tag", Math.sqrt(Math.abs(distPose[0] * distPose[0] + distPose[1] * distPose[1])));
 
         odo.update(getPose().getRotation(), this.getState().ModulePositions);
         m_poseEstimator.update(getPose().getRotation(), this.getState().ModulePositions);
         
         
-        // odoPub.set(odo.getPoseMeters());
+        odoPub.set(odo.getPoseMeters());
         estmPub.set(getEstimatedPose());
         // ogPose.set(this.getPose());
         // SmartDashboard.putBoolean("mt2 null", (mt2 == null));
 
         // SmartDashboard.putBoolean("ll test", LimelightHelpers.getTV("limelight-intake"));
         SmartDashboard.putNumber("gyro angle", getPigeon2().getYaw().getValueAsDouble());
+
+
+        if (!isEnabled) {
+            mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-intake");
+            m_poseEstimator.resetPose(mt2.pose);
+        }
     }
 
     private void startSimThread() {

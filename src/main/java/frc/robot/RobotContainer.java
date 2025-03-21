@@ -5,13 +5,19 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AutoLineUp;
+import frc.robot.commands.SetClawStateCommand;
 import frc.robot.commands.Swerve_PID;
+import frc.robot.commands.moveinauto;
+import frc.robot.commands.Auto_Commands.Coral_Intake_React_Com;
+import frc.robot.commands.Auto_Commands.L4_scoring_React_Com;
 import frc.robot.commands.Game_Commands.Coral_Intake_Com;
 import frc.robot.commands.Game_Commands.L1_scoring_Com;
 import frc.robot.commands.Game_Commands.L2_scoring_Com;
 import frc.robot.commands.Game_Commands.L3_scoring_Com;
 import frc.robot.commands.Game_Commands.L4_scoring_Com;
 import frc.robot.commands.PID_Commands.Arm_PID_Com;
+import frc.robot.commands.PID_Commands.Elevator_MotionMagic_Com;
 import frc.robot.commands.PID_Commands.Elevator_PID_Com;
 import frc.robot.commands.PID_Commands.Intake_PID_Com;
 import frc.robot.commands.Percent_Commands.ArmPercent_Com;
@@ -34,8 +40,10 @@ import frc.robot.subsystems.Intake_Sub;
 import frc.robot.subsystems.Claw_Sub.ClawState;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -44,6 +52,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
@@ -77,10 +86,10 @@ public class RobotContainer {
   final Elevator_Sub m_elevator = new Elevator_Sub(m_elevatorCfg);
   final Intake_Sub m_intake = new Intake_Sub(m_intakeCfg);
 
-  // private final CommandXboxController m_operatorController = new CommandXboxController(1); 
-  //private final CommandXboxController m_armController = new CommandXboxController(1);
+  private final CommandXboxController m_operatorController = new CommandXboxController(1); 
+  private final CommandXboxController m_armController = new CommandXboxController(2);
   // private final CommandXboxController m_clawController = new CommandXboxController(2);
-  private final CommandXboxController m_climberController = new CommandXboxController(3);
+  // private final CommandXboxController m_climberController = new CommandXboxController(3);
   private final CommandXboxController m_elevatorController = new CommandXboxController(4);
   // private final CommandXboxController m_intakeController = new CommandXboxController(5);
 
@@ -104,7 +113,6 @@ public class RobotContainer {
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      // .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -131,13 +139,30 @@ public class RobotContainer {
     //     new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.sourceIntakePosition));
 
     // // Claw Commands
-    NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(1)).withTimeout(.5));
+    NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(0.5)).withTimeout(0.5));
+    NamedCommands.registerCommand("ScoreReact", new ClawPercent_Com(m_claw, m_clawConfig.outtakePercent));
     // NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
-    NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(1));
+    NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(0.5));
 
-    NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(1));
-    NamedCommands.registerCommand("CoralIntake", new Coral_Intake_Com(m_arm, m_claw, m_elevator).withTimeout(1));
+    NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(0.7));
+    NamedCommands.registerCommand("L4ScoreReact", new L4_scoring_React_Com(m_arm, m_elevator));
+    NamedCommands.registerCommand("CoralIntakeReact", new Coral_Intake_React_Com(m_arm, m_claw, m_elevator));
+
+    NamedCommands.registerCommand("CoralIntake", new Coral_Intake_Com(m_arm, m_claw, m_elevator).withTimeout(0.5));
     // NamedCommands.registerCommand("RunEndEffector", new ClawPercent_Com(m_claw, m_clawConfig.intakePercent).withTimeout(1));
+    NamedCommands.registerCommand("NeutralizeEndEffector", new SetClawStateCommand(m_claw, ClawState.EXHAUSTING).withTimeout(1));
+    //new Swerve_PID(drivetrain, -0.165 - 0.0127, MaxSpeed, MaxAngularRate, tj)
+    NamedCommands.registerCommand("LeftLineUp", new AutoLineUp(drivetrain, -0.165, MaxSpeed, MaxAngularRate, tj));
+    NamedCommands.registerCommand("RightLineUp", new AutoLineUp(drivetrain, 0.165, MaxSpeed, MaxAngularRate, tj));
+    NamedCommands.registerCommand("FloorIntakeUp", new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
+
+    int[] twenty2 = {22};
+    // NamedCommands.registerCommand("TAG22", new InstantCommand(() -> LimelightHelpers.SetFiducialIDFiltersOverride("limelight-intake", twenty2)));
+
+    NamedCommands.registerCommand("PivotIntake", new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
+    NamedCommands.registerCommand("ElevatorIntake", new Elevator_PID_Com(m_elevator, m_elevatorCfg.sourceIntakePosition));
+    NamedCommands.registerCommand("ResetClaw", new SetClawStateCommand(m_claw, ClawState.NEUTRAL).withTimeout(1));
+
 
     // Configure the trigger bindings
     configureBindings();
@@ -184,20 +209,21 @@ public class RobotContainer {
 
     m_driverController.back().and(m_driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
     m_driverController.back().and(m_driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+
     m_driverController.start().and(m_driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
     m_driverController.start().and(m_driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
     m_driverController.leftStick().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+    m_driverController.a().onTrue(new InstantCommand(() -> drivetrain.getPigeon2().reset()));
 
     drivetrain.registerTelemetry(logger::telemeterize);
 
     // Joystick commands
     // m_arm.setDefaultCommand(new ArmJoystick_Com(m_arm, m_armController));
     // m_claw.setDefaultCommand(new ClawJoystick_Com(m_claw, m_armController));
-    m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
-    m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_elevatorController));
-    // m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake,
-    // m_intakeController));
+    m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController));
+    // m_elevator.setDefaultCommand(new ElevatorJoystick_Com(m_elevator, m_elevatorController));
+    // m_intake.setDefaultComma.nd(new IntakeJoystick_Com(m_intake, m_intakeController));
     // m_armController.rightBumper().whileTrue(new IntakePercent_Com(m_intake,
     // 0.8));
     // m_armController.leftBumper().whileTrue(new IntakePercent_Com(m_intake,
@@ -264,22 +290,58 @@ public class RobotContainer {
     // m_armController.x().onTrue(new InstantCommand(() ->
     // m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
 
-    // m_operatorController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
-    // m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0.65))));
-    // m_operatorController.pov(0).onTrue(new InstantCommand(() -> Claw_Sub.claw_state = ClawState.NEUTRAL));
-    // m_operatorController.pov(0).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
-    // m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
+    m_operatorController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
+    m_operatorController.leftBumper().whileTrue(new ClawPercent_Com(m_claw, m_clawConfig.outtakePercent));
+    // m_operatorController.leftBumper().whileTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(1))));
+    // m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
 
-    // m_operatorController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
-    // m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
-    // m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
 
-    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165, MaxSpeed, MaxAngularRate, tj));
-    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165, MaxSpeed, MaxAngularRate, tj));
+    m_operatorController.pov(0).onTrue(new SetClawStateCommand(m_claw, ClawState.EXHAUSTING));
+    // m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
+    m_operatorController.pov(270).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.algePosition));
+    m_operatorController.pov(180).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.intakePosition));
 
-    // m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
+    m_operatorController.x().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0)))); 
+    m_operatorController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
+    m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
+    m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
 
+    m_operatorController.rightTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.l1ScoringPosition));
+    m_operatorController.leftTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
+    m_operatorController.rightStick().onTrue(new InstantCommand(() -> m_arm.setArms()));
+
+    // m_operatorController.getHID().getRawButton(8).onTrue(new IntakePercent_Com(m_intake, .7));
+    JoystickButton back = new JoystickButton(m_operatorController.getHID(), 7);
+    JoystickButton start = new JoystickButton(m_operatorController.getHID(), 8);
+    back.onTrue(new IntakePercent_Com(m_intake, .25));
+    start.onTrue(new IntakePercent_Com(m_intake, -.7));
+    back.onFalse(new IntakePercent_Com(m_intake, 0));
+    start.onFalse(new IntakePercent_Com(m_intake, 0));
+
+    
+    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165 - 0.01, MaxSpeed, MaxAngularRate, tj));
+    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165 + 0.0 , MaxSpeed, MaxAngularRate, tj));
+
+    m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
+
+
+    m_driverController.b().onTrue(new InstantCommand(() -> SignalLogger.start()));
+    m_driverController.pov(0).onTrue(new InstantCommand(() -> SignalLogger.stop()));
     // m_driverController.a().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(0.1)));
+
+    m_elevatorController.a().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l2ScoringPosition));
+    m_elevatorController.b().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l3ScoringPosition));
+    m_elevatorController.y().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
+
+    m_armController.a().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
+    m_armController.b().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l4ScoringPosition));
+    m_armController.y().onTrue(new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
+
+    m_armController.rightBumper().onTrue(m_arm.runOnce(() -> m_arm.armMotor1.set(0.2)));
+    m_armController.rightBumper().onFalse(m_arm.runOnce(() -> m_arm.armMotor1.set(0)));
+
+    m_armController.leftBumper().onTrue(m_arm.runOnce(() -> m_arm.armMotor1.set(-0.2)));
+    m_armController.leftBumper().onFalse(m_arm.runOnce(() -> m_arm.armMotor1.set(0)));
   }
 
   /**

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.common.LimelightHelpers;
+import frc.robot.subsystems.Claw_Sub;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -29,7 +30,10 @@ public class Robot extends TimedRobot {
     // super(0.015);
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
     m_robotContainer = new RobotContainer();
+    m_robotContainer.drivetrain.getPigeon2().reset();
+    m_robotContainer.drivetrain.seedFieldCentric();
   }
 
   /**
@@ -47,16 +51,17 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     LimelightHelpers.SetRobotOrientation("limelight-intake", m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 0,0.0,0.0,0.0,0.0,0.0);
+    LimelightHelpers.SetRobotOrientation("limelight-high", m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 0,0.0,0.0,0.0,0.0,0.0);
+    // print all the time just to see what is going on
+    SmartDashboard.putString("Claw Subsystem State", Claw_Sub.getClawState().toString());
 
-    Pose3d pose = LimelightHelpers.getCameraPose3d_TargetSpace("limelight-intake");
-    SmartDashboard.putNumber("Limelight X ", pose.getX());
-    SmartDashboard.putNumber("Limelight Y", pose.getY());
-    SmartDashboard.putNumber("Limelight Z", pose.getZ());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_robotContainer.drivetrain.isEnabled = false;
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -64,6 +69,9 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+
+    
+    m_robotContainer.drivetrain.isEnabled = true;
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -85,6 +93,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    m_robotContainer.drivetrain.isEnabled = true;
   }
 
   /** This function is called periodically during operator control. */

@@ -25,8 +25,8 @@ public class Intake_Sub extends SubsystemBase {
   public Config intakeConfig;
 
   /* Motors */
-  public TalonFX intakeMotorRollers = new TalonFX(intakeMotorRollersConfig.canID);
-  public TalonFX intakeMotorPivot = new TalonFX(intakeMotorPivotConfig.canID);
+  public TalonFX intakeMotorRollers = new TalonFX(intakeMotorRollersConfig.canID, "Default Name");
+  public TalonFX intakeMotorPivot = new TalonFX(intakeMotorPivotConfig.canID, "Default Name");
 
   ConfigTalonFX intakePivotCFGapply = new ConfigTalonFX(intakeMotorPivotConfig, intakeMotorPivot);
 
@@ -81,6 +81,7 @@ public class Intake_Sub extends SubsystemBase {
     if (!intakeHallSensor.get()) {
       intakeMotorPivot.setPosition(0);
     }
-    // SmartDashboard.putNumber("intake position", intakeMotorPivot.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("intake position", intakeMotorPivot.getPosition().getValueAsDouble());
+    SmartDashboard.putBoolean("intake beam", !intakeHallSensor.get());
   }
 }

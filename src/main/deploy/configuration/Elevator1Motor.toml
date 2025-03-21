@@ -3,7 +3,14 @@ canID = 36
 inverted = false
 isBreakMode = true
 
+kCruiseVelocity = 300.0
+kAcceleration = 380.0
+kJerk = 2200.0
+
 [slot0]
-kp = 6.0
+kp = 8.0
 ki = 0.2
 kd = 0.1
+ks = 0.25
+kv = 0.12
+ka = 0.01

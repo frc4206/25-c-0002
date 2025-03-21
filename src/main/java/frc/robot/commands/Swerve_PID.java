@@ -21,7 +21,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Swerve_PID extends Command {
 
-  private final double limelight_robot_offset = 0.05;
+  private final double limelight_robot_offset = 0.0; //Old offset 0.05, remeasred by Senor CAD -> used to be 0.035, now just reads the offest off of limelight
 
   /** Creates a new Swerve_PID. */
   public static class Config extends LoadableConfig {
@@ -75,7 +75,7 @@ public class Swerve_PID extends Command {
   
   @Override
   public void execute() {
-    Pose3d pose = LimelightHelpers.getCameraPose3d_TargetSpace("limelight-intake");
+    Pose3d pose = LimelightHelpers.getBotPose3d_TargetSpace("limelight-intake");
 
     double sag_output = 0.0d;
     double x_output = 0.0d;
@@ -127,7 +127,16 @@ public class Swerve_PID extends Command {
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
         .withVelocityY(x_output);
         // .withVelocityX(sag_output); // Use open-loop control for drive motors
-
+        if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY < 0) {
+          driverequest = new SwerveRequest.RobotCentric()
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+            .withVelocityY(-0.5);
+        }
+        if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY > 0) {
+          driverequest = new SwerveRequest.RobotCentric()
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+            .withVelocityY(0.5);
+        }
     m_drive.setControl(driverequest);
 
     lastErrorY = central_alignment;

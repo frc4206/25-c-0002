@@ -31,8 +31,8 @@ public class L4_scoring_Com extends Command {
   @Override
   public void initialize() {
     m_armSub.setArmAngle_func(m_armSub.armConfig.l4ScoringPosition);
-    m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.l4ScoringPosition);
-    m_clawSub.setPercentage_func(m_clawSub.clawConfig.outtakePercent);
+    m_elevatorSub.setElevatorPos_func(m_elevatorSub.elevatorConfig.l4ScoringPosition );
+    // m_clawSub.setPercentage_func(m_clawSub.clawConfig.outtakePercent);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

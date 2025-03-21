@@ -30,7 +30,10 @@ public class Robot extends TimedRobot {
     // super(0.015);
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
     m_robotContainer = new RobotContainer();
+    m_robotContainer.drivetrain.getPigeon2().reset();
+    m_robotContainer.drivetrain.seedFieldCentric();
   }
 
   /**
@@ -51,11 +54,14 @@ public class Robot extends TimedRobot {
     LimelightHelpers.SetRobotOrientation("limelight-high", m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 0,0.0,0.0,0.0,0.0,0.0);
     // print all the time just to see what is going on
     SmartDashboard.putString("Claw Subsystem State", Claw_Sub.getClawState().toString());
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_robotContainer.drivetrain.isEnabled = false;
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -63,6 +69,9 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+
+    
+    m_robotContainer.drivetrain.isEnabled = true;
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -84,6 +93,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    m_robotContainer.drivetrain.isEnabled = true;
   }
 
   /** This function is called periodically during operator control. */

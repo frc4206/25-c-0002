@@ -62,6 +62,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
+
+    public boolean isEnabled = false;
+
     StructPublisher<Pose2d> odoPub = NetworkTableInstance.getDefault()
   .getStructTopic("odoPose Pub", Pose2d.struct).publish();
   StructPublisher<Pose2d> estmPub = NetworkTableInstance.getDefault()
@@ -365,7 +368,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             if(mt2.tagCount == 0)
             {
             doRejectUpdate = true;
-            } 
+            }
             else if (tagarea < 0.6) {
                 doRejectUpdate = true;
             }
@@ -401,6 +404,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         // SmartDashboard.putBoolean("ll test", LimelightHelpers.getTV("limelight-intake"));
         SmartDashboard.putNumber("gyro angle", getPigeon2().getYaw().getValueAsDouble());
+
+
+        if (!isEnabled) {
+            mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-intake");
+            m_poseEstimator.resetPose(mt2.pose);
+        }
     }
 
     private void startSimThread() {

@@ -71,15 +71,15 @@ public class Robot extends TimedRobot {
     if (ally.isPresent()) {
       if (ally.get() == Alliance.Red) {
         LimelightHelpers.SetRobotOrientation("limelight-intake",
-            m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 0, .0, 0.0, 0.0, 0.0, 0.0);
+            m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 180, .0, 0.0, 0.0, 0.0, 0.0);
         LimelightHelpers.SetRobotOrientation("limelight-high",
-            m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 0, 0.0, 0.0, 0.0, 0.0, 0.0);
+            m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 180, 0.0, 0.0, 0.0, 0.0, 0.0);
       }
       if (ally.get() == Alliance.Blue) {
         LimelightHelpers.SetRobotOrientation("limelight-intake",
-            m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 180, 0.0, 0.0, 0.0, 0.0, 0.0);
+            m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 0, 0.0, 0.0, 0.0, 0.0, 0.0);
         LimelightHelpers.SetRobotOrientation("limelight-high",
-            m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 180, 0.0, 0.0, 0.0, 0.0, 0.0);
+            m_robotContainer.drivetrain.getPigeon2().getYaw().getValueAsDouble() + 0, 0.0, 0.0, 0.0, 0.0, 0.0);
       }
 
     }
@@ -141,12 +141,19 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
+    // if (m_robotContainer.m_driverController.rightBumper().getAsBoolean()) {
+    //   m_robotContainer.drivetrain.followPathCommand("6R").schedule();
+    // }
+
     m_robotContainer.drivetrain.isEnabled = true;
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    // if (m_robotContainer.m_driverController.rightBumper().getAsBoolean()) {
+    //   m_robotContainer.drivetrain.followPathCommand("6R").schedule();
+    // }
   }
 
   @Override

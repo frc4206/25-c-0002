@@ -3,8 +3,9 @@
   "robotLength": 0.822,
   "holonomicMode": true,
   "pathFolders": [
-    "ComplL4(0,0)",
     "ComplAlga(0,0)",
+    "ComplL4(0,0)",
+    "AutoAlgn",
     "Primary(0,0)",
     "Primary(0,8)"
   ],

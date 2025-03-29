@@ -129,21 +129,21 @@ public class Arm_Sub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    var fx_pos = armMotor1.getPosition();
-    fx_pos.refresh();
+    // var fx_pos = armMotor1.getPosition();
+    // fx_pos.refresh();
 
-    var fx2_pos = armMotor2.getPosition();
-    fx2_pos.refresh();
+    // var fx2_pos = armMotor2.getPosition();
+    // fx2_pos.refresh();
 
-    // var cc_pos = armCANCoder.getAbsolutePosition();
-    // cc_pos.refresh();
+    // // var cc_pos = armCANCoder.getAbsolutePosition();
+    // // cc_pos.refresh();
 
-    SmartDashboard.putNumber("arm position", fx_pos.getValueAsDouble());
-    SmartDashboard.putNumber("arm2 position", fx2_pos.getValueAsDouble());
+    // SmartDashboard.putNumber("arm position", fx_pos.getValueAsDouble());
+    // SmartDashboard.putNumber("arm2 position", fx2_pos.getValueAsDouble());
 
-    // armMotor2.setPosition(fx_pos.getValueAsDouble());
-    // SmartDashboard.putNumber("can coder position", armCANCoder.getAbsolutePosition().getValueAsDouble());
-    SmartDashboard.putNumber("can coder adjusted position", armCANCoder.getAbsolutePosition().getValueAsDouble() * 45);
+    // // armMotor2.setPosition(fx_pos.getValueAsDouble());
+    // // SmartDashboard.putNumber("can coder position", armCANCoder.getAbsolutePosition().getValueAsDouble());
+    // SmartDashboard.putNumber("can coder adjusted position", armCANCoder.getAbsolutePosition().getValueAsDouble() * 45);
     // armMotor1.getConfigurator().refresh(ltalonConfigs);
   }
 }

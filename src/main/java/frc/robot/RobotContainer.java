@@ -16,6 +16,8 @@ import frc.robot.commands.Game_Commands.L1_scoring_Com;
 import frc.robot.commands.Game_Commands.L2_scoring_Com;
 import frc.robot.commands.Game_Commands.L3_scoring_Com;
 import frc.robot.commands.Game_Commands.L4_scoring_Com;
+import frc.robot.commands.Game_Commands.LineUpPP;
+import frc.robot.commands.Game_Commands.SwervePPAlign;
 import frc.robot.commands.PID_Commands.Arm_PID_Com;
 import frc.robot.commands.PID_Commands.Elevator_MotionMagic_Com;
 import frc.robot.commands.PID_Commands.Elevator_PID_Com;
@@ -58,8 +60,10 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.io.IOException;
 import java.util.jar.Attributes.Name;
 
+import org.json.simple.parser.ParseException;
 import org.team4206.battleaid.common.TunedJoystick;
 import org.team4206.battleaid.common.TunedJoystick.ResponseCurve;
 
@@ -249,8 +253,14 @@ public class RobotContainer {
     start.onFalse(new IntakePercent_Com(m_intake, 0));
 
     
-    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.175641 - 0.01, MaxSpeed, MaxAngularRate, tj));
-    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.163957 + 0.0 , MaxSpeed, MaxAngularRate, tj));
+    // m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.175641 - 0.01, MaxSpeed, MaxAngularRate, tj));
+    // m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.163957 + 0.0 , MaxSpeed, MaxAngularRate, tj));
+    m_driverController.rightBumper().whileTrue(new SwervePPAlign(drivetrain, "R"));
+    m_driverController.leftBumper().whileTrue(new SwervePPAlign(drivetrain, "L"));
+
+    //TODO: add the Intake React Command that will terminate it in a deadline command group
+    m_driverController.rightTrigger().whileTrue(drivetrain.followPathCommand("RightIntake"));
+    m_driverController.leftTrigger().whileTrue(drivetrain.followPathCommand("LeftIntake"));
 
     m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 

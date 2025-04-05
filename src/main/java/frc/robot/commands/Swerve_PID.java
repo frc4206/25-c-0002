@@ -21,7 +21,8 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Swerve_PID extends Command {
 
-  private final double limelight_robot_offset = 0.0; //Old offset 0.05, remeasred by Senor CAD -> used to be 0.035, now just reads the offest off of limelight
+  private final double limelight_robot_offset = -0.05; // Old offset 0.05, remeasred by Senor CAD -> used to be 0.035, now
+                                                     // just reads the offest off of limelight
 
   /** Creates a new Swerve_PID. */
   public static class Config extends LoadableConfig {
@@ -48,7 +49,6 @@ public class Swerve_PID extends Command {
   double MaxSpeed;
   double MaxAngularRate;
 
-
   double errorY;
   double lastErrorY = 0;
   double deltaY;
@@ -72,7 +72,7 @@ public class Swerve_PID extends Command {
   }
 
   // Called every time the scheduler runs while the command is scheduled.
-  
+
   @Override
   public void execute() {
     Pose3d pose = LimelightHelpers.getBotPose3d_TargetSpace("limelight-intake");
@@ -86,11 +86,11 @@ public class Swerve_PID extends Command {
 
     // left is positive, right is negative
     // from the limelights perspective, X is lefty-rightness
-    double central_alignment = pose.getX() - limelight_robot_offset; 
+    double central_alignment = pose.getX() - limelight_robot_offset;
 
     // the closest we can bot on robot perimeter is ~-0.56
     // so we are gonna round down to -0.5
-    if(distance_to_qr_code >= -0.5d){
+    if (distance_to_qr_code >= -0.5d) {
       // may need to break here
       sag_output = 0.0d;
     } else {
@@ -98,45 +98,46 @@ public class Swerve_PID extends Command {
     }
 
     // IF we are detecting the april tag
-    if(LimelightHelpers.getTV("limelight-intake")){
+    if (LimelightHelpers.getTV("limelight-intake")) {
       // alignment is still a function of the setpoint
       central_alignment -= m_setpointY;
 
       // Adding P
       x_output += (central_alignment * cfg.kpy);
 
-
       double diff = central_alignment - lastErrorY;
 
       x_output += (diff * cfg.kddiff);
 
-      // if they are not the same, it means 
+      // if they are not the same, it means
       // that we need to apply a derivative error, 'diff'
       // diff = central_alignment - lastErrorY;
 
       // this OPPOSES the proportional value
       // x_output += (diff * cfg.kddiff);
 
-      SmartDashboard.putNumber("Xoutput: ", x_output);
-      SmartDashboard.putNumber("Diff (d): ", diff);
-      SmartDashboard.putNumber("Central alignment 1:", central_alignment);
-      SmartDashboard.putNumber("Central alignment 2:", lastErrorY);
+      // SmartDashboard.putNumber("Xoutput: ", x_output);
+      // SmartDashboard.putNumber("Diff (d): ", diff);
+      // SmartDashboard.putNumber("Central alignment 1:", central_alignment);
+      // SmartDashboard.putNumber("Central alignment 2:", lastErrorY);
     }
 
     SwerveRequest.RobotCentric driverequest = new SwerveRequest.RobotCentric()
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
         .withVelocityY(x_output);
-        // .withVelocityX(sag_output); // Use open-loop control for drive motors
-        if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY < 0) {
-          driverequest = new SwerveRequest.RobotCentric()
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-            .withVelocityY(-0.5);
-        }
-        if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY > 0) {
-          driverequest = new SwerveRequest.RobotCentric()
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-            .withVelocityY(0.5);
-        }
+
+    // // .withVelocityX(sag_output); // Use open-loop control for drive motors
+    // if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY < 0) {
+    //   driverequest = new SwerveRequest.RobotCentric()
+    //       .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+    //       .withVelocityY(-0.5);
+    // }
+    // if (!LimelightHelpers.getTV("limelight-intake") && m_setpointY > 0) {
+    //   driverequest = new SwerveRequest.RobotCentric()
+    //       .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+    //       .withVelocityY(0.5);
+    // }
+
     m_drive.setControl(driverequest);
 
     lastErrorY = central_alignment;

@@ -253,8 +253,8 @@ public class RobotContainer {
     start.onFalse(new IntakePercent_Com(m_intake, 0));
 
     
-    // m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.175641 - 0.01, MaxSpeed, MaxAngularRate, tj));
-    // m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.163957 + 0.0 , MaxSpeed, MaxAngularRate, tj));
+    // m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.165, MaxSpeed, MaxAngularRate, tj));
+    // m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.165, MaxSpeed, MaxAngularRate, tj));
     m_driverController.rightBumper().whileTrue(new SwervePPAlign(drivetrain, "R"));
     m_driverController.leftBumper().whileTrue(new SwervePPAlign(drivetrain, "L"));
 

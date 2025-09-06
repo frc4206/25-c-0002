@@ -145,16 +145,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineSteer;
 
-    /**
-     * Constructs a CTRE SwerveDrivetrain using the specified constants.
-     * <p>
-     * This constructs the underlying hardware devices, so users should not construct
-     * the devices themselves. If they need the devices, they can access them through
-     * getters in the classes.
-     *
-     * @param drivetrainConstants   Drivetrain-wide constants for the swerve drive
-     * @param modules               Constants for each specific module
-     */
     public CommandSwerveDrivetrain(
         SwerveDrivetrainConstants drivetrainConstants,
         SwerveModuleConstants<?, ?, ?>... modules
@@ -177,7 +167,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         // Configure AutoBuilder last
         AutoBuilder.configure(
                 this::getEstimatedPose, // Robot pose supplier
-                this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::resetPoseEstimator, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
                 new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
@@ -409,6 +399,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (!isEnabled) {
             mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-intake");
             m_poseEstimator.resetPose(mt2.pose);
+            resetPose(getEstimatedPose());
         }
     }
 

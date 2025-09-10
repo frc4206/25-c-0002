@@ -6,7 +6,9 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -17,34 +19,46 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.Odometry;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.LimelightHelpers;
+import frc.robot.generated.TunerConstants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 import frc.robot.LimelightHelpers;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
  * Subsystem so it can easily be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
+    private ChassisSpeeds targetChassisSpeeds = new ChassisSpeeds(); 
+    
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -145,16 +159,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineSteer;
 
-    /**
-     * Constructs a CTRE SwerveDrivetrain using the specified constants.
-     * <p>
-     * This constructs the underlying hardware devices, so users should not construct
-     * the devices themselves. If they need the devices, they can access them through
-     * getters in the classes.
-     *
-     * @param drivetrainConstants   Drivetrain-wide constants for the swerve drive
-     * @param modules               Constants for each specific module
-     */
     public CommandSwerveDrivetrain(
         SwerveDrivetrainConstants drivetrainConstants,
         SwerveModuleConstants<?, ?, ?>... modules
@@ -331,7 +335,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
          * This allows us to correct the perspective in case the robot code restarts mid-match.
          * Otherwise, only check and apply the operator perspective if the DS is disabled.
          * This ensures driving behavior doesn't change until an explicit disable event occurs during testing.
-         */
+         */      
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
             DriverStation.getAlliance().ifPresent(allianceColor -> {
                 setOperatorPerspectiveForward(
@@ -407,10 +411,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
 
         if (!isEnabled) {
+            if (mt2 != null){
             mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-intake");
             m_poseEstimator.resetPose(mt2.pose);
             resetPose(getEstimatedPose());
+            }
         }
+
     }
 
     private void startSimThread() {
@@ -427,4 +434,71 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
+
+    // public class SwerveModule {
+    // // --- Module Constants
+    // // private final TunerConstants moduleConstants;
+
+    // // --- Hardware
+    // private final PWMSparkMax driveMotor;
+    // private final Encoder driveEncoder;
+    // private final PWMSparkMax steerMotor;
+    // private final Encoder steerEncoder;
+
+    // // --- Control
+    // private SwerveModuleState desiredState = new SwerveModuleState();
+    // private boolean openLoop = false;
+
+    // // Simple PID feedback controllers run on the roborio
+
+    // private PIDController drivePidController = new PIDController(1, 0, 0);
+    // // (A profiled steering PID controller may give better results by utilizing feedforward.)
+    // private PIDController steerPidController = new PIDController(20, 0, 0.25);
+
+    // public SwerveModule(Translation2d centerOffset, int driveMotorID, int turnMotorID, int cancoderID) {
+    //     // this.TunerConstants = moduleConstants;
+
+    //     driveMotor = new PWMSparkMax(driveMotorID); // drive motor can id
+    //     // driveEncoder = new Encoder(moduleConstants.driveEncoderA, moduleConstants.driveEncoderB);
+    //     // driveEncoder.setDistancePerPulse((Math.PI * 4)/1024/(6.12)); //kWheelCircumference / 1024 / kDriveGearRatio
+    //     steerMotor = new PWMSparkMax(turnMotorID); // turn motor can id
+    //     // steerEncoder = new Encoder(moduleConstants.steerEncoderA, moduleConstants.steerEncoderB);
+    //     CANcoder canCoder = new CANcoder(cancoderID); //cancoder id
+    //     // steerEncoder.setDistancePerPulse(2 * Math.PI / 1024); //2 * Math.PI / 1024
+
+    //     steerPidController.enableContinuousInput(-Math.PI, Math.PI); 
+
+    // }
+    
+    // public void drive(double vxMeters, double vyMeters, double omegaRadians){
+    //     var targetChassisSpeeds = 
+    //         ChassisSpeeds.fromFieldRelativeSpeeds(vxMeters, vyMeters, omegaRadians, getHeading());
+    //     setChassisSpeeds(targetChassisSpeeds, true, false);
+    // }
+    
+
+    // private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(new SwerveModule(TunerConstants.centerOffsetFL, TunerConstants.kFrontLeftDriveMotorId, TunerConstants.kFrontLeftSteerMotorId, TunerConstants.kFrontLeftEncoderId), 
+    // new SwerveModule(TunerConstants.centerOffsetFR, TunerConstants.kFrontRightDriveMotorId, TunerConstants.kFrontRightSteerMotorId, TunerConstants.kFrontRightEncoderId),
+    // new SwerveModule(TunerConstants.centerOffsetBL, TunerConstants.kBackLeftDriveMotorId, TunerConstants.kBackLeftSteerMotorId, TunerConstants.kBackLeftEncoderId),
+    // new SwerveModule(TunerConstants.centerOffsetBR, TunerConstants.kBackRightDriveMotorId, TunerConstants.kBackRightSteerMotorId, TunerConstants.kBackRightEncoderId));
+
+    // public void setChassisSpeeds(
+    //     ChassisSpeeds targetChassisSpeeds, boolean openLoop, boolean steerInPlace) {
+    // setModuleStates(kinematics.toSwerveModuleStates(targetChassisSpeeds), openLoop, steerInPlace);
+    // this.targetChassisSpeeds = targetChassisSpeeds;}
+
+    // public Rotation2d getHeading() {
+    //     return getPose().getRotation();
+    // }
+
+    // double kMaxLinearSpeed = Units.feetToMeters(15.5);
+
+    // public void setModuleStates(
+    //     SwerveModuleState[] desiredStates, boolean openLoop, boolean steerInPlace) {
+    // SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, kMaxLinearSpeed);
+            
+    // // for (int i = 0; i < 4; i++) {
+    // //     swerveMods[i].setDesiredState(desiredStates[i], openLoop, steerInPlace);
+    // // }
+    // }
 }

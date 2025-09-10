@@ -6,10 +6,14 @@ package frc.robot;
 
 import java.util.Optional;
 
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +32,12 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
+
+
+  //photonvision constants and stuff
+  private XboxController controller;
+  private PhotonCamera camera;  
+  private final double VISION_TURN_kP = 0.01; 
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -147,6 +157,49 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    // Calculate drivetrain commands from Joystick values
+
+    //constants that i havent put in their own config file yet 
+    double kMaxLinearSpeed = Units.feetToMeters(15.5);
+    double kMaxAngularSpeed = Units.rotationsToRadians(2);
+
+    double forward = -controller.getLeftY() * kMaxLinearSpeed;
+    double strafe = -controller.getLeftX() * kMaxLinearSpeed;
+    double turn = -controller.getRightX() * kMaxAngularSpeed;
+
+    // Read in relevant data from the Camera
+    boolean targetVisible = false;
+    double targetYaw = 0.0;
+    var results = camera.getAllUnreadResults();
+    if (!results.isEmpty()) {
+        // Camera processed a new frame since last
+        // Get the last one in the list.
+        var result = results.get(results.size() - 1);
+        if (result.hasTargets()) {
+            // At least one AprilTag was seen by the camera
+            for (var target : result.getTargets()) {
+                if (target.getFiducialId() == 7) {
+                    // Found Tag 7, record its information
+                    targetYaw = target.getYaw();
+                    targetVisible = true;
+                }
+            }
+        }
+    }
+
+    // Auto-align when requested
+    if (controller.getAButton() && targetVisible) {
+        // Driver wants auto-alignment to tag 7
+        // And, tag 7 is in sight, so we can turn toward it.
+        // Override the driver's turn command with an automatic one that turns toward the tag.
+        turn = -1.0 * targetYaw * VISION_TURN_kP * kMaxAngularSpeed;
+    }
+
+    // Command drivetrain motors based on target speeds
+    m_robotContainer.drivetrain.drive(forward, strafe, turn);
+
+    // Put debug information to the dashboard
+    SmartDashboard.putBoolean("Vision Target Visible", targetVisible);
   }
 
   @Override

@@ -57,8 +57,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
  * Subsystem so it can easily be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
-    private ChassisSpeeds targetChassisSpeeds = new ChassisSpeeds(); 
-    
+
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -435,70 +434,5 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
 
-    // public class SwerveModule {
-    // // --- Module Constants
-    // // private final TunerConstants moduleConstants;
 
-    // // --- Hardware
-    // private final PWMSparkMax driveMotor;
-    // private final Encoder driveEncoder;
-    // private final PWMSparkMax steerMotor;
-    // private final Encoder steerEncoder;
-
-    // // --- Control
-    // private SwerveModuleState desiredState = new SwerveModuleState();
-    // private boolean openLoop = false;
-
-    // // Simple PID feedback controllers run on the roborio
-
-    // private PIDController drivePidController = new PIDController(1, 0, 0);
-    // // (A profiled steering PID controller may give better results by utilizing feedforward.)
-    // private PIDController steerPidController = new PIDController(20, 0, 0.25);
-
-    // public SwerveModule(Translation2d centerOffset, int driveMotorID, int turnMotorID, int cancoderID) {
-    //     // this.TunerConstants = moduleConstants;
-
-    //     driveMotor = new PWMSparkMax(driveMotorID); // drive motor can id
-    //     // driveEncoder = new Encoder(moduleConstants.driveEncoderA, moduleConstants.driveEncoderB);
-    //     // driveEncoder.setDistancePerPulse((Math.PI * 4)/1024/(6.12)); //kWheelCircumference / 1024 / kDriveGearRatio
-    //     steerMotor = new PWMSparkMax(turnMotorID); // turn motor can id
-    //     // steerEncoder = new Encoder(moduleConstants.steerEncoderA, moduleConstants.steerEncoderB);
-    //     CANcoder canCoder = new CANcoder(cancoderID); //cancoder id
-    //     // steerEncoder.setDistancePerPulse(2 * Math.PI / 1024); //2 * Math.PI / 1024
-
-    //     steerPidController.enableContinuousInput(-Math.PI, Math.PI); 
-
-    // }
-    
-    // public void drive(double vxMeters, double vyMeters, double omegaRadians){
-    //     var targetChassisSpeeds = 
-    //         ChassisSpeeds.fromFieldRelativeSpeeds(vxMeters, vyMeters, omegaRadians, getHeading());
-    //     setChassisSpeeds(targetChassisSpeeds, true, false);
-    // }
-    
-
-    // private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(new SwerveModule(TunerConstants.centerOffsetFL, TunerConstants.kFrontLeftDriveMotorId, TunerConstants.kFrontLeftSteerMotorId, TunerConstants.kFrontLeftEncoderId), 
-    // new SwerveModule(TunerConstants.centerOffsetFR, TunerConstants.kFrontRightDriveMotorId, TunerConstants.kFrontRightSteerMotorId, TunerConstants.kFrontRightEncoderId),
-    // new SwerveModule(TunerConstants.centerOffsetBL, TunerConstants.kBackLeftDriveMotorId, TunerConstants.kBackLeftSteerMotorId, TunerConstants.kBackLeftEncoderId),
-    // new SwerveModule(TunerConstants.centerOffsetBR, TunerConstants.kBackRightDriveMotorId, TunerConstants.kBackRightSteerMotorId, TunerConstants.kBackRightEncoderId));
-
-    // public void setChassisSpeeds(
-    //     ChassisSpeeds targetChassisSpeeds, boolean openLoop, boolean steerInPlace) {
-    // setModuleStates(kinematics.toSwerveModuleStates(targetChassisSpeeds), openLoop, steerInPlace);
-    // this.targetChassisSpeeds = targetChassisSpeeds;}
-
-    // public Rotation2d getHeading() {
-    //     return getPose().getRotation();
-    // }
-
-    // double kMaxLinearSpeed = Units.feetToMeters(15.5);
-
-    // public void setModuleStates(
-    //     SwerveModuleState[] desiredStates, boolean openLoop, boolean steerInPlace) {
-    // SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, kMaxLinearSpeed);
-            
-    // // for (int i = 0; i < 4; i++) {
-    // //     swerveMods[i].setDesiredState(desiredStates[i], openLoop, steerInPlace);
-    // // }
-    // }
 }

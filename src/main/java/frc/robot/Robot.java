@@ -71,15 +71,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    Transform3d targetYaw; 
+    //uses photonvision to get a bunch of data from the camera
+    Transform3d targetDistance; 
     var results = camera.getAllUnreadResults(); 
     if (!results.isEmpty()){
       var result = results.get(results.size()-1);
       // if (results.hasTargets()){
         for (var target : result.getTargets()) {
         if (target.getFiducialId() == 19) {
-          targetYaw = target.getBestCameraToTarget();
-          System.out.println(targetYaw);
+          targetDistance = target.getBestCameraToTarget();
+          System.out.println(targetDistance);
         }
       // }
       }

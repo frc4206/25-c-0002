@@ -76,13 +76,11 @@ public class Robot extends TimedRobot {
     var results = camera.getAllUnreadResults(); 
     if (!results.isEmpty()){
       var result = results.get(results.size()-1);
-      // if (results.hasTargets()){
         for (var target : result.getTargets()) {
-        if (target.getFiducialId() == 19) {
+        // if (target.getFiducialId() == 19) {
           targetDistance = target.getBestCameraToTarget();
-          System.out.println(targetDistance);
-        }
-      // }
+          // System.out.println(target.getFiducialId());
+        // }
       }
     }
     // Runs the Scheduler. This is responsible for polling buttons, adding
@@ -110,7 +108,7 @@ public class Robot extends TimedRobot {
 
     }
     // print all the time just to see what is going on
-    SmartDashboard.putString("Claw Subsystem State", Claw_Sub.getClawState().toString());
+    // SmartDashboard.putString("Claw Subsystem State", Claw_Sub.getClawState().toString());
 
   }
 

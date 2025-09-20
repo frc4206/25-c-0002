@@ -358,7 +358,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
 
 
-        SmartDashboard.putNumber("tag area", tagarea);
+        // SmartDashboard.putNumber("tag area", tagarea);
         
         double[] distPose = LimelightHelpers.getCameraPose_TargetSpace("limelight-intake");
         
@@ -393,7 +393,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             mt2Pub.set(mt2.pose);
             
         }
-        SmartDashboard.putBoolean("DoRejectUpdate", doRejectUpdate);
+        // SmartDashboard.putBoolean("DoRejectUpdate", doRejectUpdate);
         // SmartDashboard.putNumber("distance to tag", Math.sqrt(Math.abs(distPose[0] * distPose[0] + distPose[1] * distPose[1])));
 
         odo.update(getPose().getRotation(), this.getState().ModulePositions);
@@ -406,7 +406,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         // SmartDashboard.putBoolean("mt2 null", (mt2 == null));
 
         // SmartDashboard.putBoolean("ll test", LimelightHelpers.getTV("limelight-intake"));
-        SmartDashboard.putNumber("gyro angle", getPigeon2().getYaw().getValueAsDouble());
+        // SmartDashboard.putNumber("gyro angle", getPigeon2().getYaw().getValueAsDouble());
 
 
         if (!isEnabled) {

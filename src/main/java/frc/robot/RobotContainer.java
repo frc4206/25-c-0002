@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoLineUp;
+import frc.robot.commands.PhvAutoLineUp;
 import frc.robot.commands.SetClawStateCommand;
 import frc.robot.commands.Swerve_PID;
 import frc.robot.commands.moveinauto;
@@ -249,8 +250,10 @@ public class RobotContainer {
     start.onFalse(new IntakePercent_Com(m_intake, 0));
 
     
-    m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.175641 - 0.01, MaxSpeed, MaxAngularRate, tj));
-    m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.163957 + 0.0 , MaxSpeed, MaxAngularRate, tj));
+    // m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.175641 - 0.01, MaxSpeed, MaxAngularRate, tj));
+    // m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.163957 + 0.0 , MaxSpeed, MaxAngularRate, tj));
+    m_driverController.leftBumper().whileTrue(new PhvAutoLineUp(drivetrain, -0.175641- 0.01, MaxSpeed, MaxAngularRate, tj));
+    m_driverController.rightBumper().whileTrue(new PhvAutoLineUp(drivetrain, 0.163957 +0.0, MaxSpeed, MaxAngularRate, tj));
 
     m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 

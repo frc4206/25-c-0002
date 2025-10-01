@@ -8,9 +8,10 @@ kAcceleration = 380.0
 kJerk = 2200.0
 
 [slot0]
-kp = 8.0
-ki = 0.2
-kd = 0.1
-ks = 0.25
-kv = 0.12
-ka = 0.01
+kp = 2.0
+ki = 0.0
+kd = 0.0
+kg = 0.02
+ks = 0.0
+kv = 0.0
+ka = 0.0

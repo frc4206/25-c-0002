@@ -37,6 +37,8 @@ public class ConfigTalonFX {
         public double ki; // integral
         public double kd; // derivative
 
+        public double kg;
+
         public double ks;
         public double kv;
         public double ka;
@@ -80,6 +82,7 @@ public class ConfigTalonFX {
         talonConfigs.Slot0.kP = bs.kp;
         talonConfigs.Slot0.kI = bs.ki;
         talonConfigs.Slot0.kD = bs.kd;
+        talonConfigs.Slot0.kG = bs.kg;
     }
 
     public void setSlot0SVA(Slot s) {

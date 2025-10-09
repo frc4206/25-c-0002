@@ -410,10 +410,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
 
         if (!isEnabled) {
+<<<<<<< HEAD
             if (mt2 != null){
             mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-intake");
             m_poseEstimator.resetPose(mt2.pose);
             resetPose(getEstimatedPose());
+=======
+            if (mt2 != null) {
+                mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-intake");
+                m_poseEstimator.resetPose(mt2.pose);
+                resetPose(getEstimatedPose());
+>>>>>>> 3eca2c7d299e08331c80670f9953b80448fa5bc0
             }
         }
 

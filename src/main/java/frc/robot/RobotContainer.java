@@ -48,6 +48,7 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -74,228 +75,269 @@ import org.team4206.battleaid.common.TunedJoystick.ResponseCurve;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  public final Arm_Sub.Config m_armConfig = new Arm_Sub.Config("Arm.toml");
-  public final Claw_Sub.Config m_clawConfig = new Claw_Sub.Config("Claw.toml");
-  public final Climber_Sub.Config m_climberCfg = new Climber_Sub.Config("Climber.toml");
-  public final Elevator_Sub.Config m_elevatorCfg = new Elevator_Sub.Config("Elevator.toml");
-  public final Intake_Sub.Config m_intakeCfg = new Intake_Sub.Config("Intake.toml");
+    // The robot's subsystems and commands are defined here...
+    public final Arm_Sub.Config m_armConfig = new Arm_Sub.Config("Arm.toml");
+    public final Claw_Sub.Config m_clawConfig = new Claw_Sub.Config("Claw.toml");
+    public final Climber_Sub.Config m_climberCfg = new Climber_Sub.Config("Climber.toml");
+    public final Elevator_Sub.Config m_elevatorCfg = new Elevator_Sub.Config("Elevator.toml");
+    public final Intake_Sub.Config m_intakeCfg = new Intake_Sub.Config("Intake.toml");
 
-  final Arm_Sub m_arm = new Arm_Sub(m_armConfig);
-  final Claw_Sub m_claw = new Claw_Sub(m_clawConfig);
-  final Climber_Sub m_climber = new Climber_Sub(m_climberCfg);
-  final Elevator_Sub m_elevator = new Elevator_Sub(m_elevatorCfg);
-  final Intake_Sub m_intake = new Intake_Sub(m_intakeCfg);
+    final Arm_Sub m_arm = new Arm_Sub(m_armConfig);
+    final Claw_Sub m_claw = new Claw_Sub(m_clawConfig);
+    final Climber_Sub m_climber = new Climber_Sub(m_climberCfg);
+    final Elevator_Sub m_elevator = new Elevator_Sub(m_elevatorCfg);
+    final Intake_Sub m_intake = new Intake_Sub(m_intakeCfg);
 
-  private final CommandXboxController m_operatorController = new CommandXboxController(1);
-  private final CommandXboxController m_armController = new CommandXboxController(2);
-  // private final CommandXboxController m_clawController = new
-  // CommandXboxController(2);
-  // private final CommandXboxController m_climberController = new
-  // CommandXboxController(3);
-  private final CommandXboxController m_elevatorController = new CommandXboxController(4);
-  // private final CommandXboxController m_intakeController = new
-  // CommandXboxController(5);
+    private final CommandXboxController m_operatorController = new CommandXboxController(1);
+    private final CommandXboxController m_armController = new CommandXboxController(2);
+    // private final CommandXboxController m_clawController = new
+    // CommandXboxController(2);
+    // private final CommandXboxController m_climberController = new
+    // CommandXboxController(3);
+    private final CommandXboxController m_elevatorController = new CommandXboxController(4);
+    // private final CommandXboxController m_intakeController = new
+    // CommandXboxController(5);
 
-  private final SendableChooser<Command> autoChooser;
+    private final SendableChooser<Command> autoChooser;
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController = new CommandXboxController(
-      OperatorConstants.kDriverControllerPort);
+    // Replace with CommandPS4Controller or CommandJoystick if needed
+    private final CommandXboxController m_driverController = new CommandXboxController(
+            OperatorConstants.kDriverControllerPort);
 
-  TunedJoystick tj = new TunedJoystick(m_driverController.getHID())
-      .setDeadzone(0.1)
-      .useResponseCurve(ResponseCurve.QUADRATIC)
-      .setPeriodMilliseconds(10);
+    TunedJoystick tj = new TunedJoystick(m_driverController.getHID())
+            .setDeadzone(0.1)
+            .useResponseCurve(ResponseCurve.QUADRATIC)
+            .setPeriodMilliseconds(10);
 
-  /* SWERVE */
-  private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-  private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max
-                                                                                    // angular velocity
+    /* SWERVE */
+    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
+                                                                                      // max
+                                                                                      // angular velocity
 
-  /* Setting up bindings for necessary control of the swerve drive platform */
-  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+    /* Setting up bindings for necessary control of the swerve drive platform */
+    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-  private final Telemetry logger = new Telemetry(MaxSpeed);
+    private final Telemetry logger = new Telemetry(MaxSpeed);
 
-  public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
-  public RobotContainer() {
-    // PATHPLANNER COMMANDS
-    // Arm Commands
-    // NamedCommands.registerCommand("L4Arm", new Arm_PID_Com(m_arm,
-    // m_arm.armConfig.l4ScoringPosition));
-    // NamedCommands.registerCommand("L3Arm", new Arm_PID_Com(m_arm,
-    // m_arm.armConfig.l3ScoringPosition));
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        // PATHPLANNER COMMANDS
+        // Arm Commands
+        // NamedCommands.registerCommand("L4Arm", new Arm_PID_Com(m_arm,
+        // m_arm.armConfig.l4ScoringPosition));
+        // NamedCommands.registerCommand("L3Arm", new Arm_PID_Com(m_arm,
+        // m_arm.armConfig.l3ScoringPosition));
 
-    // // Elevator Commands
-    // NamedCommands.registerCommand("L4Elevator",
-    // new Elevator_PID_Com(m_elevator,
-    // m_elevator.elevatorConfig.l4ScoringPosition));
-    // NamedCommands.registerCommand("L3Elevator",
-    // new Elevator_PID_Com(m_elevator,
-    // m_elevator.elevatorConfig.l3ScoringPosition));
-    // NamedCommands.registerCommand("IntakeElevator",
-    // new Elevator_PID_Com(m_elevator,
-    // m_elevator.elevatorConfig.sourceIntakePosition));
+        // // Elevator Commands
+        // NamedCommands.registerCommand("L4Elevator",
+        // new Elevator_PID_Com(m_elevator,
+        // m_elevator.elevatorConfig.l4ScoringPosition));
+        // NamedCommands.registerCommand("L3Elevator",
+        // new Elevator_PID_Com(m_elevator,
+        // m_elevator.elevatorConfig.l3ScoringPosition));
+        // NamedCommands.registerCommand("IntakeElevator",
+        // new Elevator_PID_Com(m_elevator,
+        // m_elevator.elevatorConfig.sourceIntakePosition));
 
-    // // Claw Commands
-    NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(0.5)).withTimeout(0.5));
-    NamedCommands.registerCommand("ScoreReact", new ClawPercent_Com(m_claw, m_clawConfig.outtakePercent));
-    // NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw,
-    // m_claw.clawConfig.intakePercent));
-    NamedCommands.registerCommand("Intake",
-        new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(0.5));
+        // // Claw Commands
+        NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(0.5)).withTimeout(0.5));
+        NamedCommands.registerCommand("ScoreReact", new ClawPercent_Com(m_claw, m_clawConfig.outtakePercent));
+        // NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw,
+        // m_claw.clawConfig.intakePercent));
+        NamedCommands.registerCommand("Intake",
+                new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(0.5));
 
-    NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(0.7));
-    NamedCommands.registerCommand("L4ScoreReact", new L4_scoring_React_Com(m_arm, m_elevator));
-    NamedCommands.registerCommand("CoralIntakeReact", new Coral_Intake_React_Com(m_arm, m_claw, m_elevator));
+        NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(0.7));
+        NamedCommands.registerCommand("L4ScoreReact", new L4_scoring_React_Com(m_arm, m_elevator));
+        NamedCommands.registerCommand("CoralIntakeReact", new Coral_Intake_React_Com(m_arm, m_claw, m_elevator));
 
-    NamedCommands.registerCommand("CoralIntake", new Coral_Intake_Com(m_arm, m_claw, m_elevator).withTimeout(0.5));
-    // NamedCommands.registerCommand("RunEndEffector", new ClawPercent_Com(m_claw,
-    // m_clawConfig.intakePercent).withTimeout(1));
-    NamedCommands.registerCommand("NeutralizeEndEffector",
-        new SetClawStateCommand(m_claw, ClawState.EXHAUSTING).withTimeout(1));
-    // new Swerve_PID(drivetrain, -0.165 - 0.0127, MaxSpeed, MaxAngularRate, tj)
-    NamedCommands.registerCommand("LeftLineUp", new AutoLineUp(drivetrain, -0.165, MaxSpeed, MaxAngularRate, tj));
-    NamedCommands.registerCommand("RightLineUp", new AutoLineUp(drivetrain, 0.165, MaxSpeed, MaxAngularRate, tj));
-    NamedCommands.registerCommand("FloorIntakeUp", new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
+        NamedCommands.registerCommand("CoralIntake", new Coral_Intake_Com(m_arm, m_claw, m_elevator).withTimeout(0.5));
+        // NamedCommands.registerCommand("RunEndEffector", new ClawPercent_Com(m_claw,
+        // m_clawConfig.intakePercent).withTimeout(1));
+        NamedCommands.registerCommand("NeutralizeEndEffector",
+                new SetClawStateCommand(m_claw, ClawState.EXHAUSTING).withTimeout(1));
+        // new Swerve_PID(drivetrain, -0.165 - 0.0127, MaxSpeed, MaxAngularRate, tj)
+        NamedCommands.registerCommand("LeftLineUp", new AutoLineUp(drivetrain, -0.165, MaxSpeed, MaxAngularRate, tj));
+        NamedCommands.registerCommand("RightLineUp", new AutoLineUp(drivetrain, 0.165, MaxSpeed, MaxAngularRate, tj));
+        NamedCommands.registerCommand("FloorIntakeUp", new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
 
-    int[] twenty2 = { 22 };
-    // NamedCommands.registerCommand("TAG22", new InstantCommand(() ->
-    // LimelightHelpers.SetFiducialIDFiltersOverride("limelight-intake", twenty2)));
+        int[] twenty2 = { 22 };
+        // NamedCommands.registerCommand("TAG22", new InstantCommand(() ->
+        // LimelightHelpers.SetFiducialIDFiltersOverride("limelight-intake", twenty2)));
 
-    NamedCommands.registerCommand("PivotIntake", new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
-    NamedCommands.registerCommand("ElevatorIntake",
-        new Elevator_PID_Com(m_elevator, m_elevatorCfg.sourceIntakePosition));
-    NamedCommands.registerCommand("ResetClaw", new SetClawStateCommand(m_claw, ClawState.NEUTRAL).withTimeout(1));
+        NamedCommands.registerCommand("PivotIntake", new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
+        NamedCommands.registerCommand("ElevatorIntake",
+                new Elevator_PID_Com(m_elevator, m_elevatorCfg.sourceIntakePosition));
+        NamedCommands.registerCommand("ResetClaw", new SetClawStateCommand(m_claw, ClawState.NEUTRAL).withTimeout(1));
 
-    // Configure the trigger bindings
-    configureBindings();
+        // Configure the trigger bindings
+        configureBindings();
 
-    // For convenience a programmer could change this when going to competition.
-    boolean isCompetition = true;
+        // For convenience a programmer could change this when going to competition.
+        boolean isCompetition = true;
 
-    // Build an auto chooser. This will use Commands.none() as the default option.
-    // As an example, this will only show autos that start with "comp" while at
-    // competition as defined by the programmer
-    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
-        (stream) -> isCompetition
-            ? stream.filter(auto -> auto.getName().startsWith(""))
-            : stream);
+        // Build an auto chooser. This will use Commands.none() as the default option.
+        // As an example, this will only show autos that start with "comp" while at
+        // competition as defined by the programmer
+        autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+                (stream) -> isCompetition
+                        ? stream.filter(auto -> auto.getName().startsWith(""))
+                        : stream);
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+        SmartDashboard.putData("Auto Chooser", autoChooser);
 
-  }
+    }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be
-   * created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-   * an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link
-   * CommandXboxController
-   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or
-   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureBindings() {
-    drivetrain.setDefaultCommand(
-        drivetrain.applyRequest(() -> {
+    /**
+     * Use this method to define your trigger->command mappings. Triggers can be
+     * created via the
+     * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+     * an arbitrary
+     * predicate, or via the named factories in {@link
+     * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
+     * {@link
+     * CommandXboxController
+     * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+     * PS4} controllers or
+     * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+     * joysticks}.
+     */
+    private void configureBindings() {
+        drivetrain.setDefaultCommand(
+                drivetrain.applyRequest(() -> {
 
-          
+                    double resistance = 0.017d;
+                    double voltageFloor = 10.0d;
 
-          return drive.withVelocityX(-tj.getLeftY() * MaxSpeed)
-                  .withVelocityY(-tj.getLeftX() * MaxSpeed)
-                  .withRotationalRate(-tj.getRightX() * MaxAngularRate); 
-          })
-    );
+                    double y = tj.getLeftY();
+                    double x = tj.getLeftX();
 
-    m_driverController.back().and(m_driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-    m_driverController.back().and(m_driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+                    double inputMag = Math.sqrt(x * x + y * y);
+                    double angle = Math.atan2(y, x);
 
-    m_driverController.start().and(m_driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-    m_driverController.start().and(m_driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+                    double num_motors = 4;
+                    double motorCurrentLimit = 50;
 
-    m_driverController.leftStick().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-    m_driverController.a().onTrue(new InstantCommand(() -> drivetrain.getPigeon2().reset()));
+                    double currentVoltage = 12;
+                    double expectedVoltageDrop = (num_motors * motorCurrentLimit) * resistance;
+                    double expectedVoltage = currentVoltage - expectedVoltageDrop;
 
-    drivetrain.registerTelemetry(logger::telemeterize);
+                    double outputMagnitude = inputMag;
+                    if (expectedVoltage < voltageFloor) {
+                        double numerator = currentVoltage - voltageFloor;
+                        double denominator = currentVoltage - expectedVoltage;
+                        double magnitudeMultiplier = numerator / denominator;
 
-    // Joystick commands
-    m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController));
+                        System.out.printf("Voltage adjust: %.3f / %.3f = %.3f%n",
+                                numerator, denominator, magnitudeMultiplier);
 
-    m_operatorController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
-    m_operatorController.leftBumper().whileTrue(new ClawPercent_Com(m_claw, m_clawConfig.outtakePercent));
+                        outputMagnitude = inputMag * magnitudeMultiplier;
+                    }
 
+                    System.out.printf("Magnitudes: input = %.3f, output = %.3f%n",
+                            inputMag, outputMagnitude);
 
+                    // convert magnitude back into x and y and also remember plus or minus
+                    double x_out = outputMagnitude * Math.cos(angle);
+                    double y_out = outputMagnitude * Math.sin(angle);
 
-    m_operatorController.pov(0).onTrue(new SetClawStateCommand(m_claw, ClawState.EXHAUSTING));
-    // m_operatorController.pov(90).onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
-    m_operatorController.pov(270).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.algePosition));
-    m_operatorController.pov(180).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.intakePosition));
+                    System.out.printf("Output vector: x = %.3f, y = %.3f%n\n\n",
+                            x_out, y_out);
 
-    m_operatorController.x().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0)))); 
-    m_operatorController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
-    m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
-    m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
+                    return drive.withVelocityX(-y_out * MaxSpeed)
+                            .withVelocityY(-x_out * MaxSpeed)
+                            .withRotationalRate(-tj.getRightX() * MaxAngularRate);
+                }));
 
-    m_operatorController.rightTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.l1ScoringPosition));
-    m_operatorController.leftTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
-    m_operatorController.rightStick().onTrue(new InstantCommand(() -> m_arm.setArms()));
+        m_driverController.back().and(m_driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        m_driverController.back().and(m_driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
 
-    // m_operatorController.getHID().getRawButton(8).onTrue(new IntakePercent_Com(m_intake, .7));
-    JoystickButton back = new JoystickButton(m_operatorController.getHID(), 7);
-    JoystickButton start = new JoystickButton(m_operatorController.getHID(), 8);
-    back.onTrue(new IntakePercent_Com(m_intake, .25));
-    start.onTrue(new IntakePercent_Com(m_intake, -.7));
-    back.onFalse(new IntakePercent_Com(m_intake, 0));
-    start.onFalse(new IntakePercent_Com(m_intake, 0));
+        m_driverController.start().and(m_driverController.y())
+                .whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        m_driverController.start().and(m_driverController.x())
+                .whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-    
-    // m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain, -0.175641 - 0.01, MaxSpeed, MaxAngularRate, tj));
-    // m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain, 0.163957 + 0.0 , MaxSpeed, MaxAngularRate, tj));
-    m_driverController.leftBumper().whileTrue(new PhvAutoLineUp(drivetrain, -0.175641- 0.01, MaxSpeed, MaxAngularRate, tj));
-    m_driverController.rightBumper().whileTrue(new PhvAutoLineUp(drivetrain, 0.163957 +0.0, MaxSpeed, MaxAngularRate, tj));
+        m_driverController.leftStick().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        m_driverController.a().onTrue(new InstantCommand(() -> drivetrain.getPigeon2().reset()));
 
-    m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
+        drivetrain.registerTelemetry(logger::telemeterize);
 
+        // Joystick commands
+        m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController));
 
-    m_driverController.b().onTrue(new InstantCommand(() -> SignalLogger.start()));
-    m_driverController.pov(0).onTrue(new InstantCommand(() -> SignalLogger.stop()));
-    // m_driverController.a().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(0.1)));
+        m_operatorController.rightBumper().onTrue(new Coral_Intake_Com(m_arm, m_claw, m_elevator));
+        m_operatorController.leftBumper().whileTrue(new ClawPercent_Com(m_claw, m_clawConfig.outtakePercent));
 
-    m_elevatorController.a().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l2ScoringPosition));
-    m_elevatorController.b().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l3ScoringPosition));
-    m_elevatorController.y().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
+        m_operatorController.pov(0).onTrue(new SetClawStateCommand(m_claw, ClawState.EXHAUSTING));
+        // m_operatorController.pov(90).onTrue(new InstantCommand(() ->
+        // m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
+        m_operatorController.pov(270).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.algePosition));
+        m_operatorController.pov(180).onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.intakePosition));
 
-    m_armController.a().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
-    m_armController.b().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l4ScoringPosition));
-    m_armController.y().onTrue(new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
+        m_operatorController.x().onTrue(new InstantCommand(() -> m_claw.clawMotor1.setControl(new DutyCycleOut(0))));
+        m_operatorController.a().onTrue(new L2_scoring_Com(m_arm, m_claw, m_elevator));
+        m_operatorController.b().onTrue(new L3_scoring_Com(m_arm, m_claw, m_elevator));
+        m_operatorController.y().onTrue(new L4_scoring_Com(m_arm, m_claw, m_elevator));
 
-    m_armController.rightBumper().onTrue(m_arm.runOnce(() -> m_arm.armMotor1.set(0.2)));
-    m_armController.rightBumper().onFalse(m_arm.runOnce(() -> m_arm.armMotor1.set(0)));
+        m_operatorController.rightTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.l1ScoringPosition));
+        m_operatorController.leftTrigger().onTrue(new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
+        m_operatorController.rightStick().onTrue(new InstantCommand(() -> m_arm.setArms()));
 
-    m_armController.leftBumper().onTrue(m_arm.runOnce(() -> m_arm.armMotor1.set(-0.2)));
-    m_armController.leftBumper().onFalse(m_arm.runOnce(() -> m_arm.armMotor1.set(0)));
-  }
+        // m_operatorController.getHID().getRawButton(8).onTrue(new
+        // IntakePercent_Com(m_intake, .7));
+        JoystickButton back = new JoystickButton(m_operatorController.getHID(), 7);
+        JoystickButton start = new JoystickButton(m_operatorController.getHID(), 8);
+        back.onTrue(new IntakePercent_Com(m_intake, .25));
+        start.onTrue(new IntakePercent_Com(m_intake, -.7));
+        back.onFalse(new IntakePercent_Com(m_intake, 0));
+        start.onFalse(new IntakePercent_Com(m_intake, 0));
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return autoChooser.getSelected();
-  }
+        // m_driverController.leftBumper().whileTrue(new Swerve_PID(drivetrain,
+        // -0.175641 - 0.01, MaxSpeed, MaxAngularRate, tj));
+        // m_driverController.rightBumper().whileTrue(new Swerve_PID(drivetrain,
+        // 0.163957 + 0.0 , MaxSpeed, MaxAngularRate, tj));
+        m_driverController.leftBumper()
+                .whileTrue(new PhvAutoLineUp(drivetrain, -0.175641 - 0.01, MaxSpeed, MaxAngularRate, tj));
+        m_driverController.rightBumper()
+                .whileTrue(new PhvAutoLineUp(drivetrain, 0.163957 + 0.0, MaxSpeed, MaxAngularRate, tj));
+
+        m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
+
+        m_driverController.b().onTrue(new InstantCommand(() -> SignalLogger.start()));
+        m_driverController.pov(0).onTrue(new InstantCommand(() -> SignalLogger.stop()));
+        // m_driverController.a().whileTrue(drivetrain.applyRequest(() ->
+        // drive.withVelocityX(0.1)));
+
+        m_elevatorController.a().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l2ScoringPosition));
+        m_elevatorController.b().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l3ScoringPosition));
+        m_elevatorController.y().onTrue(new Elevator_MotionMagic_Com(m_elevator, m_elevatorCfg.l4ScoringPosition));
+
+        m_armController.a().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l2ScoringPosition));
+        m_armController.b().onTrue(new Arm_PID_Com(m_arm, m_armConfig.l4ScoringPosition));
+        m_armController.y().onTrue(new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
+
+        m_armController.rightBumper().onTrue(m_arm.runOnce(() -> m_arm.armMotor1.set(0.2)));
+        m_armController.rightBumper().onFalse(m_arm.runOnce(() -> m_arm.armMotor1.set(0)));
+
+        m_armController.leftBumper().onTrue(m_arm.runOnce(() -> m_arm.armMotor1.set(-0.2)));
+        m_armController.leftBumper().onFalse(m_arm.runOnce(() -> m_arm.armMotor1.set(0)));
+    }
+
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        // An example command will be run in autonomous
+        return autoChooser.getSelected();
+    }
 }

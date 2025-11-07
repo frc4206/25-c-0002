@@ -2,6 +2,8 @@ package frc.robot.generated;
 
 import static edu.wpi.first.units.Units.*;
 
+import org.team4206.battleaid.common.LoadableConfig;
+
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.hardware.*;
@@ -65,9 +67,28 @@ public class TunerConstants {
     // This needs to be tuned to your individual robot
     private static final Current kSlipCurrent = Amps.of(120.0);
 
+    // public static class MotorConfig extends LoadableConfig {
+    //     public int amps;
+    //     public MotorConfig(String filename){
+    //         super.load(this, filename);
+    //         LoadableConfig.print(this);
+    //     }
+    // }
+
+    // TunerConstants.MotorConfig motor_config = new TunerConstants.MotorConfig("motor-config.toml");
+
     // Initial configs for the drive and steer motors and the azimuth encoder; these cannot be null.
     // Some configs will be overwritten; check the `with*InitialConfigs()` API documentation.
-    private static final TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration();
+    private static final TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration()
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
+            .withStatorCurrentLimit(Amps.of(30))
+            .withStatorCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(Amps.of(30))
+            .withSupplyCurrentLowerLimit(Amps.of(30))
+            .withSupplyCurrentLowerTime(0.0)
+            .withSupplyCurrentLimitEnable(true)
+        );
     private static final TalonFXConfiguration steerInitialConfigs = new TalonFXConfiguration()
         .withCurrentLimits(
             new CurrentLimitsConfigs()
@@ -136,7 +157,6 @@ public class TunerConstants {
             .withSteerFrictionVoltage(kSteerFrictionVoltage)
             .withDriveFrictionVoltage(kDriveFrictionVoltage);
 
-
     // Front Left
     public static final int kFrontLeftDriveMotorId = 11;
     public static final int kFrontLeftSteerMotorId = 12;
@@ -203,6 +223,8 @@ public class TunerConstants {
             kBackRightSteerMotorId, kBackRightDriveMotorId, kBackRightEncoderId, kBackRightEncoderOffset,
             kBackRightXPos, kBackRightYPos, kInvertRightSide, kBackRightSteerMotorInverted, kBackRightEncoderInverted
         );
+
+    
 
     /**
      * Creates a CommandSwerveDrivetrain instance.

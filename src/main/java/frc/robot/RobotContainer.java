@@ -87,14 +87,15 @@ public class RobotContainer {
   final Elevator_Sub m_elevator = new Elevator_Sub(m_elevatorCfg);
   final Intake_Sub m_intake = new Intake_Sub(m_intakeCfg);
 
-  private final CommandXboxController m_operatorController = new CommandXboxController(1); 
+  private final CommandXboxController m_operatorController = new CommandXboxController(1);
   private final CommandXboxController m_armController = new CommandXboxController(2);
-  // private final CommandXboxController m_clawController = new CommandXboxController(2);
-  // private final CommandXboxController m_climberController = new CommandXboxController(3);
+  // private final CommandXboxController m_clawController = new
+  // CommandXboxController(2);
+  // private final CommandXboxController m_climberController = new
+  // CommandXboxController(3);
   private final CommandXboxController m_elevatorController = new CommandXboxController(4);
-  // private final CommandXboxController m_intakeController = new CommandXboxController(5);
-
-  
+  // private final CommandXboxController m_intakeController = new
+  // CommandXboxController(5);
 
   private final SendableChooser<Command> autoChooser;
 
@@ -103,9 +104,9 @@ public class RobotContainer {
       OperatorConstants.kDriverControllerPort);
 
   TunedJoystick tj = new TunedJoystick(m_driverController.getHID())
-    .setDeadzone(0.1)
-    .useResponseCurve(ResponseCurve.QUADRATIC)
-    .setPeriodMilliseconds(10);
+      .setDeadzone(0.1)
+      .useResponseCurve(ResponseCurve.QUADRATIC)
+      .setPeriodMilliseconds(10);
 
   /* SWERVE */
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -128,42 +129,52 @@ public class RobotContainer {
   public RobotContainer() {
     // PATHPLANNER COMMANDS
     // Arm Commands
-    // NamedCommands.registerCommand("L4Arm", new Arm_PID_Com(m_arm, m_arm.armConfig.l4ScoringPosition));
-    // NamedCommands.registerCommand("L3Arm", new Arm_PID_Com(m_arm, m_arm.armConfig.l3ScoringPosition));
+    // NamedCommands.registerCommand("L4Arm", new Arm_PID_Com(m_arm,
+    // m_arm.armConfig.l4ScoringPosition));
+    // NamedCommands.registerCommand("L3Arm", new Arm_PID_Com(m_arm,
+    // m_arm.armConfig.l3ScoringPosition));
 
     // // Elevator Commands
     // NamedCommands.registerCommand("L4Elevator",
-    //     new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.l4ScoringPosition));
+    // new Elevator_PID_Com(m_elevator,
+    // m_elevator.elevatorConfig.l4ScoringPosition));
     // NamedCommands.registerCommand("L3Elevator",
-    //     new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.l3ScoringPosition));
+    // new Elevator_PID_Com(m_elevator,
+    // m_elevator.elevatorConfig.l3ScoringPosition));
     // NamedCommands.registerCommand("IntakeElevator",
-    //     new Elevator_PID_Com(m_elevator, m_elevator.elevatorConfig.sourceIntakePosition));
+    // new Elevator_PID_Com(m_elevator,
+    // m_elevator.elevatorConfig.sourceIntakePosition));
 
     // // Claw Commands
     NamedCommands.registerCommand("Score", new InstantCommand(() -> m_claw.clawMotor1.set(0.5)).withTimeout(0.5));
     NamedCommands.registerCommand("ScoreReact", new ClawPercent_Com(m_claw, m_clawConfig.outtakePercent));
-    // NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent));
-    NamedCommands.registerCommand("Intake", new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(0.5));
+    // NamedCommands.registerCommand("AlgaClaw", new ClawPercent_Com(m_claw,
+    // m_claw.clawConfig.intakePercent));
+    NamedCommands.registerCommand("Intake",
+        new ClawPercent_Com(m_claw, m_claw.clawConfig.intakePercent).withTimeout(0.5));
 
     NamedCommands.registerCommand("L4Score", new L4_scoring_Com(m_arm, m_claw, m_elevator).withTimeout(0.7));
     NamedCommands.registerCommand("L4ScoreReact", new L4_scoring_React_Com(m_arm, m_elevator));
     NamedCommands.registerCommand("CoralIntakeReact", new Coral_Intake_React_Com(m_arm, m_claw, m_elevator));
 
     NamedCommands.registerCommand("CoralIntake", new Coral_Intake_Com(m_arm, m_claw, m_elevator).withTimeout(0.5));
-    // NamedCommands.registerCommand("RunEndEffector", new ClawPercent_Com(m_claw, m_clawConfig.intakePercent).withTimeout(1));
-    NamedCommands.registerCommand("NeutralizeEndEffector", new SetClawStateCommand(m_claw, ClawState.EXHAUSTING).withTimeout(1));
-    //new Swerve_PID(drivetrain, -0.165 - 0.0127, MaxSpeed, MaxAngularRate, tj)
+    // NamedCommands.registerCommand("RunEndEffector", new ClawPercent_Com(m_claw,
+    // m_clawConfig.intakePercent).withTimeout(1));
+    NamedCommands.registerCommand("NeutralizeEndEffector",
+        new SetClawStateCommand(m_claw, ClawState.EXHAUSTING).withTimeout(1));
+    // new Swerve_PID(drivetrain, -0.165 - 0.0127, MaxSpeed, MaxAngularRate, tj)
     NamedCommands.registerCommand("LeftLineUp", new AutoLineUp(drivetrain, -0.165, MaxSpeed, MaxAngularRate, tj));
     NamedCommands.registerCommand("RightLineUp", new AutoLineUp(drivetrain, 0.165, MaxSpeed, MaxAngularRate, tj));
     NamedCommands.registerCommand("FloorIntakeUp", new Intake_PID_Com(m_intake, m_intakeCfg.stowPosition));
 
-    int[] twenty2 = {22};
-    // NamedCommands.registerCommand("TAG22", new InstantCommand(() -> LimelightHelpers.SetFiducialIDFiltersOverride("limelight-intake", twenty2)));
+    int[] twenty2 = { 22 };
+    // NamedCommands.registerCommand("TAG22", new InstantCommand(() ->
+    // LimelightHelpers.SetFiducialIDFiltersOverride("limelight-intake", twenty2)));
 
     NamedCommands.registerCommand("PivotIntake", new Arm_PID_Com(m_arm, m_armConfig.sourceIntakePosition));
-    NamedCommands.registerCommand("ElevatorIntake", new Elevator_PID_Com(m_elevator, m_elevatorCfg.sourceIntakePosition));
+    NamedCommands.registerCommand("ElevatorIntake",
+        new Elevator_PID_Com(m_elevator, m_elevatorCfg.sourceIntakePosition));
     NamedCommands.registerCommand("ResetClaw", new SetClawStateCommand(m_claw, ClawState.NEUTRAL).withTimeout(1));
-
 
     // Configure the trigger bindings
     configureBindings();
@@ -199,14 +210,15 @@ public class RobotContainer {
    */
   private void configureBindings() {
     drivetrain.setDefaultCommand(
-        // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-tj.getLeftY() * MaxSpeed) // Drive forward
-                                                                                                     // with negative Y
-                                                                                                     // (forward)
-            .withVelocityY(-tj.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(-tj.getRightX() * MaxAngularRate) // Drive counterclockwise with
-                                                                                  // negative X (left)
-        ));
+        drivetrain.applyRequest(() -> {
+
+          
+
+          return drive.withVelocityX(-tj.getLeftY() * MaxSpeed)
+                  .withVelocityY(-tj.getLeftX() * MaxSpeed)
+                  .withRotationalRate(-tj.getRightX() * MaxAngularRate); 
+          })
+    );
 
     m_driverController.back().and(m_driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
     m_driverController.back().and(m_driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));

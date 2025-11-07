@@ -117,10 +117,10 @@ public class AutoLineUp extends Command {
       // this OPPOSES the proportional value
       // x_output += (diff * cfg.kddiff);
 
-      SmartDashboard.putNumber("Xoutput Auto: ", x_output);
-      SmartDashboard.putNumber("Diff ", diff);
-      SmartDashboard.putNumber("Central alignment 1:", central_alignment);
-      SmartDashboard.putNumber("Central alignment 2:", lastErrorY);
+      // SmartDashboard.putNumber("Xoutput Auto: ", x_output);
+      // SmartDashboard.putNumber("Diff ", diff);
+      // SmartDashboard.putNumber("Central alignment 1:", central_alignment);
+      // SmartDashboard.putNumber("Central alignment 2:", lastErrorY);
     }
 
     SwerveRequest.RobotCentric driverequest = new SwerveRequest.RobotCentric()

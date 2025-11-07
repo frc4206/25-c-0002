@@ -78,8 +78,8 @@ public class Arm_Sub extends SubsystemBase {
     armCANCoder = new CANcoder(armConfig.canCoderID, "Default Name");
     armHallSensor = new DigitalInput(armConfig.limitSwitchPort);
 
-    LoadableConfig.print(armConfig);
-    LoadableConfig.print(armMotorConfig1);
+    // LoadableConfig.print(armConfig);
+    // LoadableConfig.print(armMotorConfig1);
 
 
     var mc = new MotorOutputConfigs();
@@ -138,12 +138,12 @@ public class Arm_Sub extends SubsystemBase {
     // var cc_pos = armCANCoder.getAbsolutePosition();
     // cc_pos.refresh();
 
-    SmartDashboard.putNumber("arm position", fx_pos.getValueAsDouble());
-    SmartDashboard.putNumber("arm2 position", fx2_pos.getValueAsDouble());
+    // SmartDashboard.putNumber("arm position", fx_pos.getValueAsDouble());
+    // SmartDashboard.putNumber("arm2 position", fx2_pos.getValueAsDouble());
 
     // armMotor2.setPosition(fx_pos.getValueAsDouble());
     // SmartDashboard.putNumber("can coder position", armCANCoder.getAbsolutePosition().getValueAsDouble());
-    SmartDashboard.putNumber("can coder adjusted position", armCANCoder.getAbsolutePosition().getValueAsDouble() * 45);
+    // SmartDashboard.putNumber("can coder adjusted position", armCANCoder.getAbsolutePosition().getValueAsDouble() * 45);
     // armMotor1.getConfigurator().refresh(ltalonConfigs);
   }
 }

@@ -7,6 +7,8 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoLineUp;
 import frc.robot.commands.PhvAutoLineUp;
+import frc.robot.commands.PhvGoBackward;
+import frc.robot.commands.PhvGoForward;
 import frc.robot.commands.SetClawStateCommand;
 import frc.robot.commands.Swerve_PID;
 import frc.robot.commands.moveinauto;
@@ -215,7 +217,7 @@ public class RobotContainer {
     m_driverController.start().and(m_driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
     m_driverController.leftStick().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-    m_driverController.a().onTrue(new InstantCommand(() -> drivetrain.getPigeon2().reset()));
+    // m_driverController.a().onTrue(new InstantCommand(() -> drivetrain.getPigeon2().reset()));
 
     drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -257,6 +259,8 @@ public class RobotContainer {
 
     m_intake.setDefaultCommand(new Intake_PID_Com(m_intake, 0));
 
+    m_driverController.y().whileTrue(new PhvGoForward(drivetrain, 0.1, MaxSpeed, MaxAngularRate, tj));
+    m_driverController.a().whileTrue(new PhvGoBackward(drivetrain, .3, MaxSpeed, MaxAngularRate, tj));
 
     m_driverController.b().onTrue(new InstantCommand(() -> SignalLogger.start()));
     m_driverController.pov(0).onTrue(new InstantCommand(() -> SignalLogger.stop()));

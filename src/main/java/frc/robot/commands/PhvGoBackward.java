@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class PhvGoForward extends Command {
+public class PhvGoBackward extends Command {
   /** Creates a new PhvGoForward. */
   private final double camera_robot_offset = 0.05; 
   public boolean isFinished = false; 
@@ -51,7 +51,7 @@ public class PhvGoForward extends Command {
 
   TunedJoystick tj; 
 
-  public PhvGoForward(CommandSwerveDrivetrain drive, double setpointY, double sped, double angrate, TunedJoystick _tj) {
+  public PhvGoBackward(CommandSwerveDrivetrain drive, double setpointY, double sped, double angrate, TunedJoystick _tj) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive; 
     m_setpointY = setpointY; 
@@ -108,13 +108,13 @@ public class PhvGoForward extends Command {
           .withVelocityX(distance_to_qr_code); 
 
       // lastErrorY = central_alignment; 
-      if (Math.abs(distance_to_qr_code) > 0.6) {
+      if (Math.abs(distance_to_qr_code) < 2.0) {
         driverequest = new SwerveRequest.RobotCentric()
           .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-          .withVelocityX(1); 
+          .withVelocityX(-1); 
       }
 
-      if (Math.abs(distance_to_qr_code) < 0.6) {
+      if (Math.abs(distance_to_qr_code) > 2.0) {
         driverequest = new SwerveRequest.RobotCentric()
           .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
           .withVelocityX(0); 
